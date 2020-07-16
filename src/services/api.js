@@ -52,6 +52,14 @@ const getPaintingById = id => {
 	}).then(res => res.json());
 };
 
+const createPainting = painting => {
+	return fetch(`${API_ROOT}/paintings/${painting.id}`, {
+		headers: headers(),
+		method: 'POST',
+		body: JSON.stringify({ painting }),
+	}).then(res => res.json());
+};
+
 const getShelters = () => {
 	return fetch(`${API_ROOT}/shelters`, {
 		headers: headers(),
@@ -79,6 +87,7 @@ export const api = {
 	},
 	paintings: {
 		getPaintingById,
+		createPainting,
 	},
 	shelters: {
 		getShelters,

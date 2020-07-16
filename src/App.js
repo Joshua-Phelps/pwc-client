@@ -81,12 +81,13 @@ function App() {
 	const setGalleries = () => {
 		api.galleries
 			.getGalleries()
-			.then(galleries =>
+			.then(galleries => {
+				console.log('HELLLLLOOOOO', galleries);
 				galleriesDispatch({
 					type: 'SET_GALLERIES',
 					payload: galleries,
-				})
-			)
+				});
+			})
 			.catch(err => console.log(err));
 	};
 
