@@ -11,6 +11,7 @@ const CLEAR_FORM = 'CLEAR_FORM';
 const SET_ANIMAL = 'SET_ANIMAL';
 const ADD_PAINTING = 'ADD_PAINTING';
 const UPDATE_PAINTING = 'UPDATE_PAINTING';
+const DELETE_PAINTING = 'DELETE_PAINTING';
 
 const animalsReducer = (state, action) => {
 	switch (action.type) {
@@ -32,7 +33,9 @@ const selectAnimalReducer = (state, action) => {
 			paintings = state.paintings.map(p => {
 				return p.id === action.payload.id ? action.payload : p;
 			});
-			console.log(paintings);
+			return { ...state, paintings: paintings };
+		case DELETE_PAINTING:
+			paintings = state.paintings.filter(p => p.id !== action.payload);
 			return { ...state, paintings: paintings };
 		default:
 			return state;

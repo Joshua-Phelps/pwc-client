@@ -1,7 +1,9 @@
 import React, { useContext } from 'react';
-import { StateContext } from '../App';
+import { StateContext, DispatchContext } from '../App';
+import { api } from '../services/api';
 import { makeStyles } from '@material-ui/core/styles';
 import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 import {
 	Table,
 	TableBody,
@@ -15,7 +17,7 @@ import {
 const useStyles = makeStyles({
 	table: {
 		minWidth: '10%',
-		maxWidth: '25%',
+		maxWidth: '45%',
 	},
 });
 
@@ -34,25 +36,47 @@ const rows = [
 export default function PaintingsTable({
 	paintings,
 	setPaintingId,
-	setOpenModal,
-	openModal,
+	setOpenForm,
+	openForm,
 }) {
 	const classes = useStyles();
-	const { galleries } = useContext(StateContext);
+	const { galleries, paintLocs } = useContext(StateContext);
+	const { selectAnimalDispatch } = useContext(DispatchContext);
 
 	const handleEdit = id => {
 		setPaintingId(id);
-		setOpenModal(!openModal);
+		setOpenForm(!openForm);
+	};
+
+	const handleDelete = id => {
+		api.paintings
+			.deletePainting(id)
+			.then(res => {
+				if (res.msg) {
+					removePainting(id);
+				} else {
+					console.log(res);
+				}
+			})
+			.catch(err => console.log(err));
+	};
+
+	const removePainting = id => {
+		selectAnimalDispatch({ type: 'DELETE_PAINTING', payload: id });
 	};
 
 	const getGallery = id => {
 		return galleries.filter(g => g.id === id)[0];
 	};
 
+	const getPaintLocation = id => {
+		return paintLocs.filter(pl => pl.id === id)[0];
+	};
+
 	const renderRows = () => {
 		return paintings.map(p => {
 			let gallery = getGallery(p.gallery_id);
-			console.log(gallery);
+			let paintLocation = getPaintLocation(p.paint_location_id);
 			return (
 				<TableRow key={p.id}>
 					<TableCell component='th' scope='p'>
@@ -62,7 +86,13 @@ export default function PaintingsTable({
 					<TableCell align='right'>{gallery && gallery.name}</TableCell>
 					<TableCell align='right'>{p.painting_status}</TableCell>
 					<TableCell align='right'>
+						{paintLocation && paintLocation.name}
+					</TableCell>
+					<TableCell align='right'>
 						<EditIcon onClick={() => handleEdit(p.id)} />
+					</TableCell>
+					<TableCell align='right'>
+						<DeleteIcon onClick={() => handleDelete(p.id)} />
 					</TableCell>
 				</TableRow>
 			);
@@ -75,9 +105,11 @@ export default function PaintingsTable({
 				<TableHead>
 					<TableRow>
 						<TableCell>Painting ID</TableCell>
-						<TableCell align='right'>Painter</TableCell>
+						<TableCell align='right'>Painted By</TableCell>
 						<TableCell align='right'>Gallery</TableCell>
 						<TableCell align='right'>Status</TableCell>
+						<TableCell align='right'>Painted at</TableCell>
+						<TableCell align='right'></TableCell>
 						<TableCell align='right'></TableCell>
 					</TableRow>
 				</TableHead>

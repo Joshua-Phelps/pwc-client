@@ -34,7 +34,7 @@ export default function AnimalShowPage({ history, location }) {
 
 	// const [animal, setAnimal] = useState({});
 	const [paintingId, setPaintingId] = useState(null);
-	const [openModal, setOpenModal] = useState(false);
+	const [openForm, setOpenForm] = useState(false);
 	const [showPhotos, setShowPhotos] = useState(false);
 	const [loaded, setLoaded] = useState(false);
 	const id = parseInt(location.pathname.split('/animals/')[1]);
@@ -125,8 +125,8 @@ export default function AnimalShowPage({ history, location }) {
 						<PaintingsTable
 							paintings={selectAnimal.paintings}
 							setPaintingId={setPaintingId}
-							setOpenModal={setOpenModal}
-							openModal={openModal}
+							setOpenForm={setOpenForm}
+							openForm={openForm}
 						/>
 					</div>
 					<div>
@@ -137,8 +137,8 @@ export default function AnimalShowPage({ history, location }) {
 								updatePainting={updatePainting}
 								animalId={id}
 								location={location}
-								open={openModal}
-								setOpen={setOpenModal}
+								open={openForm}
+								setOpen={setOpenForm}
 								addPainting={addPainting}
 							/>
 						</div>

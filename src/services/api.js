@@ -69,6 +69,13 @@ const updatePainting = painting => {
 	}).then(res => res.json());
 };
 
+const deletePainting = id => {
+	return fetch(`${API_ROOT}/paintings/${id}`, {
+		method: 'DELETE',
+		headers: headers(),
+	}).then(res => res.json());
+};
+
 const getShelters = () => {
 	return fetch(`${API_ROOT}/shelters`, {
 		headers: headers(),
@@ -98,6 +105,7 @@ export const api = {
 		getPaintingById,
 		createPainting,
 		updatePainting,
+		deletePainting,
 	},
 	shelters: {
 		getShelters,
