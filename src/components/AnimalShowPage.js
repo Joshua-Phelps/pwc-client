@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { api } from '../services/api';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Box } from '@material-ui/core';
 import PaintingForm from './PaintingForm';
+import PaintingsTable from './PaintingsTable';
+import { StateContext } from '../App';
 
 const useStyles = makeStyles(theme => ({
 	centered: {
@@ -27,12 +29,15 @@ const useStyles = makeStyles(theme => ({
 
 export default function AnimalShowPage({ history, location }) {
 	const classes = useStyles();
+	const { galleries } = useContext(StateContext);
 	const [animal, setAnimal] = useState({});
+	const [paintingId, setPaintingId] = useState(null);
+	const [openModal, setOpenModal] = useState(false);
 	const [showPhotos, setShowPhotos] = useState(false);
 	const [loaded, setLoaded] = useState(false);
+	const id = parseInt(location.pathname.split('/animals/')[1]);
 
 	useEffect(() => {
-		let id = parseInt(location.pathname.split('/animals/')[1]);
 		api.animals
 			.getAnimalById(id)
 			.then(ani => setAnimal(ani))
@@ -44,7 +49,7 @@ export default function AnimalShowPage({ history, location }) {
 		return animal.paintings.map(paint => {
 			return (
 				<ul>
-					{paint.id} - {paint.painter} - {paint.status}
+					{paint.id} - {paint.painter} - {paint.painting_status}
 				</ul>
 			);
 		});
@@ -92,10 +97,22 @@ export default function AnimalShowPage({ history, location }) {
 					</div>
 					<div className={(classes.root, classes.box)}>
 						<h3>Current Paintings</h3>
+						<PaintingsTable
+							paintings={animal.paintings}
+							setPaintingId={setPaintingId}
+							setOpenModal={setOpenModal}
+							openModal={openModal}
+						/>
 					</div>
 					<div>
 						<div className={classes.box}>
-							<PaintingForm paintingId={null} location={location} />
+							<PaintingForm
+								paintingId={paintingId}
+								animalId={id}
+								location={location}
+								open={openModal}
+								setOpen={setOpenModal}
+							/>
 						</div>
 					</div>
 					{/* <div>

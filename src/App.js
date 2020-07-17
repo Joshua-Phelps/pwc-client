@@ -30,12 +30,13 @@ function App() {
 	const [paintLocs, paintLocsDispatch] = useReducer(paintLocsReducer, []);
 	const [shelters, sheltersDispatch] = useReducer(sheltersReducer, []);
 
-	const state = { animals, galleries };
+	const state = { animals, galleries, paintLocs };
 
 	useEffect(() => {
 		setPaintLocs();
 		setGalleries();
 		setShelters();
+		setPaintLocs();
 
 		// const token = localStorage.getItem("token");
 		// if (token) {
@@ -69,12 +70,13 @@ function App() {
 	const setPaintLocs = () => {
 		api.paintLocs
 			.getPaintLocs()
-			.then(paintLocs =>
+			.then(paintLocs => {
+				console.log(paintLocs);
 				paintLocsDispatch({
 					type: 'SET_PAINT_LOCS',
 					payload: paintLocs,
-				})
-			)
+				});
+			})
 			.catch(err => console.log(err));
 	};
 

@@ -53,10 +53,18 @@ const getPaintingById = id => {
 };
 
 const createPainting = painting => {
+	return fetch(`${API_ROOT}/paintings`, {
+		headers: headers(),
+		method: 'POST',
+		body: JSON.stringify(painting),
+	}).then(res => res.json());
+};
+
+const updatePainting = painting => {
 	return fetch(`${API_ROOT}/paintings/${painting.id}`, {
 		headers: headers(),
 		method: 'POST',
-		body: JSON.stringify({ painting }),
+		body: JSON.stringify(painting),
 	}).then(res => res.json());
 };
 
@@ -88,6 +96,7 @@ export const api = {
 	paintings: {
 		getPaintingById,
 		createPainting,
+		updatePainting,
 	},
 	shelters: {
 		getShelters,

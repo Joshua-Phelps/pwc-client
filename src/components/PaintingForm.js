@@ -36,36 +36,62 @@ const useStyles = makeStyles(theme => ({
 	},
 }));
 
-export default function PaintingForm({ paintingId, location }) {
+export default function PaintingForm({ paintingId, animalId, open, setOpen }) {
 	const classes = useStyles();
-	const [open, setOpen] = React.useState(false);
-	const { galleries } = useContext(StateContext);
+	const { galleries, paintLocs } = useContext(StateContext);
 	const [painter, setPainter] = useState('');
 	const [galleryId, setGalleryId] = useState(null);
 	const [paintLocationId, setPaintLocationId] = useState(null);
-	const [animalId, setAnimalId] = useState(null);
-	const [paintingUrl, setPaintingUrl] = useState('');
+	const [paintingURL, setPaintingURL] = useState('');
 	const [status, setStatus] = useState('');
 
 	useEffect(() => {
 		if (paintingId) {
 			fetchPainting()
-				.then(painting => {
+				.then(p => {
+					console.log(p);
+					setPainter(p.painter);
+					setStatus(p.painting_status);
+					setPaintLocationId(p.paint_location_id);
+					setGalleryId(p.gallery_id);
 					// painting['animal'] = painting.animal.id;
-					console.log(painting);
+					console.log(p);
 				})
 				.catch(err => console.log(err));
 		}
-	}, []);
+	}, [paintingId]);
 
 	const fetchPainting = () => {
-		let id = parseInt(location.pathname.split('/paintings/edit/')[1]);
-		return api.paintings.getPaintingById(id);
+		return api.paintings.getPaintingById(paintingId);
 	};
 
 	const handleChange = (e, cb) => cb(e.target.value);
 
-	const handleSubmit = () => {};
+	const handleSubmit = () => {
+		const painting = {
+			painter,
+			painting_status: status,
+			gallery_id: galleryId,
+			animal_id: animalId,
+			painting_url: paintingURL,
+			paint_location_id: paintLocationId,
+		};
+		if (paintingId) {
+			painting = { ...painting, id: paintingId };
+			api.paintings
+				.updatePainting(painting)
+				.then(painting => console.log(painting).catch(err => console.log(err)));
+		} else {
+		}
+		api.paintings
+			.createPainting(painting)
+			.then(painting => console.log(painting))
+			.catch(err => console.log(err));
+	};
+
+	const handleOpen = () => setOpen(true);
+
+	const handleClose = () => setOpen(false);
 
 	const renderStatusValues = () => {
 		const statusValues = [
@@ -97,9 +123,15 @@ export default function PaintingForm({ paintingId, location }) {
 		});
 	};
 
-	const handleOpen = () => setOpen(true);
-
-	const handleClose = () => setOpen(false);
+	const renderPaintLocationValues = () => {
+		return paintLocs.map(paintLoc => {
+			return (
+				<MenuItem key={paintLoc.id} value={paintLoc.id}>
+					{paintLoc.name}
+				</MenuItem>
+			);
+		});
+	};
 
 	return (
 		<div>
@@ -129,6 +161,20 @@ export default function PaintingForm({ paintingId, location }) {
 								name='setPainter'
 								onChange={e => handleChange(e, setPainter)}
 							/>
+						</FormControl>
+						<br></br>
+						<FormControl className={classes.formControl}>
+							<InputLabel id='select-paint-location-label'>
+								Painting Location
+							</InputLabel>
+							<Select
+								labelId='select-paint-location'
+								id='simple-select-paint-location'
+								value={paintLocationId}
+								name='paintingLocationId'
+								onChange={e => handleChange(e, setPaintLocationId)}>
+								{renderPaintLocationValues()}
+							</Select>
 						</FormControl>
 						<br></br>
 						<FormControl className={classes.formControl}>
