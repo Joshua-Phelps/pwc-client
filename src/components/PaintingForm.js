@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { StateContext } from '../App';
+import { StateContext, DispatchContext } from '../App';
 import { api } from '../services/api';
 import { makeStyles } from '@material-ui/core/styles';
 import {
@@ -36,26 +36,26 @@ const useStyles = makeStyles(theme => ({
 	},
 }));
 
-export default function PaintingForm({ paintingId, animalId, open, setOpen }) {
+export default function PaintingForm({
+	paintingId,
+	open,
+	animalId,
+	setOpen,
+	addPainting,
+	updatePainting,
+}) {
 	const classes = useStyles();
-	const { galleries, paintLocs } = useContext(StateContext);
-	const [painter, setPainter] = useState('');
-	const [galleryId, setGalleryId] = useState(null);
-	const [paintLocationId, setPaintLocationId] = useState(null);
-	const [paintingURL, setPaintingURL] = useState('');
-	const [status, setStatus] = useState('');
+	const { galleries, paintLocs, form } = useContext(StateContext);
+	const { formDispatch } = useContext(DispatchContext);
 
 	useEffect(() => {
 		if (paintingId) {
 			fetchPainting()
 				.then(p => {
-					console.log(p);
-					setPainter(p.painter);
-					setStatus(p.painting_status);
-					setPaintLocationId(p.paint_location_id);
-					setGalleryId(p.gallery_id);
-					// painting['animal'] = painting.animal.id;
-					console.log(p);
+					formDispatch({
+						type: 'SET_FORM',
+						payload: p,
+					});
 				})
 				.catch(err => console.log(err));
 		}
@@ -65,31 +65,42 @@ export default function PaintingForm({ paintingId, animalId, open, setOpen }) {
 		return api.paintings.getPaintingById(paintingId);
 	};
 
-	const handleChange = (e, cb) => cb(e.target.value);
-
-	const handleSubmit = () => {
-		const painting = {
-			painter,
-			painting_status: status,
-			gallery_id: galleryId,
-			animal_id: animalId,
-			painting_url: paintingURL,
-			paint_location_id: paintLocationId,
-		};
-		if (paintingId) {
-			painting = { ...painting, id: paintingId };
-			api.paintings
-				.updatePainting(painting)
-				.then(painting => console.log(painting).catch(err => console.log(err)));
-		} else {
-		}
-		api.paintings
-			.createPainting(painting)
-			.then(painting => console.log(painting))
-			.catch(err => console.log(err));
+	const handleChange = e => {
+		formDispatch({
+			type: 'UPDATE_FORM',
+			payload: e.target.value,
+			key: e.target.name,
+		});
 	};
 
-	const handleOpen = () => setOpen(true);
+	const handleSubmit = () => {
+		setOpen(false);
+		let painting = { ...form, animal_id: animalId };
+		if (form.painting_status !== 'Displayed') {
+			painting = { ...painting, gallery_id: null };
+		}
+		if (form.id) {
+			api.paintings
+				.updatePainting(painting)
+				.then(painting => updatePainting(painting))
+				.catch(err => console.log(err));
+		} else {
+			api.paintings
+				.createPainting(painting)
+				.then(painting => addPainting(painting))
+				.then(() => clearForm())
+				.catch(err => console.log(err));
+		}
+	};
+
+	const clearForm = () => {
+		formDispatch({ type: 'CLEAR_FORM', payload: {} });
+	};
+
+	const handleOpen = () => {
+		if (form.id) clearForm();
+		setOpen(true);
+	};
 
 	const handleClose = () => setOpen(false);
 
@@ -157,52 +168,62 @@ export default function PaintingForm({ paintingId, animalId, open, setOpen }) {
 								labelId='painter-name-input'
 								id='painter-name'
 								label='Painter Name'
-								value={painter}
-								name='setPainter'
-								onChange={e => handleChange(e, setPainter)}
+								value={form.painter || ''}
+								name='painter'
+								onChange={handleChange}
 							/>
 						</FormControl>
+
 						<br></br>
+
 						<FormControl className={classes.formControl}>
-							<InputLabel id='select-paint-location-label'>
+							<InputLabel
+								shrink={form.paint_location_id && true}
+								id='select-paint-location-label'>
 								Painting Location
 							</InputLabel>
 							<Select
 								labelId='select-paint-location'
 								id='simple-select-paint-location'
-								value={paintLocationId}
-								name='paintingLocationId'
-								onChange={e => handleChange(e, setPaintLocationId)}>
+								value={form.paint_location_id || null}
+								name='paint_location_id'
+								onChange={handleChange}>
 								{renderPaintLocationValues()}
 							</Select>
 						</FormControl>
+
 						<br></br>
+
 						<FormControl className={classes.formControl}>
 							<InputLabel id='select-status-label'>Painting Status</InputLabel>
 							<Select
 								labelId='select-status'
 								id='simple-select-status'
-								value={status}
-								name='status'
-								onChange={e => handleChange(e, setStatus)}>
+								value={form.painting_status || ''}
+								name='painting_status'
+								onChange={handleChange}>
 								{renderStatusValues()}
 							</Select>
 						</FormControl>
+
 						<br></br>
-						{status === 'Displayed' && (
+
+						{form.painting_status === 'Displayed' && (
 							<FormControl className={classes.formControl}>
 								<InputLabel id='select-gallery-label'>Gallery</InputLabel>
 								<Select
-									labelId='select-gallery'
+									labelId='select-status'
 									id='simple-select-status'
-									value={galleryId}
-									name='galleryId'
-									onChange={e => handleChange(e, setGalleryId)}>
+									value={form.gallery_id || null}
+									name='gallery_id'
+									onChange={handleChange}>
 									{renderGalleryValues()}
 								</Select>
 							</FormControl>
 						)}
+
 						<br></br>
+
 						<Button
 							variant='contained'
 							color='primary'

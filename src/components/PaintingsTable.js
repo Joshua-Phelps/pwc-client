@@ -45,15 +45,21 @@ export default function PaintingsTable({
 		setOpenModal(!openModal);
 	};
 
+	const getGallery = id => {
+		return galleries.filter(g => g.id === id)[0];
+	};
+
 	const renderRows = () => {
 		return paintings.map(p => {
+			let gallery = getGallery(p.gallery_id);
+			console.log(gallery);
 			return (
 				<TableRow key={p.id}>
 					<TableCell component='th' scope='p'>
 						{p.id}
 					</TableCell>
 					<TableCell align='right'>{p.painter}</TableCell>
-					<TableCell align='right'>{p.gallery_id}</TableCell>
+					<TableCell align='right'>{gallery && gallery.name}</TableCell>
 					<TableCell align='right'>{p.painting_status}</TableCell>
 					<TableCell align='right'>
 						<EditIcon onClick={() => handleEdit(p.id)} />

@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useReducer } from 'react';
 import { api } from '../services/api';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Box } from '@material-ui/core';
 import PaintingForm from './PaintingForm';
 import PaintingsTable from './PaintingsTable';
-import { StateContext } from '../App';
+import { StateContext, DispatchContext } from '../App';
 
 const useStyles = makeStyles(theme => ({
 	centered: {
@@ -29,8 +29,10 @@ const useStyles = makeStyles(theme => ({
 
 export default function AnimalShowPage({ history, location }) {
 	const classes = useStyles();
-	const { galleries } = useContext(StateContext);
-	const [animal, setAnimal] = useState({});
+	const { galleries, selectAnimal } = useContext(StateContext);
+	const { selectAnimalDispatch } = useContext(DispatchContext);
+
+	// const [animal, setAnimal] = useState({});
 	const [paintingId, setPaintingId] = useState(null);
 	const [openModal, setOpenModal] = useState(false);
 	const [showPhotos, setShowPhotos] = useState(false);
@@ -40,13 +42,34 @@ export default function AnimalShowPage({ history, location }) {
 	useEffect(() => {
 		api.animals
 			.getAnimalById(id)
-			.then(ani => setAnimal(ani))
+			.then(ani => {
+				selectAnimalDispatch({
+					type: 'SET_ANIMAL',
+					payload: ani,
+				});
+			})
 			.then(() => setLoaded(true))
 			.catch(err => console.log(err));
 	}, [loaded, location.pathname]);
 
+	const addPainting = painting => {
+		console.log(painting);
+		selectAnimalDispatch({
+			type: 'ADD_PAINTING',
+			payload: painting,
+		});
+	};
+
+	const updatePainting = painting => {
+		console.log(painting);
+		selectAnimalDispatch({
+			type: 'UPDATE_PAINTING',
+			payload: painting,
+		});
+	};
+
 	const renderPaintingsList = () => {
-		return animal.paintings.map(paint => {
+		return selectAnimal.paintings.map(paint => {
 			return (
 				<ul>
 					{paint.id} - {paint.painter} - {paint.painting_status}
@@ -56,7 +79,7 @@ export default function AnimalShowPage({ history, location }) {
 	};
 
 	const renderPhotos = () => {
-		return animal.photos.map(photo => {
+		return selectAnimal.photos.map(photo => {
 			return (
 				<div key={photo.url}>
 					<img src={photo.url}></img>
@@ -69,15 +92,17 @@ export default function AnimalShowPage({ history, location }) {
 		<>
 			{loaded && (
 				<div>
-					<h1 className={classes.centered}>{animal.name}</h1>
+					<h1 className={classes.centered}>{selectAnimal.name}</h1>
 					<div className={classes.root}>
 						<Grid container>
 							<Grid className={classes.paper} item xs={12} sm={4}>
-								<img className={classes.image} src={animal.photos[3].url}></img>
+								<img
+									className={classes.image}
+									src={selectAnimal.photos[3].url}></img>
 							</Grid>
 							<Grid className={classes.box} item xs={12} sm={6}>
 								<h3>Description</h3>
-								<p>{animal.description}</p>
+								<p>{selectAnimal.description}</p>
 								<Grid container>
 									<Grid xs={12} sm={7}>
 										<Box
@@ -85,9 +110,9 @@ export default function AnimalShowPage({ history, location }) {
 											borderRadius='borderRadius'
 											border={1}>
 											<h3>Shelter</h3>
-											<p>{animal.shelter.name}</p>
-											<p>{animal.shelter.phone_number}</p>
-											<p>{animal.shelter.address}</p>
+											<p>{selectAnimal.shelter.name}</p>
+											<p>{selectAnimal.shelter.phone_number}</p>
+											<p>{selectAnimal.shelter.address}</p>
 											<p>Email goes here</p>
 										</Box>
 									</Grid>
@@ -98,7 +123,7 @@ export default function AnimalShowPage({ history, location }) {
 					<div className={(classes.root, classes.box)}>
 						<h3>Current Paintings</h3>
 						<PaintingsTable
-							paintings={animal.paintings}
+							paintings={selectAnimal.paintings}
 							setPaintingId={setPaintingId}
 							setOpenModal={setOpenModal}
 							openModal={openModal}
@@ -108,10 +133,13 @@ export default function AnimalShowPage({ history, location }) {
 						<div className={classes.box}>
 							<PaintingForm
 								paintingId={paintingId}
+								setPaintingId={setPaintingId}
+								updatePainting={updatePainting}
 								animalId={id}
 								location={location}
 								open={openModal}
 								setOpen={setOpenModal}
+								addPainting={addPainting}
 							/>
 						</div>
 					</div>

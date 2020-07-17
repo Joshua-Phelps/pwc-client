@@ -18,6 +18,8 @@ import {
 	galleriesReducer,
 	paintLocsReducer,
 	sheltersReducer,
+	selectAnimalReducer,
+	formReducer,
 } from './reducers/Reducers';
 import AnimalCard from './components/AnimalCard';
 
@@ -26,11 +28,17 @@ export const DispatchContext = createContext();
 
 function App() {
 	const [animals, animalsDispatch] = useReducer(animalsReducer, []);
+	const [selectAnimal, selectAnimalDispatch] = useReducer(
+		selectAnimalReducer,
+		{}
+	);
 	const [galleries, galleriesDispatch] = useReducer(galleriesReducer, []);
 	const [paintLocs, paintLocsDispatch] = useReducer(paintLocsReducer, []);
 	const [shelters, sheltersDispatch] = useReducer(sheltersReducer, []);
+	const [form, formDispatch] = useReducer(formReducer, {});
 
-	const state = { animals, galleries, paintLocs };
+	const state = { animals, galleries, paintLocs, selectAnimal, form };
+	const dispatch = { selectAnimalDispatch, formDispatch };
 
 	useEffect(() => {
 		setPaintLocs();
@@ -108,68 +116,72 @@ function App() {
 	return (
 		<Router>
 			<StateContext.Provider value={state}>
-				<Route path='/' render={props => <NavBar {...props} />} />
-				<Route path='/home' render={props => <HomePage {...props} />} />
-				<Route
-					path='/animals'
-					exact
-					render={props => (
-						<AnimalCardsContainer animals={animals} {...props} />
-					)}
-				/>
-				<Route
-					path='/galleries'
-					exact
-					render={props => (
-						<GalleryCardsContainer galleries={galleries} {...props} />
-					)}
-				/>
-				<Route
-					path='/galleries/:id'
-					exact
-					render={props => <GalleryShowPage {...props} />}
-				/>
-				<Route
-					path='/animals/:id'
-					exact
-					render={props => <AnimalShowPage {...props} />}
-				/>
-				<Route
-					path='/paint-locations'
-					exact
-					render={props => (
-						<PaintLocContainer paintLocs={paintLocs} {...props} />
-					)}
-				/>
-				<Route
-					path='/paint-locations/:id'
-					exact
-					render={props => <PaintLocationShowPage {...props} />}
-				/>
-				<Route
-					path='/paintings/create'
-					exact
-					render={props => (
-						<PaintingForm animals={animals} editMode={false} {...props} />
-					)}
-				/>
-				<Route
-					path='/paintings/edit/:id'
-					exact
-					render={props => (
-						<PaintingForm animals={animals} editMode={true} {...props} />
-					)}
-				/>
-				<Route
-					path='/shelters'
-					exact
-					render={props => <SheltersContainer shelters={shelters} {...props} />}
-				/>
-				<Route
-					path='/shelters/:id'
-					exact
-					render={props => <ShelterShowPage {...props} />}
-				/>
+				<DispatchContext.Provider value={dispatch}>
+					<Route path='/' render={props => <NavBar {...props} />} />
+					<Route path='/home' render={props => <HomePage {...props} />} />
+					<Route
+						path='/animals'
+						exact
+						render={props => (
+							<AnimalCardsContainer animals={animals} {...props} />
+						)}
+					/>
+					<Route
+						path='/galleries'
+						exact
+						render={props => (
+							<GalleryCardsContainer galleries={galleries} {...props} />
+						)}
+					/>
+					<Route
+						path='/galleries/:id'
+						exact
+						render={props => <GalleryShowPage {...props} />}
+					/>
+					<Route
+						path='/animals/:id'
+						exact
+						render={props => <AnimalShowPage {...props} />}
+					/>
+					<Route
+						path='/paint-locations'
+						exact
+						render={props => (
+							<PaintLocContainer paintLocs={paintLocs} {...props} />
+						)}
+					/>
+					<Route
+						path='/paint-locations/:id'
+						exact
+						render={props => <PaintLocationShowPage {...props} />}
+					/>
+					<Route
+						path='/paintings/create'
+						exact
+						render={props => (
+							<PaintingForm animals={animals} editMode={false} {...props} />
+						)}
+					/>
+					<Route
+						path='/paintings/edit/:id'
+						exact
+						render={props => (
+							<PaintingForm animals={animals} editMode={true} {...props} />
+						)}
+					/>
+					<Route
+						path='/shelters'
+						exact
+						render={props => (
+							<SheltersContainer shelters={shelters} {...props} />
+						)}
+					/>
+					<Route
+						path='/shelters/:id'
+						exact
+						render={props => <ShelterShowPage {...props} />}
+					/>
+				</DispatchContext.Provider>
 			</StateContext.Provider>
 		</Router>
 	);

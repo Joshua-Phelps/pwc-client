@@ -61,9 +61,10 @@ const createPainting = painting => {
 };
 
 const updatePainting = painting => {
+	console.log(painting);
 	return fetch(`${API_ROOT}/paintings/${painting.id}`, {
+		method: 'PATCH',
 		headers: headers(),
-		method: 'POST',
 		body: JSON.stringify(painting),
 	}).then(res => res.json());
 };

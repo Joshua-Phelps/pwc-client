@@ -5,11 +5,35 @@ const SET_PAINT_LOCS = 'SET_PAINT_LOCS';
 const SET_PAINT_LOCATION = 'SET_PAINT_LOCATION';
 const SET_SHELTERS = 'SET_SHELTERS';
 const SET_SHELTER = 'SET_SHELTER';
+const SET_FORM = 'SET_FORM';
+const UPDATE_FORM = 'UPDATE_FORM';
+const CLEAR_FORM = 'CLEAR_FORM';
+const SET_ANIMAL = 'SET_ANIMAL';
+const ADD_PAINTING = 'ADD_PAINTING';
+const UPDATE_PAINTING = 'UPDATE_PAINTING';
 
 const animalsReducer = (state, action) => {
 	switch (action.type) {
 		case SET_ANIMALS:
 			return [...action.payload];
+		default:
+			return state;
+	}
+};
+
+const selectAnimalReducer = (state, action) => {
+	let paintings;
+	switch (action.type) {
+		case SET_ANIMAL:
+			return { ...action.payload };
+		case ADD_PAINTING:
+			return { ...state, paintings: [...state.paintings, action.payload] };
+		case UPDATE_PAINTING:
+			paintings = state.paintings.map(p => {
+				return p.id === action.payload.id ? action.payload : p;
+			});
+			console.log(paintings);
+			return { ...state, paintings: paintings };
 		default:
 			return state;
 	}
@@ -69,6 +93,19 @@ const shelterReducer = (state, action) => {
 	}
 };
 
+const formReducer = (state, action) => {
+	switch (action.type) {
+		case SET_FORM:
+			return { ...action.payload };
+		case UPDATE_FORM:
+			return { ...state, [action.key]: action.payload };
+		case CLEAR_FORM:
+			return {};
+		default:
+			return state;
+	}
+};
+
 export {
 	animalsReducer,
 	galleriesReducer,
@@ -77,4 +114,6 @@ export {
 	paintLocationReducer,
 	sheltersReducer,
 	shelterReducer,
+	selectAnimalReducer,
+	formReducer,
 };
