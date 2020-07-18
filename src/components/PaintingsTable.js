@@ -12,12 +12,13 @@ import {
 	TableHead,
 	TableRow,
 	Paper,
+	Container,
 } from '@material-ui/core';
 
 const useStyles = makeStyles({
-	table: {
-		minWidth: '10%',
-		maxWidth: '45%',
+	container: {
+		paddingLeft: '5%',
+		paddingRight: '5%',
 	},
 });
 
@@ -100,21 +101,23 @@ export default function PaintingsTable({
 	};
 
 	return (
-		<TableContainer component={Paper}>
-			<Table className={classes.table} aria-label='simple table'>
-				<TableHead>
-					<TableRow>
-						<TableCell>Painting ID</TableCell>
-						<TableCell align='right'>Status</TableCell>
-						<TableCell align='right'>Gallery</TableCell>
-						<TableCell align='right'>Painted By</TableCell>
-						<TableCell align='right'>Painted at</TableCell>
-						<TableCell align='right'></TableCell>
-						<TableCell align='right'></TableCell>
-					</TableRow>
-				</TableHead>
-				<TableBody>{renderRows()}</TableBody>
-			</Table>
-		</TableContainer>
+		<Container className={classes.container} maxWidth='lg'>
+			<TableContainer component={Paper}>
+				<Table aria-label='simple table'>
+					<TableHead>
+						<TableRow>
+							<TableCell>Painting ID</TableCell>
+							<TableCell align='right'>Status</TableCell>
+							<TableCell align='right'>Gallery</TableCell>
+							<TableCell align='right'>Painted By</TableCell>
+							<TableCell align='right'>Painted at</TableCell>
+							<TableCell align='right'></TableCell>
+							<TableCell align='right'></TableCell>
+						</TableRow>
+					</TableHead>
+					<TableBody>{renderRows()}</TableBody>
+				</Table>
+			</TableContainer>
+		</Container>
 	);
 }

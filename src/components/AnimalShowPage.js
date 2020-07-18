@@ -95,7 +95,10 @@ export default function AnimalShowPage({ history, location }) {
 							Generate Card
 						</Button>
 					</div>
-					<h1 className={classes.centered}>{selectAnimal.name}</h1>
+					<div className={classes.centered}>
+						<h1>Hello!</h1>
+						<h1>My name is {selectAnimal.name}</h1>
+					</div>
 					<div className={classes.root}>
 						<Grid container>
 							<Grid className={classes.paper} item xs={12} sm={4}>
