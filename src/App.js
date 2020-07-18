@@ -1,5 +1,6 @@
 import React, { useReducer, useEffect, createContext, useState } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
+import CssBaseline from '@material-ui/core/CssBaseline';
 import { api } from './services/api';
 import './App.css';
 import HomePage from './components/HomePage';
@@ -52,7 +53,7 @@ function App() {
 		api.animals
 			.getAnimals()
 			.then(animals => {
-				// console.log(animals);
+				console.log(animals);
 				animalsDispatch({ type: 'SET_ANIMALS', payload: animals });
 			})
 			.catch(error => console.log(error));
@@ -117,6 +118,7 @@ function App() {
 		<Router>
 			<StateContext.Provider value={state}>
 				<DispatchContext.Provider value={dispatch}>
+					<CssBaseline />
 					<Route path='/' render={props => <NavBar {...props} />} />
 					<Route path='/home' render={props => <HomePage {...props} />} />
 					<Route

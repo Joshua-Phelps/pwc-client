@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, useReducer } from 'react';
 import { api } from '../services/api';
 import { makeStyles } from '@material-ui/core/styles';
-import { Grid, Box } from '@material-ui/core';
+import { Grid, Box, Button } from '@material-ui/core';
 import PaintingForm from './PaintingForm';
 import PaintingsTable from './PaintingsTable';
 import { StateContext, DispatchContext } from '../App';
@@ -24,6 +24,10 @@ const useStyles = makeStyles(theme => ({
 	},
 	image: {
 		maxWidth: '-webkit-fill-available',
+	},
+	button: {
+		padding: theme.spacing(2),
+		marginTop: theme.spacing(2),
 	},
 }));
 
@@ -50,19 +54,12 @@ export default function AnimalShowPage({ history, location }) {
 			.catch(err => console.log(err));
 	}, [loaded, location.pathname]);
 
-	// const addPainting = painting => {
-	// 	selectAnimalDispatch({
-	// 		type: 'ADD_PAINTING',
-	// 		payload: painting,
-	// 	});
-	// };
-
-	// const updatePainting = painting => {
-	// 	selectAnimalDispatch({
-	// 		type: 'UPDATE_PAINTING',
-	// 		payload: painting,
-	// 	});
-	// };
+	const handleGenerateCard = () => {
+		api.cards
+			.generateCard(id)
+			.then(card => console.log(card))
+			.catch(err => console.log(err));
+	};
 
 	const handleOpenForm = () => setOpenForm(!openForm);
 
@@ -90,6 +87,14 @@ export default function AnimalShowPage({ history, location }) {
 		<>
 			{loaded && (
 				<div>
+					<div className={classes.button}>
+						<Button
+							onClick={handleGenerateCard}
+							variant='contained'
+							color='secondary'>
+							Generate Card
+						</Button>
+					</div>
 					<h1 className={classes.centered}>{selectAnimal.name}</h1>
 					<div className={classes.root}>
 						<Grid container>

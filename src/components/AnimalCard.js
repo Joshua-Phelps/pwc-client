@@ -52,48 +52,21 @@ export default function AnimalCard({ animal, history }) {
 		animal_type,
 		name,
 		id,
-		complete_photos,
+		photo_url,
+		shelter_name,
+		total_paintings,
 		photo_status,
-		description,
-		painting,
-		photos,
 	} = animal;
 
-	const handleExpandClick = () => {
-		setExpanded(!expanded);
-	};
+	const handleExpandClick = () => setExpanded(!expanded);
 
-	const avatarLetter = string => {
-		return string.split('')[0].toUpperCase();
-	};
+	const handleClick = () => history.push(`/animals/${id}`);
 
-	const handleClick = () => {
-		history.push(`/animals/${id}`);
-	};
-	// const photoUrl = () => {
-	// 	// return complete_photos ? complete_photos[0].url : '';
-	// 	return photos ? photos[0].url : '';
-	// };
-
-	const subheader = () => {
-		let photoStatusColor =
-			photo_status === 'complete'
-				? classes.subheaderComplete
-				: classes.subheaderIncomplete;
-
-		let paintingStatusColor =
-			painting && painting.status === 'painted'
-				? classes.subheaderComplete
-				: classes.subheaderIncomplete;
-
+	const renderInfo = (key, value) => {
 		return (
 			<>
-				Photo Status: <span className={photoStatusColor}>{photo_status}</span>
+				<b>{key}:</b> {value}
 				<br></br>
-				Painting Status:{' '}
-				<span className={paintingStatusColor}>
-					{painting ? painting.status : 'None'}
-				</span>
 			</>
 		);
 	};
@@ -106,27 +79,15 @@ export default function AnimalCard({ animal, history }) {
 						<MoreVertIcon onClick={handleClick} />
 					</IconButton>
 				}
-				title={`${name} - ${animal_type}`}
-				subheader={subheader()}
+				title={name}
 			/>
 			<CardMedia
 				className={classes.media}
 				// image='https://drive.google.com/uc?export=view&id=13xmQNRWPiICreCTeWqLxfe_8meH5V82t'
-				image={photos[0] ? photos[2].url : ''}
+				image={photo_url}
 				title={'animal-photo'}
 			/>
-			<CardContent>
-				<Typography variant='body2' color='textSecondary' component='p'>
-					{description}
-				</Typography>
-			</CardContent>
 			<CardActions disableSpacing>
-				{/* <IconButton aria-label='add to favorites'>
-					<FavoriteIcon />
-				</IconButton>
-				<IconButton aria-label='share'>
-					<ShareIcon />
-				</IconButton> */}
 				<IconButton
 					className={clsx(classes.expand, {
 						[classes.expandOpen]: expanded,
@@ -137,7 +98,16 @@ export default function AnimalCard({ animal, history }) {
 					<ExpandMoreIcon />
 				</IconButton>
 			</CardActions>
-			<Collapse in={expanded} timeout='auto' unmountOnExit></Collapse>
+			<Collapse in={expanded} timeout='auto' unmountOnExit>
+				<CardContent>
+					<Typography>
+						{renderInfo('ID', id)}
+						{renderInfo('Shelter', shelter_name)}
+						{renderInfo('Total Paintings', total_paintings)}
+						{renderInfo('Photo Status', photo_status)}
+					</Typography>
+				</CardContent>
+			</Collapse>
 		</Card>
 	);
 }

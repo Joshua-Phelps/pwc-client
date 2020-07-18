@@ -10,6 +10,12 @@ const headers = () => {
 	};
 };
 
+const generateCard = id => {
+	return fetch(`${API_ROOT}/card_generator/${id}`, {
+		headers: headers(),
+	}).then(res => res.json());
+};
+
 const getAnimals = () => {
 	return fetch(`${API_ROOT}/animals`, {
 		headers: headers(),
@@ -110,5 +116,8 @@ export const api = {
 	shelters: {
 		getShelters,
 		getShelterById,
+	},
+	cards: {
+		generateCard,
 	},
 };
