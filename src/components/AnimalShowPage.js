@@ -31,8 +31,6 @@ export default function AnimalShowPage({ history, location }) {
 	const classes = useStyles();
 	const { galleries, selectAnimal } = useContext(StateContext);
 	const { selectAnimalDispatch } = useContext(DispatchContext);
-
-	// const [animal, setAnimal] = useState({});
 	const [paintingId, setPaintingId] = useState(null);
 	const [openForm, setOpenForm] = useState(false);
 	const [showPhotos, setShowPhotos] = useState(false);
@@ -52,21 +50,21 @@ export default function AnimalShowPage({ history, location }) {
 			.catch(err => console.log(err));
 	}, [loaded, location.pathname]);
 
-	const addPainting = painting => {
-		console.log(painting);
-		selectAnimalDispatch({
-			type: 'ADD_PAINTING',
-			payload: painting,
-		});
-	};
+	// const addPainting = painting => {
+	// 	selectAnimalDispatch({
+	// 		type: 'ADD_PAINTING',
+	// 		payload: painting,
+	// 	});
+	// };
 
-	const updatePainting = painting => {
-		console.log(painting);
-		selectAnimalDispatch({
-			type: 'UPDATE_PAINTING',
-			payload: painting,
-		});
-	};
+	// const updatePainting = painting => {
+	// 	selectAnimalDispatch({
+	// 		type: 'UPDATE_PAINTING',
+	// 		payload: painting,
+	// 	});
+	// };
+
+	const handleOpenForm = () => setOpenForm(!openForm);
 
 	const renderPaintingsList = () => {
 		return selectAnimal.paintings.map(paint => {
@@ -131,15 +129,16 @@ export default function AnimalShowPage({ history, location }) {
 					</div>
 					<div>
 						<div className={classes.box}>
+							<button type='button' onClick={handleOpenForm}>
+								Add Painting
+							</button>
 							<PaintingForm
 								paintingId={paintingId}
 								setPaintingId={setPaintingId}
-								updatePainting={updatePainting}
 								animalId={id}
-								location={location}
+								animalName={selectAnimal.name}
 								open={openForm}
 								setOpen={setOpenForm}
-								addPainting={addPainting}
 							/>
 						</div>
 					</div>

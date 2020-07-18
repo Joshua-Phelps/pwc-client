@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import { api } from '../services/api';
 import { galleryReducer } from '../reducers/Reducers';
+import PaintingCard from './PaintingCard';
 
 const initialState = {
 	id: null,
@@ -12,51 +13,60 @@ const initialState = {
 
 export default function GalleryShowPage({ history, location }) {
 	const [gallery, galleryDispatch] = useReducer(galleryReducer, initialState);
-	const [update, setUpdate] = useState(false);
+	const [loaded, setLoaded] = useState(false);
+	const {
+		id,
+		name,
+		address,
+		email,
+		phone_number,
+		paintings,
+		max_paintings,
+	} = gallery;
 
 	useEffect(() => {
-		fetchGallery();
-	}, [update]);
+		fetchGallery().then(() => setLoaded(true));
+	}, [loaded]);
 
-	const fetchGallery = async () => {
+	const fetchGallery = () => {
 		let id = parseInt(location.pathname.split('/galleries/')[1]);
-		await api.galleries
+		return api.galleries
 			.getGalleryById(id)
 			.then(gallery => {
-				let current_paintings = gallery.current_paintings;
-				galleryDispatch({
+				return galleryDispatch({
 					type: 'SET_GALLERY',
-					payload: { ...gallery.gallery, current_paintings },
+					payload: { ...gallery },
 				});
 			})
 			.catch(err => console.log(err));
 	};
 
 	const renderPaintings = () => {
-		return gallery.current_paintings.map(painting => {
-			return (
-				<li>
-					Animal Name: {painting.animal.name}
-					<br></br>
-					Type: {painting.animal.name}
-					<br></br>
-					description: {painting.animal.description}
-				</li>
-			);
+		return paintings.map(painting => {
+			return <PaintingCard key={painting.id} painting={painting} />;
 		});
 	};
 
 	return (
 		<>
-			<div>{gallery.name}</div>
-			<div>{gallery.address}</div>
-			{console.log(gallery)}
-			<div>Maximum Paintings: {gallery.max_paintings}</div>
+			{loaded && (
+				<>
+					<div>{name}</div>
+					<div>{address}</div>
+					<div>Maximum Paintings: {max_paintings}</div>
 
-			<div>
-				Current Paintings:
-				<ul>{renderPaintings()}</ul>
-			</div>
+					<div>
+						{paintings.length > 0 ? (
+							<>
+								Current Paintings:
+								<ul>{renderPaintings()}</ul>
+							</>
+						) : (
+							<>There are currently no paintings at this location</>
+						)}
+					</div>
+				</>
+			)}
 		</>
 	);
 }

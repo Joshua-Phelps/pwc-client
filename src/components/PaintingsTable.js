@@ -82,9 +82,9 @@ export default function PaintingsTable({
 					<TableCell component='th' scope='p'>
 						{p.id}
 					</TableCell>
-					<TableCell align='right'>{p.painter}</TableCell>
-					<TableCell align='right'>{gallery && gallery.name}</TableCell>
 					<TableCell align='right'>{p.painting_status}</TableCell>
+					<TableCell align='right'>{gallery && gallery.name}</TableCell>
+					<TableCell align='right'>{p.painter}</TableCell>
 					<TableCell align='right'>
 						{paintLocation && paintLocation.name}
 					</TableCell>
@@ -105,9 +105,9 @@ export default function PaintingsTable({
 				<TableHead>
 					<TableRow>
 						<TableCell>Painting ID</TableCell>
-						<TableCell align='right'>Painted By</TableCell>
-						<TableCell align='right'>Gallery</TableCell>
 						<TableCell align='right'>Status</TableCell>
+						<TableCell align='right'>Gallery</TableCell>
+						<TableCell align='right'>Painted By</TableCell>
 						<TableCell align='right'>Painted at</TableCell>
 						<TableCell align='right'></TableCell>
 						<TableCell align='right'></TableCell>

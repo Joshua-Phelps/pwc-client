@@ -38,31 +38,48 @@ const useStyles = makeStyles(theme => ({
 
 export default function PaintingForm({
 	paintingId,
-	open,
 	animalId,
 	setOpen,
-	addPainting,
-	updatePainting,
+	open,
+	animalName,
 }) {
 	const classes = useStyles();
+	const [loaded, setLoaded] = useState(false);
 	const { galleries, paintLocs, form } = useContext(StateContext);
-	const { formDispatch } = useContext(DispatchContext);
+	const { formDispatch, selectAnimalDispatch } = useContext(DispatchContext);
 
 	useEffect(() => {
 		if (paintingId) {
 			fetchPainting()
 				.then(p => {
-					formDispatch({
+					return formDispatch({
 						type: 'SET_FORM',
 						payload: p,
 					});
 				})
+				.then(() => setLoaded(true))
 				.catch(err => console.log(err));
+		} else {
+			setLoaded(true);
 		}
 	}, [paintingId]);
 
 	const fetchPainting = () => {
 		return api.paintings.getPaintingById(paintingId);
+	};
+
+	const addPainting = painting => {
+		selectAnimalDispatch({
+			type: 'ADD_PAINTING',
+			payload: painting,
+		});
+	};
+
+	const updatePainting = painting => {
+		selectAnimalDispatch({
+			type: 'UPDATE_PAINTING',
+			payload: painting,
+		});
 	};
 
 	const handleChange = e => {
@@ -146,94 +163,97 @@ export default function PaintingForm({
 
 	return (
 		<div>
-			<button type='button' onClick={handleOpen}>
+			{/* <button type='button' onClick={handleOpen}>
 				Add Painting
-			</button>
-			<Modal
-				aria-labelledby='transition-modal-title'
-				aria-describedby='transition-modal-description'
-				className={classes.modal}
-				open={open}
-				onClose={handleClose}
-				closeAfterTransition
-				BackdropComponent={Backdrop}
-				BackdropProps={{
-					timeout: 500,
-				}}>
-				<Fade in={open}>
-					<div className={classes.paper}>
-						<FormControl className={classes.formControl}>
-							{/* <InputLabel id='demo-simple-select-label'>Age</InputLabel> */}
-							<TextField
-								labelId='painter-name-input'
-								id='painter-name'
-								label='Painter Name'
-								value={form.painter || ''}
-								name='painter'
-								onChange={handleChange}
-							/>
-						</FormControl>
-
-						<br></br>
-
-						<FormControl className={classes.formControl}>
-							<InputLabel
-								shrink={form.paint_location_id && true}
-								id='select-paint-location-label'>
-								Painting Location
-							</InputLabel>
-							<Select
-								labelId='select-paint-location'
-								id='simple-select-paint-location'
-								value={form.paint_location_id || null}
-								name='paint_location_id'
-								onChange={handleChange}>
-								{renderPaintLocationValues()}
-							</Select>
-						</FormControl>
-
-						<br></br>
-
-						<FormControl className={classes.formControl}>
-							<InputLabel id='select-status-label'>Painting Status</InputLabel>
-							<Select
-								labelId='select-status'
-								id='simple-select-status'
-								value={form.painting_status || ''}
-								name='painting_status'
-								onChange={handleChange}>
-								{renderStatusValues()}
-							</Select>
-						</FormControl>
-
-						<br></br>
-
-						{form.painting_status === 'Displayed' && (
+			</button> */}
+			{loaded && (
+				<Modal
+					aria-labelledby='transition-modal-title'
+					aria-describedby='transition-modal-description'
+					className={classes.modal}
+					open={open}
+					onClose={handleClose}
+					closeAfterTransition
+					BackdropComponent={Backdrop}
+					BackdropProps={{
+						timeout: 500,
+					}}>
+					<Fade in={open}>
+						<div className={classes.paper}>
+							<h1>{animalName}'s Painting</h1>
 							<FormControl className={classes.formControl}>
-								<InputLabel id='select-gallery-label'>Gallery</InputLabel>
+								<TextField
+									id='painter-name'
+									label='Painter Name'
+									value={form.painter || ''}
+									name='painter'
+									onChange={handleChange}
+								/>
+							</FormControl>
+
+							<br></br>
+
+							<FormControl className={classes.formControl}>
+								<InputLabel
+									shrink={form.paint_location_id && true}
+									id='select-paint-location-label'>
+									Painting Location
+								</InputLabel>
 								<Select
-									labelId='select-status'
-									id='simple-select-status'
-									value={form.gallery_id || null}
-									name='gallery_id'
+									labelId='select-paint-location-label'
+									id='simple-select-paint-location'
+									value={form.paint_location_id || ''}
+									name='paint_location_id'
 									onChange={handleChange}>
-									{renderGalleryValues()}
+									{renderPaintLocationValues()}
 								</Select>
 							</FormControl>
-						)}
 
-						<br></br>
+							<br></br>
 
-						<Button
-							variant='contained'
-							color='primary'
-							className={classes.submit}
-							onClick={handleSubmit}>
-							Submit
-						</Button>
-					</div>
-				</Fade>
-			</Modal>
+							<FormControl className={classes.formControl}>
+								<InputLabel id='select-status-label'>
+									Painting Status
+								</InputLabel>
+								<Select
+									labelId='select-status-label'
+									id='simple-select-status'
+									value={form.painting_status || ''}
+									name='painting_status'
+									onChange={handleChange}>
+									{renderStatusValues()}
+								</Select>
+							</FormControl>
+
+							<br></br>
+
+							{form.painting_status === 'Displayed' && (
+								<FormControl className={classes.formControl}>
+									<InputLabel id='select-gallery-label'>Gallery</InputLabel>
+									<Select
+										labelId='select-gallery-label'
+										id='simple-select-status'
+										value={form.gallery_id || ''}
+										name='gallery_id'
+										onChange={handleChange}>
+										{renderGalleryValues()}
+									</Select>
+								</FormControl>
+							)}
+
+							<br></br>
+
+							<Button
+								variant='contained'
+								color='primary'
+								className={classes.submit}
+								onClick={handleSubmit}>
+								Submit
+							</Button>
+						</div>
+					</Fade>
+				</Modal>
+			)}
 		</div>
 	);
 }
