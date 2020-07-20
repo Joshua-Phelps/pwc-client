@@ -61,12 +61,18 @@ export default function AnimalShowPage({ history, location }) {
 		api.animals
 			.getAnimalById(id)
 			.then(ani => {
-				selectAnimalDispatch({
-					type: 'SET_ANIMAL',
-					payload: ani,
-				});
+				if (ani.error) {
+					history.push('/not-found');
+				} else {
+					return selectAnimalDispatch({
+						type: 'SET_ANIMAL',
+						payload: ani,
+					});
+				}
 			})
-			.then(() => setLoaded(true))
+			.then(() => {
+				setLoaded(true);
+			})
 			.catch(err => console.log(err));
 	}, [loaded, location.pathname]);
 
@@ -203,6 +209,7 @@ export default function AnimalShowPage({ history, location }) {
 							<PaintingForm
 								paintingId={paintingId}
 								setPaintingId={setPaintingId}
+								updateSelectAnimal={true}
 								animalId={id}
 								animalName={animal.name}
 								open={openForm}

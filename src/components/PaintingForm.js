@@ -42,6 +42,7 @@ export default function PaintingForm({
 	setOpen,
 	open,
 	animalName,
+	updateSelectAnimal,
 }) {
 	const classes = useStyles();
 	const [loaded, setLoaded] = useState(false);
@@ -75,7 +76,7 @@ export default function PaintingForm({
 		});
 	};
 
-	const updatePainting = painting => {
+	const updateSelectAnimalPainting = painting => {
 		selectAnimalDispatch({
 			type: 'UPDATE_PAINTING',
 			payload: painting,
@@ -90,7 +91,8 @@ export default function PaintingForm({
 		});
 	};
 
-	const handleSubmit = () => {
+	const handleSubmit = e => {
+		e.preventDefault();
 		setOpen(false);
 		let painting = { ...form, animal_id: animalId };
 		if (form.painting_status !== 'Displayed') {
@@ -99,12 +101,16 @@ export default function PaintingForm({
 		if (form.id) {
 			api.paintings
 				.updatePainting(painting)
-				.then(painting => updatePainting(painting))
+				.then(painting => {
+					if (updateSelectAnimal) updateSelectAnimalPainting(painting);
+				})
 				.catch(err => console.log(err));
 		} else {
 			api.paintings
 				.createPainting(painting)
-				.then(painting => addPainting(painting))
+				.then(painting => {
+					if (updateSelectAnimal) addPainting(painting);
+				})
 				.then(() => clearForm())
 				.catch(err => console.log(err));
 		}
@@ -181,75 +187,78 @@ export default function PaintingForm({
 					<Fade in={open}>
 						<div className={classes.paper}>
 							<h1>{animalName}'s Painting</h1>
-							<FormControl className={classes.formControl}>
-								<TextField
-									id='painter-name'
-									label='Painter Name'
-									value={form.painter || ''}
-									name='painter'
-									onChange={handleChange}
-								/>
-							</FormControl>
-
-							<br></br>
-
-							<FormControl className={classes.formControl}>
-								<InputLabel
-									shrink={form.paint_location_id && true}
-									id='select-paint-location-label'>
-									Painting Location
-								</InputLabel>
-								<Select
-									labelId='select-paint-location-label'
-									id='simple-select-paint-location'
-									value={form.paint_location_id || ''}
-									name='paint_location_id'
-									onChange={handleChange}>
-									{renderPaintLocationValues()}
-								</Select>
-							</FormControl>
-
-							<br></br>
-
-							<FormControl className={classes.formControl}>
-								<InputLabel id='select-status-label'>
-									Painting Status
-								</InputLabel>
-								<Select
-									labelId='select-status-label'
-									id='simple-select-status'
-									value={form.painting_status || ''}
-									name='painting_status'
-									onChange={handleChange}>
-									{renderStatusValues()}
-								</Select>
-							</FormControl>
-
-							<br></br>
-
-							{form.painting_status === 'Displayed' && (
+							<form onSubmit={handleSubmit}>
 								<FormControl className={classes.formControl}>
-									<InputLabel id='select-gallery-label'>Gallery</InputLabel>
+									<TextField
+										id='painter-name'
+										label='Painter Name'
+										value={form.painter || ''}
+										name='painter'
+										onChange={handleChange}
+									/>
+								</FormControl>
+
+								<br></br>
+
+								<FormControl className={classes.formControl}>
+									<InputLabel
+										shrink={form.paint_location_id && true}
+										id='select-paint-location-label'>
+										Painting Location
+									</InputLabel>
 									<Select
-										labelId='select-gallery-label'
-										id='simple-select-status'
-										value={form.gallery_id || ''}
-										name='gallery_id'
+										labelId='select-paint-location-label'
+										id='simple-select-paint-location'
+										value={form.paint_location_id || ''}
+										name='paint_location_id'
 										onChange={handleChange}>
-										{renderGalleryValues()}
+										{renderPaintLocationValues()}
 									</Select>
 								</FormControl>
-							)}
 
-							<br></br>
+								<br></br>
 
-							<Button
-								variant='contained'
-								color='primary'
-								className={classes.submit}
-								onClick={handleSubmit}>
-								Submit
-							</Button>
+								<FormControl className={classes.formControl}>
+									<InputLabel id='select-status-label'>
+										Painting Status
+									</InputLabel>
+									<Select
+										labelId='select-status-label'
+										id='simple-select-status'
+										value={form.painting_status || ''}
+										name='painting_status'
+										onChange={handleChange}>
+										{renderStatusValues()}
+									</Select>
+								</FormControl>
+
+								<br></br>
+
+								{form.painting_status === 'Displayed' && (
+									<FormControl className={classes.formControl}>
+										<InputLabel id='select-gallery-label'>Gallery</InputLabel>
+										<Select
+											labelId='select-gallery-label'
+											id='simple-select-status'
+											value={form.gallery_id || ''}
+											name='gallery_id'
+											onChange={handleChange}>
+											{renderGalleryValues()}
+										</Select>
+									</FormControl>
+								)}
+
+								<br></br>
+
+								<Button
+									variant='contained'
+									color='primary'
+									className={classes.submit}
+									type='submit'
+									onClick={handleSubmit}>
+									Submit
+								</Button>
+							</form>
 						</div>
 					</Fade>
 				</Modal>

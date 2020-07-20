@@ -3,6 +3,7 @@ import { AppBar, Tabs, Tab, Menu, MenuItem, Grid } from '@material-ui/core/';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
+import NavBarSmall from './NavBarSmall';
 
 // const useStyles = makeStyles(theme => ({
 // 	test: {
@@ -36,11 +37,11 @@ export default function NavBar({ history }) {
 	return (
 		<AppBar position='static'>
 			<Grid container xs={12}>
-				<Grid item xs={12} sm={12}>
+				<Grid className='horizontal-nav-bar' item xs={12} sm={12}>
 					<Tabs
 						wrapped={true}
 						variant='fullWidth'
-						className='horizontal-nav-bar'
+						// className='horizontal-nav-bar'
 						value={tabEl}
 						onChange={handleChange}
 						aria-label='nav tabs'>
@@ -50,9 +51,11 @@ export default function NavBar({ history }) {
 						<Tab label='Paint Locations' />
 					</Tabs>
 				</Grid>
-				<Grid item xs={12} sm={12}>
-					<Tabs
-						className='vertical-nav-bar'
+
+				<Grid className='vertical-nav-bar' item xs={12} sm={12}>
+					<NavBarSmall history={history} />
+					{/* <Tabs
+						// className='vertical-nav-bar'
 						wrapped={true}
 						orientation='vertical'
 						variant='scrollable'
@@ -63,7 +66,7 @@ export default function NavBar({ history }) {
 						<Tab label='Galleries' />
 						<Tab label='Shelters' />
 						<Tab label='Paint Locations' />
-					</Tabs>
+					</Tabs> */}
 				</Grid>
 
 				{/* <Grid item xs={1}>

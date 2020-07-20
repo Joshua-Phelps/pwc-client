@@ -15,9 +15,12 @@ const useStyles = makeStyles({
 	root: {
 		maxWidth: 345,
 	},
+	center: {
+		textAlign: 'center',
+	},
 });
 
-export default function PaintingCard({ painting }) {
+export default function PaintingCard({ painting, galleryName }) {
 	const classes = useStyles();
 	const [open, setOpen] = useState(false);
 
@@ -30,21 +33,26 @@ export default function PaintingCard({ painting }) {
 	return (
 		<Card className={classes.root}>
 			<CardActionArea>
-				<CardMedia
+				<CardContent>
+					<Typography align='center' gutterBottom variant='h5' component='h2'>
+						{painting.animal.name}
+					</Typography>
+					<Typography variant='body2' color='textSecondary' component='p'>
+						Card Stock: Card Stock goes here
+						<br></br>
+						Status:{' '}
+						{painting.painting_status === 'Displayed'
+							? `Displayed at ${galleryName}`
+							: painting.painting_status}
+					</Typography>
+				</CardContent>
+				{/* <CardMedia
 					component='img'
 					alt='Contemplative Reptile'
 					height='140'
 					image={painting.url}
 					title='Contemplative Reptile'
-				/>
-				<CardContent>
-					<Typography gutterBottom variant='h5' component='h2'>
-						{painting.animal.name}
-					</Typography>
-					<Typography variant='body2' color='textSecondary' component='p'>
-						Card Stock: Card Stock goes here
-					</Typography>
-				</CardContent>
+				/> */}
 			</CardActionArea>
 			<CardActions>
 				<Button
@@ -58,6 +66,7 @@ export default function PaintingCard({ painting }) {
 					<PaintingForm
 						paintingId={painting.id}
 						animalId={painting.animal.id}
+						updateSelectAnimal={false}
 						animalName={painting.animal.name}
 						open={open}
 						setOpen={handleOpen}
