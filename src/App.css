@@ -41,10 +41,16 @@
 	.vertical-nav-bar {
 		display: none !important;
 	}
+	.horizontal-tabs {
+		display: none !important;
+	}
 }
 
 @media (max-width: 769px) {
 	.horizontal-nav-bar {
+		display: none !important;
+	}
+	.vertical-tabs {
 		display: none !important;
 	}
 }

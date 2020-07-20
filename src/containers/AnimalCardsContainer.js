@@ -5,7 +5,9 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
 	container: {
-		padding: theme.spacing(2),
+		// padding: theme.spacing(1),
+		width: '100%',
+		margin: 0,
 	},
 }));
 
@@ -24,7 +26,7 @@ export default function CardsContainer({ animals, history }) {
 
 	return (
 		<>
-			<Grid className={classes.container} container spacing={3}>
+			<Grid className={classes.container} spacing={3} container>
 				{renderCards()}
 			</Grid>
 		</>
