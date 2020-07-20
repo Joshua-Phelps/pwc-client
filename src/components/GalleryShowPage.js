@@ -111,7 +111,9 @@ export default function GalleryShowPage({ history, location }) {
 								</Grid>
 							</>
 						) : (
-							<>There are currently no paintings at this location</>
+							<Typography align='center' variant='h6'>
+								There are currently no paintings at this location
+							</Typography>
 						)}
 					</div>
 				</>

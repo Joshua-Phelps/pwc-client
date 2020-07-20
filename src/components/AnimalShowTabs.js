@@ -57,6 +57,7 @@ const useStyles = makeStyles(theme => ({
 	tabPanel: {
 		overflowX: 'auto',
 		height: '100%',
+		width: '100%',
 	},
 	heading: {
 		textAlign: 'center',
@@ -86,8 +87,8 @@ const useStyles = makeStyles(theme => ({
 	button: {
 		padding: theme.spacing(1),
 	},
-	box: {
-		overflowX: 'auto',
+	detailsList: {
+		padding: theme.spacing(1),
 	},
 }));
 
@@ -142,7 +143,7 @@ export default function AnimalShowTabs({ animal, galleries }) {
 						onChange={handleChange}
 						aria-label='Horizontal Tabs'
 						className={classes.horizontalTabs}>
-						<Tab label='Description' {...a11yProps(0)} />
+						<Tab label='Details' {...a11yProps(0)} />
 						<Tab label='Shelter' {...a11yProps(1)} />
 						<Tab label='Photos' {...a11yProps(2)} />
 						<Tab label='Galleries' {...a11yProps(3)} />
@@ -157,17 +158,36 @@ export default function AnimalShowTabs({ animal, galleries }) {
 						onChange={handleChange}
 						aria-label='Vertical tabs example'
 						className={classes.verticalTabs}>
-						<Tab label='Description' {...a11yProps(0)} />
+						<Tab label='Details' {...a11yProps(0)} />
 						<Tab label='Shelter' {...a11yProps(1)} />
 						<Tab label='Photos' {...a11yProps(2)} />
 						<Tab label='Galleries' {...a11yProps(3)} />
 					</Tabs>
 				</Grid>
 
-				<Grid className={classes.tabPanel} item xs={12} sm={8}>
+				<Grid className={classes.tabPanel} item xs={12} sm={9}>
 					<TabPanel value={value} index={0}>
-						<b>ID:</b> {animal.id}
-						<p>{animal.description}</p>
+						<Typography
+							className={classes.detailsList}
+							align='left'
+							variant='body1'>
+							<b>ID:</b> {animal.id}
+							<br></br>
+							<b>Name:</b> {animal.name}
+							<br></br>
+							<b>Description:</b> {animal.description}
+							<br></br>
+							<b>Gender:</b> {animal.gender}
+							<br></br>
+							<b>Type:</b> {animal.animal_type}
+							<br></br>
+							<b>External ID:</b> {animal.external_id}
+							<br></br>
+							<b>Total Paintings:</b> {animal.paintings.length}
+							<br></br>
+							<b>Photo Status:</b> {animal.photo_status}
+						</Typography>
+						{/* <Typography variant='body1'>{animal.description}</Typography> */}
 					</TabPanel>
 
 					<TabPanel value={value} index={1}>

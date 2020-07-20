@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { AppBar, Tabs, Tab, Menu, MenuItem, Grid } from '@material-ui/core/';
+import {
+	AppBar,
+	Tabs,
+	Tab,
+	Menu,
+	MenuItem,
+	Grid,
+	Button,
+} from '@material-ui/core/';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
@@ -32,6 +40,7 @@ export default function NavBar({ history }) {
 		newValue === 1 && history.push('/galleries');
 		newValue === 2 && history.push('/shelters');
 		newValue === 3 && history.push('/paint-locations');
+		newValue === 4 && history.push('/search-page');
 	};
 
 	return (
@@ -49,6 +58,7 @@ export default function NavBar({ history }) {
 						<Tab label='Galleries' />
 						<Tab label='Shelters' />
 						<Tab label='Paint Locations' />
+						<Tab label='Search' />
 					</Tabs>
 				</Grid>
 

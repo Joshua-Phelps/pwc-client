@@ -11,19 +11,26 @@ const useStyles = makeStyles(theme => ({
 	root: {
 		flexGrow: 1,
 	},
+	heading: {
+		padding: theme.spacing(2),
+	},
+	subheader: {
+		alignSelf: 'center',
+	},
 	imageContainer: {
-		padding: theme.spacing(3),
-		textAlign: 'center',
-		// color: theme.palette.text.secondary,
+		paddingBottom: theme.spacing(2),
 	},
 	box: {
-		padding: theme.spacing(2),
-		paddingTop: theme.spacing(3),
+		width: '100%',
+		height: '100%',
+		maxWidth: '300px',
+		maxHeight: '300px',
 	},
 	image: {
 		width: '100%',
 		height: '100%',
-		marginBottom: '-5px',
+		maxWidth: '300px',
+		maxHeight: '300px',
 	},
 	button: {
 		padding: theme.spacing(2),
@@ -39,7 +46,7 @@ const useStyles = makeStyles(theme => ({
 		padding: theme.spacing(2),
 	},
 	divider: {
-		border: `1px solid`,
+		borderTop: `1px solid`,
 	},
 	dividerSpacing: {
 		paddingTop: theme.spacing(4),
@@ -149,21 +156,36 @@ export default function AnimalShowPage({ history, location }) {
 					</div> */}
 					<div className={classes.root}>
 						<Grid container>
-							<Grid className={classes.imageContainer} item xs={12} sm={3}>
-								<Box borderRadius='borderRadius' border={2}>
-									<div className={classes.imageContainer}>
-										<Typography>
-											<h1>{animal.name}</h1>
-										</Typography>
-									</div>
+							{/* <Grid item xs={0} sm={1}></Grid> */}
+							<Grid item xs={12} sm={12}>
+								<Typography className={classes.heading} variant='h1'>
+									{animal.name}
+								</Typography>
+							</Grid>
+							<Grid item sm={2} xs={0}></Grid>
 
+							<Grid className={classes.imageContainer} item xs={12} sm={3}>
+								<Box
+									className={classes.box}
+									borderRadius='borderRadius'
+									border={2}>
 									<img
 										className={classes.image}
 										src={animal.photos[3].url}></img>
 								</Box>
 							</Grid>
+							<Grid className={classes.subheader} item sm={6} xs={12}>
+								<Typography align='right' variant='h5'>
+									{animal.description}
+								</Typography>
+							</Grid>
+						</Grid>
+						<Divider variant='fullWidth' className={classes.divider} />
 
-							<Grid item xs={12} sm={8}>
+						<Grid container className={classes.dividerSpacing}>
+							<Grid item xs={0} sm={1}></Grid>
+
+							<Grid item xs={12} sm={10}>
 								<div className={classes.tabs}>
 									<Box borderRadius='borderRadius' border={1}>
 										<AnimalShowTabs
@@ -173,9 +195,11 @@ export default function AnimalShowPage({ history, location }) {
 									</Box>
 								</div>
 							</Grid>
+
+							<Grid item xs={0} sm={1}></Grid>
 						</Grid>
 					</div>
-					<div className={(classes.root, classes.box)}>
+					<div className={classes.root}>
 						<Divider variant='fullWidth' className={classes.divider} />
 
 						<Grid container className={classes.dividerSpacing}>
