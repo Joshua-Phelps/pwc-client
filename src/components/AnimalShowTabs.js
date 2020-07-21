@@ -111,7 +111,6 @@ export default function AnimalShowTabs({ animal, galleries }) {
 	};
 
 	const renderGalleries = () => {
-		console.log(galleries());
 		return galleries().map((g, idx) => {
 			return (
 				<div key={idx}>
@@ -135,7 +134,7 @@ export default function AnimalShowTabs({ animal, galleries }) {
 	return (
 		<div className={classes.root}>
 			<Grid container>
-				<Grid className='horizontal-tabs' item xs={12}>
+				<Grid className='small-view' item xs={12}>
 					<Tabs
 						variant='scrollable'
 						scrollButtons='on'
@@ -150,7 +149,7 @@ export default function AnimalShowTabs({ animal, galleries }) {
 					</Tabs>
 				</Grid>
 
-				<Grid className='vertical-tabs' item xs={4} sm={3}>
+				<Grid className='large-view' item xs={4} sm={3}>
 					<Tabs
 						orientation='vertical'
 						variant='scrollable'

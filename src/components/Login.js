@@ -1,8 +1,7 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { StateContext, DispatchContext, MethodContext } from '../App';
+import React, { useState } from 'react';
+import { StateContext } from '../App';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { api } from '../services/api';
-// import { Link } from 'react-router-dom'
 
 import {
 	Avatar,
@@ -24,7 +23,7 @@ function Copyright() {
 		<Typography variant='body2' color='textSecondary' align='center'>
 			{'Copyright © '}
 			<Link color='inherit' href='https://material-ui.com/'>
-				Nicole Cabral, Josh Phelps, Alice Won
+				Josh Phelps
 			</Link>{' '}
 			{new Date().getFullYear()}
 			{'.'}

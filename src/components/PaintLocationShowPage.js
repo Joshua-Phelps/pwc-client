@@ -48,7 +48,7 @@ export default function PaintLocationShowPage({ history, location }) {
 				name: '',
 				animal_type: '',
 			};
-			console.log(animal);
+
 			return (
 				<div>
 					<h1>

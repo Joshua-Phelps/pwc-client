@@ -37,20 +37,20 @@
 	}
 }
 
-@media (min-width: 768px) {
-	.vertical-nav-bar {
+@media (min-width: 600px) {
+	.small-view {
 		display: none !important;
 	}
-	.horizontal-tabs {
+	.form-small {
 		display: none !important;
 	}
 }
 
-@media (max-width: 769px) {
-	.horizontal-nav-bar {
+@media (max-width: 601px) {
+	.large-view {
 		display: none !important;
 	}
-	.vertical-tabs {
+	.form-large {
 		display: none !important;
 	}
 }

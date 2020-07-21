@@ -46,11 +46,10 @@ export default function NavBar({ history }) {
 	return (
 		<AppBar position='static'>
 			<Grid container xs={12}>
-				<Grid className='horizontal-nav-bar' item xs={12} sm={12}>
+				<Grid className='large-view' item xs={12} sm={12}>
 					<Tabs
 						wrapped={true}
 						variant='fullWidth'
-						// className='horizontal-nav-bar'
 						value={tabEl}
 						onChange={handleChange}
 						aria-label='nav tabs'>
@@ -62,7 +61,7 @@ export default function NavBar({ history }) {
 					</Tabs>
 				</Grid>
 
-				<Grid className='vertical-nav-bar' item xs={12} sm={12}>
+				<Grid className='small-view' item xs={12} sm={12}>
 					<NavBarSmall history={history} />
 					{/* <Tabs
 						// className='vertical-nav-bar'

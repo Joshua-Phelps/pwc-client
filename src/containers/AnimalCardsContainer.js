@@ -5,9 +5,11 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
 	container: {
-		// padding: theme.spacing(1),
 		width: '100%',
 		margin: 0,
+	},
+	gridItem: {
+		textAlign: '-webkit-center',
 	},
 }));
 
@@ -17,7 +19,7 @@ export default function CardsContainer({ animals, history }) {
 	const renderCards = () => {
 		return animals.map(animal => {
 			return (
-				<Grid key={animal.id} item xs={12} sm={4}>
+				<Grid key={animal.id} className={classes.gridItem} item xs={12} sm={4}>
 					<AnimalCard animal={animal} history={history} />
 				</Grid>
 			);
@@ -26,7 +28,11 @@ export default function CardsContainer({ animals, history }) {
 
 	return (
 		<>
-			<Grid className={classes.container} spacing={3} container>
+			<Grid
+				className={classes.container}
+				spacing={3}
+				alignItems='center'
+				container>
 				{renderCards()}
 			</Grid>
 		</>

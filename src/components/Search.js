@@ -8,15 +8,24 @@ import {
 	TextField,
 	Button,
 	Grid,
+	Paper,
+	Typography,
 } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
 	formControl: {
 		margin: theme.spacing(1),
-		minWidth: 120,
+		width: '71%',
 	},
 	selectEmpty: {
 		marginTop: theme.spacing(2),
+	},
+	form: {
+		textAlign: 'center',
+		padding: theme.spacing(2),
+	},
+	button: {
+		padding: theme.spacing(2),
 	},
 	textField: {
 		'& .MuiTextField-root': {
@@ -24,9 +33,22 @@ const useStyles = makeStyles(theme => ({
 			width: '25ch',
 		},
 	},
+	gridItem: {
+		width: '100%',
+	},
+	root: {
+		flexGrow: 1,
+		width: '100%',
+		margin: 0,
+	},
+	paper: {
+		padding: theme.spacing(2),
+		textAlign: 'center',
+		color: theme.palette.text.secondary,
+	},
 }));
 
-export default function Search() {
+export default function Search({ history }) {
 	const classes = useStyles();
 	const [type, setType] = useState('');
 	const [attribute, setAttribute] = useState('');
@@ -52,65 +74,82 @@ export default function Search() {
 	};
 
 	return (
-		<Grid container alignContent='center'>
-			<Grid item xs={0} sm={4}></Grid>
-			<form>
-				<Grid alignContent='center' item xs={12} sm={4}>
-					<FormControl className={classes.formControl}>
-						<InputLabel id='select-type-label'>Search for</InputLabel>
-						<Select
-							labelId='select-type-label'
-							id='select-type'
-							value={type}
-							name='type'
-							onChange={e => handleChange(e, setType)}>
-							<MenuItem value={1}>Animal</MenuItem>
-							<MenuItem value={2}>Gallery</MenuItem>
-							<MenuItem value={3}>Paint Location</MenuItem>
-							<MenuItem value={4}>Shelter</MenuItem>
-						</Select>
-					</FormControl>
+		<div className={classes.root}>
+			<Grid
+				justify='center'
+				alignItems='center'
+				className={classes.root}
+				container
+				spacing={3}>
+				<Grid className='form-large' item xs={0} sm={4}>
+					<div className={classes.paper}></div>
 				</Grid>
-				<br></br>
+				<Grid item xs={12} sm={4}>
+					<Paper className={(classes.paper, classes.form)}>
+						<Typography variant='h5'>Search Form</Typography>
+						<form className={classes.form}>
+							<FormControl className={classes.formControl}>
+								<InputLabel id='select-type-label'>Search for</InputLabel>
+								<Select
+									labelId='select-type-label'
+									id='select-type'
+									value={type}
+									name='type'
+									onChange={e => handleChange(e, setType)}>
+									<MenuItem value={1}>Animal</MenuItem>
+									<MenuItem value={2}>Gallery</MenuItem>
+									<MenuItem value={3}>Paint Location</MenuItem>
+									<MenuItem value={4}>Shelter</MenuItem>
+								</Select>
+							</FormControl>
 
-				{type && (
-					<>
-						<FormControl className={classes.formControl}>
-							<InputLabel id='select-type-label'>Search By</InputLabel>
-							<Select
-								labelId='elect-type-label'
-								id='select-type'
-								value={attribute}
-								name='attribute'
-								onChange={e => handleChange(e, setAttribute)}>
-								{type === 1
-									? renderAttributes(['Name', 'ID'])
-									: renderAttributes(['Name'])}
-							</Select>
-						</FormControl>
-						<br></br>
-					</>
-				)}
+							{type && (
+								<>
+									<FormControl className={classes.formControl}>
+										<InputLabel id='select-type-label'>Search By</InputLabel>
+										<Select
+											labelId='elect-type-label'
+											id='select-type'
+											value={attribute}
+											name='attribute'
+											onChange={e => handleChange(e, setAttribute)}>
+											{type === 1
+												? renderAttributes(['ID', 'Name'])
+												: renderAttributes(['Name'])}
+										</Select>
+									</FormControl>
+									<br></br>
+								</>
+							)}
 
-				{attribute && (
-					// <Grid item xs={12} sm={12}>
-					<div className={classes.textField}>
-						<TextField
-							id='outlined-name'
-							label='Name'
-							value={searchValue}
-							onChange={e => handleChange(e, setSearchValue)}
-							variant='outlined'
-						/>
-					</div>
-					// </Grid>
-				)}
-
-				<Button variant='contained' type='submit' onClick={handleSubmit}>
-					Submit
-				</Button>
-			</form>
-			<Grid item xs={0} sm={4}></Grid>
-		</Grid>
+							{attribute && (
+								<>
+									<div className={classes.textField}>
+										<TextField
+											id='outlined-name'
+											label={attribute}
+											value={searchValue}
+											onChange={e => handleChange(e, setSearchValue)}
+											variant='outlined'
+										/>
+									</div>
+									<div className={classes.button}>
+										<Button
+											variant='contained'
+											type='submit'
+											onClick={handleSubmit}>
+											Submit
+										</Button>
+									</div>
+								</>
+							)}
+						</form>
+					</Paper>
+				</Grid>
+				<Grid className='form-large' item xs={0} sm={4}>
+					<div className={classes.paper}></div>
+				</Grid>
+			</Grid>
+		</div>
 	);
 }

@@ -10,6 +10,7 @@ import {
 	ListItemIcon,
 	ListItemText,
 	TextField,
+	Typography,
 	FormControl,
 	InputLabel,
 	Select,
@@ -18,7 +19,9 @@ import {
 import BrushIcon from '@material-ui/icons/Brush';
 import HomeIcon from '@material-ui/icons/Home';
 import PetsIcon from '@material-ui/icons/Pets';
+import MenuIcon from '@material-ui/icons/Menu';
 import PhotoLibraryIcon from '@material-ui/icons/PhotoLibrary';
+import SearchIcon from '@material-ui/icons/Search';
 
 const useStyles = makeStyles(theme => ({
 	list: {
@@ -30,11 +33,13 @@ const useStyles = makeStyles(theme => ({
 	},
 	formControl: {
 		margin: theme.spacing(1),
-		// minWidth: 120,
 		width: '90%',
 	},
 	selectEmpty: {
 		marginTop: theme.spacing(2),
+	},
+	caption: {
+		textAlign: 'center',
 	},
 }));
 
@@ -50,7 +55,6 @@ export default function NavBarSmall({ history }) {
 
 	const handleSearch = e => {
 		e.preventDefault();
-		console.log('searching');
 		history.push(`/animals/${search}`);
 		// let id = parseInt(search);
 		// api.animals
@@ -73,51 +77,48 @@ export default function NavBarSmall({ history }) {
 		// toggleDrawer(false);
 		setOpen(false);
 		index === 0 && history.push('/animals');
-		index === 1 && history.push('/galleries');
-		index === 2 && history.push('/shelters');
+		index === 1 && history.push('/shelters');
+		index === 2 && history.push('/galleries');
 		index === 3 && history.push('/paint-locations');
+		index === 4 && history.push('/search-page');
 	};
 
 	const list = () => (
-		<div
-			className={classes.list}
-			role='presentation'
-			// onClick={handleVisitPage()}
-		>
+		<div className={classes.list} role='presentation'>
 			<List>
-				{['Animals', 'Shelters', 'Galleries', 'Paint Locations'].map(
-					(text, index) => (
-						<ListItem onClick={() => handleVisitPage(index)} button key={text}>
-							<ListItemIcon>
-								{index === 0 && <PetsIcon />}
-								{index === 1 && <HomeIcon />}
-								{index === 2 && <PhotoLibraryIcon />}
-								{index === 3 && <BrushIcon />}
-							</ListItemIcon>
-							<ListItemText primary={text} />
-						</ListItem>
-					)
-				)}
+				{[
+					'Animals',
+					'Shelters',
+					'Galleries',
+					'Painting Locations',
+					'Search Page',
+				].map((text, index) => (
+					<ListItem onClick={() => handleVisitPage(index)} button key={text}>
+						<ListItemIcon>
+							{index === 0 && <PetsIcon />}
+							{index === 1 && <HomeIcon />}
+							{index === 2 && <PhotoLibraryIcon />}
+							{index === 3 && <BrushIcon />}
+							{index === 4 && <SearchIcon />}
+						</ListItemIcon>
+						<ListItemText primary={text} />
+					</ListItem>
+				))}
 			</List>
 			<Divider />
 			<List>
+				<br></br>
+				<div className={classes.caption}>
+					<Typography align='center' variant='caption'>
+						Quick Seach
+					</Typography>
+				</div>
 				<ListItem>
 					<form
 						onSubmit={handleSearch}
 						className={classes.root}
 						noValidate
 						autoComplete='off'>
-						{/* <FormControl className={classes.formControl}>
-							<InputLabel id='demo-simple-select-label'>Age</InputLabel>
-							<Select
-								labelId='demo-simple-select-label'
-								id='demo-simple-select'
-								value={select}
-								onChange={handleSelect}>
-								<MenuItem value={10}>Name</MenuItem>
-								<MenuItem value={20}>Id</MenuItem>
-							</Select>
-						</FormControl> */}
 						<TextField
 							value={search}
 							id='search-animal'
@@ -137,7 +138,9 @@ export default function NavBarSmall({ history }) {
 
 	return (
 		<div>
-			<Button onClick={toggleDrawer}>Menu</Button>
+			<Button onClick={toggleDrawer}>
+				<MenuIcon />
+			</Button>
 			<SwipeableDrawer
 				disableBackdropTransition
 				open={open}

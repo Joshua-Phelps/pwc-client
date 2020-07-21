@@ -5,6 +5,7 @@ import { Grid, Box, Button, Typography, Divider } from '@material-ui/core';
 import PaintingForm from './PaintingForm';
 import PaintingsTable from './PaintingsTable';
 import AnimalShowTabs from './AnimalShowTabs';
+import AnimalHeading from './AnimalHeading';
 import { StateContext, DispatchContext } from '../App';
 
 const useStyles = makeStyles(theme => ({
@@ -16,21 +17,25 @@ const useStyles = makeStyles(theme => ({
 	},
 	subheader: {
 		alignSelf: 'center',
+		padding: theme.spacing(2),
 	},
 	imageContainer: {
 		paddingBottom: theme.spacing(2),
+		textAlign: 'center',
+	},
+	imageContainer2: {
+		display: 'inline-block',
 	},
 	box: {
 		width: '100%',
 		height: '100%',
-		maxWidth: '300px',
-		maxHeight: '300px',
 	},
 	image: {
 		width: '100%',
 		height: '100%',
-		maxWidth: '300px',
-		maxHeight: '300px',
+		maxWidth: '275px',
+		maxHeight: '275px',
+		display: 'block',
 	},
 	button: {
 		padding: theme.spacing(2),
@@ -107,20 +112,18 @@ export default function AnimalShowPage({ history, location }) {
 			}
 		}
 		return result;
-		// return animal.paintings.map(p => {
-		// 	if (p.gallery_id) {
-		// 		// p.card_stock
-		// 		let foundGallery = galleries.find(g => g.id === p.gallery_id);
-		// 		if (foundGallery) {
-		// 			return { name: foundGallery.name, card_stock: 'placement #' };
-		// 		} else {
-		// 			return { name: '', card_stock: '' };
-		// 		}
-		// 	}
-		// });
 	};
 
-	const handleOpenForm = () => setOpenForm(!openForm);
+	const handleOpenForm = () => {
+		setOpenForm(!openForm);
+		console.log('running2');
+	};
+
+	const handleOpenBlankForm = cb => {
+		console.log('running 1');
+		setPaintingId(false);
+		cb();
+	};
 
 	const renderPaintingsList = () => {
 		return animal.paintings.map(paint => {
@@ -155,24 +158,25 @@ export default function AnimalShowPage({ history, location }) {
 						</Button>
 					</div> */}
 					<div className={classes.root}>
+						<AnimalHeading />
 						<Grid container>
-							{/* <Grid item xs={0} sm={1}></Grid> */}
 							<Grid item xs={12} sm={12}>
 								<Typography className={classes.heading} variant='h1'>
 									{animal.name}
 								</Typography>
 							</Grid>
 							<Grid item sm={2} xs={0}></Grid>
-
 							<Grid className={classes.imageContainer} item xs={12} sm={3}>
-								<Box
-									className={classes.box}
-									borderRadius='borderRadius'
-									border={2}>
-									<img
-										className={classes.image}
-										src={animal.photos[3].url}></img>
-								</Box>
+								<span className={classes.imageContainer2}>
+									<Box
+										className={classes.box}
+										borderRadius='borderRadius'
+										border={2}>
+										<img
+											className={classes.image}
+											src={animal.photos[3].url}></img>
+									</Box>
+								</span>
 							</Grid>
 							<Grid className={classes.subheader} item sm={6} xs={12}>
 								<Typography align='right' variant='h5'>
@@ -205,11 +209,11 @@ export default function AnimalShowPage({ history, location }) {
 						<Grid container className={classes.dividerSpacing}>
 							<Grid item xs={0} sm={2}></Grid>
 							<Grid item xs={12} sm={2}>
-								<div classname={classes.addPaintButton}>
+								<div className={classes.addPaintButton}>
 									<Button
 										variant='contained'
 										type='button'
-										onClick={handleOpenForm}>
+										onClick={() => handleOpenBlankForm(handleOpenForm)}>
 										Add Painting
 									</Button>
 								</div>

@@ -16,7 +16,7 @@ import PaintingForm from './components/PaintingForm';
 import SheltersContainer from './containers/SheltersContainer';
 import ShelterShowPage from './components/ShelterShowPage';
 import Login from './components/Login';
-import Search from './components/Search';
+import SearchContainer from './containers/SearchContainer';
 import {
 	animalsReducer,
 	galleriesReducer,
@@ -72,7 +72,6 @@ function App() {
 		api.animals
 			.getAnimals()
 			.then(animals => {
-				console.log(animals);
 				animalsDispatch({ type: 'SET_ANIMALS', payload: animals });
 			})
 			.catch(error => console.log(error));
@@ -99,7 +98,6 @@ function App() {
 		api.paintLocs
 			.getPaintLocs()
 			.then(paintLocs => {
-				console.log(paintLocs);
 				paintLocsDispatch({
 					type: 'SET_PAINT_LOCS',
 					payload: paintLocs,
@@ -112,7 +110,6 @@ function App() {
 		api.galleries
 			.getGalleries()
 			.then(galleries => {
-				console.log('HELLLLLOOOOO', galleries);
 				galleriesDispatch({
 					type: 'SET_GALLERIES',
 					payload: galleries,
@@ -144,7 +141,7 @@ function App() {
 						<Route path='/home' render={props => <HomePage {...props} />} />
 						<Route
 							path='/search-page'
-							render={props => <Search {...props} />}
+							render={props => <SearchContainer {...props} />}
 						/>
 						<Route
 							path='/animals'

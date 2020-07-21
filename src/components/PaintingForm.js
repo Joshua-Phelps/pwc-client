@@ -31,7 +31,10 @@ const useStyles = makeStyles(theme => ({
 		minWidth: 120,
 		display: 'flex',
 	},
-	submit: {
+	button: {
+		display: 'inline-block',
+	},
+	buttonContainer: {
 		textAlign: 'center',
 	},
 }));
@@ -61,6 +64,7 @@ export default function PaintingForm({
 				.then(() => setLoaded(true))
 				.catch(err => console.log(err));
 		} else {
+			clearForm();
 			setLoaded(true);
 		}
 	}, [paintingId]);
@@ -219,6 +223,20 @@ export default function PaintingForm({
 								<br></br>
 
 								<FormControl className={classes.formControl}>
+									<TextField
+										label='Card Stock'
+										id='card-stock'
+										type='number'
+										value={form.card_stock || ''}
+										name='card_stock'
+										onChange={handleChange}>
+										{renderStatusValues()}
+									</TextField>
+								</FormControl>
+
+								<br></br>
+
+								<FormControl className={classes.formControl}>
 									<InputLabel id='select-status-label'>
 										Painting Status
 									</InputLabel>
@@ -250,14 +268,16 @@ export default function PaintingForm({
 
 								<br></br>
 
-								<Button
-									variant='contained'
-									color='primary'
-									className={classes.submit}
-									type='submit'
-									onClick={handleSubmit}>
-									Submit
-								</Button>
+								<div className={classes.buttonContainer}>
+									<Button
+										variant='contained'
+										color='primary'
+										className={classes.button}
+										type='submit'
+										onClick={handleSubmit}>
+										Submit
+									</Button>
+								</div>
 							</form>
 						</div>
 					</Fade>
