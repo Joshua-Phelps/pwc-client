@@ -33,15 +33,20 @@ export const DispatchContext = createContext();
 const theme = createMuiTheme({
 	palette: {
 		primary: {
-			main: '#607d8b', //#66b783 #a6dadc
-			light: '#e0e0e0', //#efefef
-			dark: '#accacc', //#29434e
+			main: '#60326a', //Paws Purple
+			light: '#7f5b87', //#efefef
+			dark: '#43234a', //#29434e
 			gradient: 'linear-gradient(45deg, #09203f 0%, #537895 100%)',
 		},
 		secondary: {
-			main: '#eee8aa', //palegoldenrod
-			light: '#d6e286', //lime green
-			dark: '#29434e',
+			main: '#e44c26', //Paws Orange
+			light: '#e96f51', //lime green
+			dark: '#9f351a',
+		},
+		info: {
+			main: '#02b39c',
+			light: '#34c2af',
+			dark: '#017d6d',
 		},
 	},
 });
