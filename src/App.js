@@ -5,7 +5,7 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { api } from './services/api';
 import './App.css';
 import HomePage from './components/HomePage';
-import NavBar from './components/NavBar';
+import NavBarContainer from './containers/NavBarContainer';
 import AnimalCardsContainer from './containers/AnimalCardsContainer';
 import GalleryCardsContainer from './containers/GalleryCardsContainer';
 import PaintLocContainer from './containers/PaintLocContainer';
@@ -141,7 +141,7 @@ function App() {
 				<StateContext.Provider value={state}>
 					<DispatchContext.Provider value={dispatch}>
 						<CssBaseline />
-						<Route path='/' render={props => <NavBar {...props} />} />
+						<Route path='/' render={props => <NavBarContainer {...props} />} />
 						<Route path='/login' render={props => <Login {...props} />}></Route>
 						<Route path='/home' render={props => <HomePage {...props} />} />
 						<Route

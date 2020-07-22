@@ -43,11 +43,18 @@ const useStyles = makeStyles(theme => ({
 	},
 }));
 
-export default function NavBarSmall({ history }) {
+export default function NavBarSmall({ handleNavigate, history }) {
 	const classes = useStyles();
 	const [open, setOpen] = useState(false);
 	const [search, setSearch] = useState('');
 	const [select, setSelect] = useState('');
+
+	const listItems = [
+		'Shelters',
+		'Galleries',
+		'Painting Locations',
+		'Search Page',
+	];
 
 	const toggleDrawer = () => {
 		setOpen(!open);
@@ -73,33 +80,21 @@ export default function NavBarSmall({ history }) {
 		setSelect(event.target.value);
 	};
 
-	const handleVisitPage = index => {
-		// toggleDrawer(false);
+	const handleClick = index => {
 		setOpen(false);
-		index === 0 && history.push('/animals');
-		index === 1 && history.push('/shelters');
-		index === 2 && history.push('/galleries');
-		index === 3 && history.push('/paint-locations');
-		index === 4 && history.push('/search-page');
+		handleNavigate(index);
 	};
 
 	const list = () => (
 		<div className={classes.list} role='presentation'>
 			<List>
-				{[
-					'Animals',
-					'Shelters',
-					'Galleries',
-					'Painting Locations',
-					'Search Page',
-				].map((text, index) => (
-					<ListItem onClick={() => handleVisitPage(index)} button key={text}>
+				{listItems.map((text, index) => (
+					<ListItem onClick={() => handleClick(index)} button key={text}>
 						<ListItemIcon>
-							{index === 0 && <PetsIcon />}
-							{index === 1 && <HomeIcon />}
-							{index === 2 && <PhotoLibraryIcon />}
-							{index === 3 && <BrushIcon />}
-							{index === 4 && <SearchIcon />}
+							{index === 0 && <HomeIcon />}
+							{index === 1 && <PhotoLibraryIcon />}
+							{index === 2 && <BrushIcon />}
+							{index === 3 && <SearchIcon />}
 						</ListItemIcon>
 						<ListItemText primary={text} />
 					</ListItem>
@@ -137,7 +132,7 @@ export default function NavBarSmall({ history }) {
 	);
 
 	return (
-		<div>
+		<div className='small-view'>
 			<Button onClick={toggleDrawer}>
 				<MenuIcon />
 			</Button>

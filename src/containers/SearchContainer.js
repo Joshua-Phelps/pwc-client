@@ -1,14 +1,14 @@
 import React from 'react';
-import Search from '../components/Search';
+import SearchPage from '../components/SearchPage';
 
 export default function SearchContainer({ history }) {
 	return (
 		<>
 			<div className='small-view'>
-				<Search history={history} />
+				<SearchPage history={history} />
 			</div>
 			<div className='large-view'>
-				<Search history={history} />
+				<SearchPage history={history} />
 			</div>
 		</>
 	);

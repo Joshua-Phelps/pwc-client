@@ -48,7 +48,7 @@ const useStyles = makeStyles(theme => ({
 	},
 }));
 
-export default function Search({ history }) {
+export default function SearchPage({ history }) {
 	const classes = useStyles();
 	const [type, setType] = useState('');
 	const [attribute, setAttribute] = useState('');
