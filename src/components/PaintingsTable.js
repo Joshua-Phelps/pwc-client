@@ -30,7 +30,7 @@ export default function PaintingsTable({
 }) {
 	const classes = useStyles();
 	const { galleries, paintLocs } = useContext(StateContext);
-	const { selectAnimalDispatch } = useContext(DispatchContext);
+	const { animalDispatch } = useContext(DispatchContext);
 
 	const handleEdit = id => {
 		setPaintingId(id);
@@ -51,7 +51,7 @@ export default function PaintingsTable({
 	};
 
 	const removePainting = id => {
-		selectAnimalDispatch({ type: 'DELETE_PAINTING', payload: id });
+		animalDispatch({ type: 'DELETE_PAINTING', payload: id });
 	};
 
 	const getGallery = id => {

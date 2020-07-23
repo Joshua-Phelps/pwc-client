@@ -34,8 +34,8 @@ const useStyles = makeStyles(theme => ({
 
 export default function Animalheading() {
 	const classes = useStyles();
-	const { selectAnimal } = useContext(StateContext);
-	const { name, photos, description } = selectAnimal;
+	const { soloAnimal } = useContext(StateContext);
+	const { name, photos, description } = soloAnimal;
 
 	return (
 		<Grid container>

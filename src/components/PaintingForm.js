@@ -45,12 +45,12 @@ export default function PaintingForm({
 	setOpen,
 	open,
 	animalName,
-	updateSelectAnimal,
+	updateAnimal,
 }) {
 	const classes = useStyles();
 	const [loaded, setLoaded] = useState(false);
 	const { galleries, paintLocs, form } = useContext(StateContext);
-	const { formDispatch, selectAnimalDispatch } = useContext(DispatchContext);
+	const { formDispatch, animalDispatch } = useContext(DispatchContext);
 
 	useEffect(() => {
 		if (paintingId) {
@@ -74,14 +74,14 @@ export default function PaintingForm({
 	};
 
 	const addPainting = painting => {
-		selectAnimalDispatch({
+		animalDispatch({
 			type: 'ADD_PAINTING',
 			payload: painting,
 		});
 	};
 
-	const updateSelectAnimalPainting = painting => {
-		selectAnimalDispatch({
+	const updateSoloAnimalPainting = painting => {
+		animalDispatch({
 			type: 'UPDATE_PAINTING',
 			payload: painting,
 		});
@@ -106,14 +106,14 @@ export default function PaintingForm({
 			api.paintings
 				.updatePainting(painting)
 				.then(painting => {
-					if (updateSelectAnimal) updateSelectAnimalPainting(painting);
+					if (updateAnimal) updateSoloAnimalPainting(painting);
 				})
 				.catch(err => console.log(err));
 		} else {
 			api.paintings
 				.createPainting(painting)
 				.then(painting => {
-					if (updateSelectAnimal) addPainting(painting);
+					if (updateAnimal) addPainting(painting);
 				})
 				.then(() => clearForm())
 				.catch(err => console.log(err));
@@ -173,6 +173,7 @@ export default function PaintingForm({
 
 	return (
 		<div>
+			{console.log('running in form')}
 			{/* <button type='button' onClick={handleOpen}>
 				Add Painting
 			</button> */}

@@ -84,6 +84,7 @@ export default function Login({ history }) {
 		// })
 	};
 
+	console.log('running in login');
 	return (
 		<Grid container component='main' className={classes.root}>
 			<CssBaseline />

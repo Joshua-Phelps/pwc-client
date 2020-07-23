@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useReducer } from 'react';
+import React, { useState, useEffect, useContext, useReducer } from 'react';
+import { StateContext, DispatchContext } from '../App';
 import { api } from '../services/api';
-import { galleryReducer } from '../reducers/Reducers';
 import PaintingCard from './PaintingCard';
 import { Grid, Typography, Divider } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -37,7 +37,8 @@ const initialState = {
 
 export default function GalleryShowPage({ history, location }) {
 	const classes = useStyles();
-	const [gallery, galleryDispatch] = useReducer(galleryReducer, initialState);
+	const { gallery } = useContext(StateContext);
+	const { galleryDispatch } = useContext(DispatchContext);
 	const [loaded, setLoaded] = useState(false);
 	const id = parseInt(location.pathname.split('/animals/')[1]);
 	const {
@@ -70,7 +71,7 @@ export default function GalleryShowPage({ history, location }) {
 		return paintings.map(painting => {
 			return (
 				<Grid key={painting.id} item xs={12} sm={4}>
-					<PaintingCard galleryName={gallery.name} painting={painting} />
+					<PaintingCard galleryName={name} painting={painting} />
 				</Grid>
 			);
 		});

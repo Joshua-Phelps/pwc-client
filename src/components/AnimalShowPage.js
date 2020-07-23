@@ -27,9 +27,8 @@ const useStyles = makeStyles(theme => ({
 
 export default function AnimalShowPage({ history, location }) {
 	const classes = useStyles();
-	const { selectAnimal } = useContext(StateContext);
-	const { selectAnimalDispatch } = useContext(DispatchContext);
-	const animal = selectAnimal;
+	const { animal } = useContext(StateContext);
+	const { animalDispatch } = useContext(DispatchContext);
 	const [paintingId, setPaintingId] = useState(null);
 	const [openForm, setOpenForm] = useState(false);
 	const [showPhotos, setShowPhotos] = useState(false);
@@ -43,7 +42,7 @@ export default function AnimalShowPage({ history, location }) {
 				if (ani.error) {
 					history.push('/not-found');
 				} else {
-					return selectAnimalDispatch({
+					return animalDispatch({
 						type: 'SET_ANIMAL',
 						payload: ani,
 					});
@@ -136,7 +135,7 @@ export default function AnimalShowPage({ history, location }) {
 					<PaintingForm
 						paintingId={paintingId}
 						setPaintingId={setPaintingId}
-						updateSelectAnimal={true}
+						updateAnimal={true}
 						animalId={id}
 						animalName={animal.name}
 						open={openForm}

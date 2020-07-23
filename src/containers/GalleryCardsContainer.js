@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import GalleryCard from '../components/GalleryCard';
 import { Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { StateContext } from '../App';
 
 const useStyles = makeStyles(theme => ({
 	container: {
@@ -10,8 +11,9 @@ const useStyles = makeStyles(theme => ({
 	},
 }));
 
-export default function CardsContainer({ galleries, history }) {
+export default function CardsContainer({ history }) {
 	const classes = useStyles();
+	const { galleries } = useContext(StateContext);
 
 	const renderCards = () => {
 		return galleries.map(gallery => {

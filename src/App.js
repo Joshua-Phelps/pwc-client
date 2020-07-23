@@ -19,10 +19,13 @@ import Login from './components/Login';
 import SearchContainer from './containers/SearchContainer';
 import {
 	animalsReducer,
+	animalReducer,
 	galleriesReducer,
+	galleryReducer,
 	paintLocsReducer,
+	paintLocReducer,
 	sheltersReducer,
-	selectAnimalReducer,
+	shelterReducer,
 	formReducer,
 } from './reducers/Reducers';
 import AnimalCard from './components/AnimalCard';
@@ -62,17 +65,32 @@ const theme = createMuiTheme({
 
 function App() {
 	const [animals, animalsDispatch] = useReducer(animalsReducer, []);
-	const [selectAnimal, selectAnimalDispatch] = useReducer(
-		selectAnimalReducer,
-		{}
-	);
+	const [animal, animalDispatch] = useReducer(animalReducer, {});
 	const [galleries, galleriesDispatch] = useReducer(galleriesReducer, []);
+	const [gallery, galleryDispatch] = useReducer(galleryReducer, {});
 	const [paintLocs, paintLocsDispatch] = useReducer(paintLocsReducer, []);
 	const [shelters, sheltersDispatch] = useReducer(sheltersReducer, []);
+	const [shelter, shelterDispatch] = useReducer(shelterReducer, {});
+	const [paintLoc, paintLocDispatch] = useReducer(paintLocReducer, {});
 	const [form, formDispatch] = useReducer(formReducer, {});
 
-	const state = { animals, galleries, paintLocs, selectAnimal, form, shelters };
-	const dispatch = { selectAnimalDispatch, formDispatch };
+	const state = {
+		animals,
+		animal,
+		galleries,
+		gallery,
+		paintLocs,
+		paintLoc,
+		form,
+		shelters,
+	};
+	const dispatch = {
+		animalDispatch,
+		galleryDispatch,
+		paintLocDispatch,
+		shelterDispatch,
+		formDispatch,
+	};
 
 	useEffect(() => {
 		setPaintLocs();
@@ -89,24 +107,12 @@ function App() {
 				animalsDispatch({ type: 'SET_ANIMALS', payload: animals });
 			})
 			.catch(error => console.log(error));
-		// api.paintLocs.getPaintLocs().then(paintLocs =>
-		// 	paintLocsDispatch({
-		// 		type: 'SET_GALLERIES',
-		// 		payload: paintLocs,
-		// 	})
-		// );
-		// const setGalleries = api.galleries.getGalleries().then(galleries =>
-		// 	galleriesDispatch({
-		// 		type: 'SET_GALLERIES',
-		// 		payload: galleries,
-		// 	})
-		// );
-		// }
 	}, []);
 
 	// const animalsByDisplayLocation = dispLocId => {
 	// 	return animals.filter(a => a.current_display_location_id === dispLocId);
 	// };
+	console.log('rnning in app');
 
 	const setPaintLocs = () => {
 		api.paintLocs
@@ -167,9 +173,7 @@ function App() {
 						<Route
 							path='/galleries'
 							exact
-							render={props => (
-								<GalleryCardsContainer galleries={galleries} {...props} />
-							)}
+							render={props => <GalleryCardsContainer {...props} />}
 						/>
 						<Route
 							path='/galleries/:id'

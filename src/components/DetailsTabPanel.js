@@ -11,7 +11,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function DetailsTabPanel() {
 	const classes = useStyles();
-	const { selectAnimal } = useContext(StateContext);
+	const { animal } = useContext(StateContext);
 	const {
 		id,
 		name,
@@ -21,7 +21,7 @@ export default function DetailsTabPanel() {
 		external_id,
 		paintings,
 		photo_status,
-	} = selectAnimal;
+	} = animal;
 
 	return (
 		<Typography className={classes.detailsList} align='left' variant='body1'>

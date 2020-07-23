@@ -22,7 +22,7 @@ const animalsReducer = (state, action) => {
 	}
 };
 
-const selectAnimalReducer = (state, action) => {
+const animalReducer = (state, action) => {
 	let paintings;
 	switch (action.type) {
 		case SET_ANIMAL:
@@ -69,7 +69,7 @@ const paintLocsReducer = (state, action) => {
 	}
 };
 
-const paintLocationReducer = (state, action) => {
+const paintLocReducer = (state, action) => {
 	switch (action.type) {
 		case SET_PAINT_LOCATION:
 			return { ...action.payload };
@@ -114,9 +114,9 @@ export {
 	galleriesReducer,
 	galleryReducer,
 	paintLocsReducer,
-	paintLocationReducer,
+	paintLocReducer,
 	sheltersReducer,
 	shelterReducer,
-	selectAnimalReducer,
+	animalReducer,
 	formReducer,
 };

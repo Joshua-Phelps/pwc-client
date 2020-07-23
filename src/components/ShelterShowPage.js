@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useReducer, useContext } from 'react';
-import { StateContext } from '../App';
+import React, { useState, useEffect, useContext } from 'react';
+import { StateContext, DispatchContext } from '../App';
 import { api } from '../services/api';
-import { shelterReducer } from '../reducers/Reducers';
 
 // const initialState = {
 // 	id: null,
@@ -13,8 +12,8 @@ import { shelterReducer } from '../reducers/Reducers';
 // };
 
 export default function PaintLocationShowPage({ location }) {
-	// const { shelter } = useContext(StateContext);
-	const [shelter, shelterDispatch] = useReducer(shelterReducer, []);
+	const { shelter } = useContext(StateContext);
+	const { shelterDispatch } = useContext(DispatchContext);
 	const [loaded, setLoaded] = useState(false);
 	const id = parseInt(location.pathname.split('/shelters/')[1]);
 

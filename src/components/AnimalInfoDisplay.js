@@ -93,8 +93,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function AnimalInfoDisplay() {
 	const classes = useStyles();
-	const { galleries, selectAnimal } = useContext(StateContext);
-	const animal = selectAnimal;
+	const { galleries, animal } = useContext(StateContext);
 	const [value, setValue] = React.useState(0);
 
 	const handleChange = (event, newValue) => {
