@@ -10,6 +10,7 @@ import {
 	Button,
 } from '@material-ui/core/';
 import SearchIcon from '@material-ui/icons/Search';
+import { api } from '../services/api';
 
 const useStyles = makeStyles(theme => ({
 	formControl: {
@@ -21,47 +22,83 @@ const useStyles = makeStyles(theme => ({
 		padding: theme.spacing(1),
 	},
 	label: {
-		// width: '100%',
 		textAlign: 'left',
 	},
-	// search: {
-	// 	alignItems: 'left',
-	// },
-	// searchContainer: {
-	// 	display: 'flex',
-	// 	justifyContent: 'center',
-	// 	alignItems: 'center',
-	// 	height: '100%',
-	// },
+	buttonContainer: {
+		display: 'flex',
+		justifyContent: 'center',
+		alignItems: 'center',
+		height: '100%',
+		padding: theme.spacing(1),
+	},
 }));
 
-let secondSelectOptions1 = [
-	'Photos need background removed',
-	'Photos ready for print',
-];
-let secondSelectOptions2 = ['ID', 'Name'];
-
-let firstSelectOptions1 = ['Tasks'];
-let firstSelectOptions2 = [
-	'Animals',
-	'Galleries',
-	'Shelters',
-	'Paint Locations',
-];
-
-export default function SearchAnimal({ fetch }) {
+export default function SearchAnimal({ history }) {
 	const classes = useStyles();
 	const [select1, setSelect1] = useState('');
 	const [select2, setSelect2] = useState('');
-	const [task, setTask] = useState('');
 	const [textField, setTextField] = useState('');
+	const firstOptions = {
+		tasks: ['Tasks'],
+		animals: ['Animals'],
+		other: ['Galleries', 'Shelters', 'Paint Locations'],
+	};
+	// const firstOptions1 = ['Tasks'];
+	// const firstOptions2 = ['Animals'];
+	// const firstOptions3 = ['Galleries', 'Shelters', 'Paint Locations'];
+
+	const secondOptions = {
+		tasks: ['Photos need background removed', 'Photos ready for print'],
+		animals: ['ID', 'Name'],
+	};
+	const allFirstOptions = firstOptions.tasks
+		.concat(firstOptions.animals)
+		.concat(firstOptions.other);
 
 	const handleChange = (e, setState) => setState(e.target.value);
 
-	const handleClick = () => {};
+	const handleSubmit = e => {
+		e.preventDefault();
+		// for TASKS
+		if (hasValues(select1, firstOptions.tasks)) {
+			if (hasValues(select2, secondOptions.tasks[0])) {
+				api.photos.getIncompletePhotos();
+			} else {
+				api.photos.getPrintReadyPhotos();
+			}
+
+			// for ANIMALS
+		} else if (hasValues(select1, firstOptions.animals)) {
+			if (select2 === secondOptions.animals[0]) {
+				// for ID
+				history.push(`/animals/${textField}`);
+			} else if (select2 === secondOptions.animals[1]) {
+				//for NAME
+				api.animals
+					.getAnimalByName(textField)
+					.then(res => {
+						res.id
+							? history.push(`/animals/${res.id}`)
+							: alert('Animal Not Found!');
+					})
+					.catch(err => console.log(err));
+			}
+
+			//for Galleries, paint locs, and shelters
+		} else if (hasValues(select1, firstOptions.other)) {
+			// look through state
+			console.log('looking through state');
+		}
+	};
+
+	const clearState = () => {
+		setSelect1('');
+		setSelect2('');
+		setTextField('');
+	};
 
 	const renderMenuItems = arr => {
-		return arr.map((text, idx) => {
+		return arr.map(text => {
 			return (
 				<MenuItem key={text} value={text}>
 					{text}
@@ -78,7 +115,7 @@ export default function SearchAnimal({ fetch }) {
 	};
 
 	return (
-		<form>
+		<form onSubmit={handleSubmit}>
 			<Grid container spacing={1}>
 				<Grid item sm={3}>
 					<FormControl variant='outlined' className={classes.formControl}>
@@ -91,16 +128,21 @@ export default function SearchAnimal({ fetch }) {
 							value={select1}
 							name='input-one'
 							onChange={e => handleChange(e, setSelect1)}>
-							{renderMenuItems(firstSelectOptions1.concat(firstSelectOptions2))}
+							{renderMenuItems(allFirstOptions)}
 						</Select>
 					</FormControl>
 				</Grid>
 
-				{!hasValues(select1, ['']) && (
+				{hasValues(
+					select1,
+					firstOptions.tasks.concat(firstOptions.animals)
+				) && (
 					<Grid item sm={3}>
 						<FormControl variant='outlined' className={classes.formControl}>
 							<InputLabel className={classes.label} id='select-attribute-label'>
-								{select1 === 'Tasks' ? 'To-do' : select1 === '' ? '' : 'By'}
+								{hasValues(select1, firstOptions.tasks) && 'To-do'}
+								{hasValues(select1, firstOptions.animals) && 'By'}
+								{hasValues(select1, firstOptions.other) && 'Name'}
 							</InputLabel>
 							<Select
 								labelId='select-attribute-label'
@@ -108,39 +150,48 @@ export default function SearchAnimal({ fetch }) {
 								value={select2}
 								name='input-two'
 								onChange={e => handleChange(e, setSelect2)}>
-								{hasValues(select1, firstSelectOptions1) &&
-									renderMenuItems(secondSelectOptions1)}
+								{hasValues(select1, firstOptions.tasks) &&
+									renderMenuItems(secondOptions.tasks)}
 
-								{hasValues(select1, firstSelectOptions2) &&
-									renderMenuItems(secondSelectOptions2)}
+								{hasValues(select1, firstOptions.animals) &&
+									renderMenuItems(secondOptions.animals)}
 							</Select>
 						</FormControl>
 					</Grid>
 				)}
 
-				{hasValues(select1, firstSelectOptions2) &&
-					hasValues(select2, secondSelectOptions2) && (
-						<Grid item sm={4}>
-							<div className={classes.formControl}>
-								<TextField
-									id='search-animal'
-									label={`Enter ${select2}`}
-									value={textField}
-									className={classes.search}
-									onChange={e => handleChange(e, setTextField)}
-									variant='outlined'
-								/>
-							</div>
-						</Grid>
-					)}
-				{((hasValues(select1, firstSelectOptions1) &&
-					hasValues(select2, secondSelectOptions1)) ||
-					(hasValues(select1, firstSelectOptions2) &&
-						hasValues(select2, secondSelectOptions2))) && (
-					<Grid item sm={4}>
-						<Button variant='outlined'>Submit</Button>
+				{hasValues(select1, firstOptions.animals) && (
+					<Grid item sm={3}>
+						<div className={classes.formControl}>
+							<TextField
+								id='search-animal'
+								label={`Enter ${select2}`}
+								value={textField}
+								type={select2 === 'ID' ? 'number' : 'string'}
+								className={classes.search}
+								onChange={e => handleChange(e, setTextField)}
+								variant='outlined'
+							/>
+						</div>
 					</Grid>
 				)}
+				{(hasValues(select1, firstOptions.tasks) &&
+					hasValues(select2, secondOptions.tasks)) ||
+					(hasValues(select1, firstOptions.animals) &&
+						hasValues(select2, secondOptions.animals)) ||
+					(hasValues(select1, firstOptions.other) &&
+						!hasValues(
+							select2,
+							secondOptions.tasks.concat(secondOptions.animals).concat([''])
+						) && (
+							<Grid item sm={3}>
+								<div className={classes.buttonContainer}>
+									<Button type='submit' color='primary' variant='outlined'>
+										Submit
+									</Button>
+								</div>
+							</Grid>
+						))}
 			</Grid>
 		</form>
 	);

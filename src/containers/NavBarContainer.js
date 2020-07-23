@@ -13,7 +13,7 @@ export default function NavBarContainer({ history }) {
 
 	return (
 		<>
-			<NavBarLarge handleNavigate={handleNavigate} />
+			<NavBarLarge handleNavigate={handleNavigate} history={history} />
 
 			<NavBarSmall history={history} handleNavigate={handleNavigate} />
 

@@ -28,6 +28,21 @@ const getAnimalById = id => {
 	}).then(res => res.json());
 };
 
+const getAnimalByName = name => {
+	let titleizedName = toTitleCase(name);
+	return fetch(`${API_ROOT}/animals_by_name/${titleizedName}`, {
+		headers: headers(),
+	}).then(res => res.json());
+};
+
+const toTitleCase = phrase => {
+	return phrase
+		.toLowerCase()
+		.split(' ')
+		.map(word => word.charAt(0).toUpperCase() + word.slice(1))
+		.join(' ');
+};
+
 const getGalleries = () => {
 	return fetch(`${API_ROOT}/galleries`, {
 		headers: headers(),
@@ -93,6 +108,18 @@ const getShelterById = id => {
 	}).then(res => res.json());
 };
 
+const getIncompletePhotos = () => {
+	return fetch(`${API_ROOT}/photos/incomplete`, {
+		headers: headers(),
+	}).then(res => res.json());
+};
+
+const getPrintReadyPhotos = () => {
+	return fetch(`${API_ROOT}/photos/print_ready`, {
+		headers: headers(),
+	}).then(res => res.json());
+};
+
 const getFiles = () => {
 	return fetch(`${API_ROOT}/google_drive`, {
 		headers: headers(),
@@ -114,6 +141,7 @@ export const api = {
 	animals: {
 		getAnimals,
 		getAnimalById,
+		getAnimalByName,
 	},
 	galleries: {
 		getGalleries,
@@ -139,5 +167,9 @@ export const api = {
 	google: {
 		getFiles,
 		createFile,
+	},
+	photos: {
+		getIncompletePhotos,
+		getPrintReadyPhotos,
 	},
 };

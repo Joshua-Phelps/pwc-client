@@ -35,7 +35,7 @@ const useStyles = makeStyles(theme => ({
 	},
 }));
 
-export default function NavBarLarge({ handleNavigate }) {
+export default function NavBarLarge({ handleNavigate, history }) {
 	const classes = useStyles();
 	const [tabEl, setTabEl] = useState(false);
 
@@ -78,7 +78,7 @@ export default function NavBarLarge({ handleNavigate }) {
 				</Grid>
 				<Grid item sm={8}>
 					<Paper className={classes.paper}>
-						<SearchAnimal />
+						<SearchAnimal history={history} />
 					</Paper>
 				</Grid>
 				<Grid item sm={2}>
