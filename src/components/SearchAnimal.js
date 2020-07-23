@@ -7,6 +7,7 @@ import {
 	InputLabel,
 	Select,
 	MenuItem,
+	Button,
 } from '@material-ui/core/';
 import SearchIcon from '@material-ui/icons/Search';
 
@@ -14,9 +15,14 @@ const useStyles = makeStyles(theme => ({
 	formControl: {
 		margin: theme.spacing(1),
 		width: '100%',
+		textAlign: 'left',
 	},
 	gridSpacing: {
 		padding: theme.spacing(1),
+	},
+	label: {
+		// width: '100%',
+		textAlign: 'left',
 	},
 	// search: {
 	// 	alignItems: 'left',
@@ -29,67 +35,112 @@ const useStyles = makeStyles(theme => ({
 	// },
 }));
 
-export default function SearchInput({ fetch }) {
-	const classes = useStyles();
-	const [input, setInput] = useState('');
+let secondSelectOptions1 = [
+	'Photos need background removed',
+	'Photos ready for print',
+];
+let secondSelectOptions2 = ['ID', 'Name'];
 
-	const handleChange = e => setInput(e.target.value);
+let firstSelectOptions1 = ['Tasks'];
+let firstSelectOptions2 = [
+	'Animals',
+	'Galleries',
+	'Shelters',
+	'Paint Locations',
+];
+
+export default function SearchAnimal({ fetch }) {
+	const classes = useStyles();
+	const [select1, setSelect1] = useState('');
+	const [select2, setSelect2] = useState('');
+	const [task, setTask] = useState('');
+	const [textField, setTextField] = useState('');
+
+	const handleChange = (e, setState) => setState(e.target.value);
 
 	const handleClick = () => {};
 
-	const renderSearchOptions = () => {};
+	const renderMenuItems = arr => {
+		return arr.map((text, idx) => {
+			return (
+				<MenuItem key={text} value={text}>
+					{text}
+				</MenuItem>
+			);
+		});
+	};
+
+	const hasValues = (state, values) => {
+		for (let i = 0; i < values.length; i++) {
+			if (values[i] === state) return true;
+		}
+		return false;
+	};
 
 	return (
 		<form>
 			<Grid container spacing={1}>
 				<Grid item sm={3}>
 					<FormControl variant='outlined' className={classes.formControl}>
-						<InputLabel id='select-status-label'>Search for</InputLabel>
+						<InputLabel className={classes.label} id='select-type-label'>
+							Search
+						</InputLabel>
 						<Select
-							labelId='select-status-label'
-							id='simple-select-status'
-							value={''}
-							name='painting_status'
-							onChange={handleChange}>
-							{renderSearchOptions()}
-							<MenuItem value={1}>Animal</MenuItem>
-							<MenuItem value={2}>Gallery</MenuItem>
-							<MenuItem value={3}>Paint Location</MenuItem>
-							<MenuItem value={4}>Shelter</MenuItem>
+							labelId='select-type-label'
+							id='select-type'
+							value={select1}
+							name='input-one'
+							onChange={e => handleChange(e, setSelect1)}>
+							{renderMenuItems(firstSelectOptions1.concat(firstSelectOptions2))}
 						</Select>
 					</FormControl>
 				</Grid>
 
-				<Grid item sm={3}>
-					<FormControl variant='outlined' className={classes.formControl}>
-						<InputLabel id='select-status-label'>By</InputLabel>
-						<Select
-							labelId='select-status-label'
-							id='simple-select-status'
-							value={input}
-							name='painting_status'
-							onChange={handleChange}>
-							{renderSearchOptions()}
-							<MenuItem value={1}>ID</MenuItem>
-							<MenuItem value={2}>Paint Ready</MenuItem>
-							<MenuItem value={3}>Needs Background Removed</MenuItem>
-							<MenuItem value={4}>Shelter</MenuItem>
-						</Select>
-					</FormControl>
-				</Grid>
+				{!hasValues(select1, ['']) && (
+					<Grid item sm={3}>
+						<FormControl variant='outlined' className={classes.formControl}>
+							<InputLabel className={classes.label} id='select-attribute-label'>
+								{select1 === 'Tasks' ? 'To-do' : select1 === '' ? '' : 'By'}
+							</InputLabel>
+							<Select
+								labelId='select-attribute-label'
+								id='select-attribute'
+								value={select2}
+								name='input-two'
+								onChange={e => handleChange(e, setSelect2)}>
+								{hasValues(select1, firstSelectOptions1) &&
+									renderMenuItems(secondSelectOptions1)}
 
-				<Grid item sm={4}>
-					<div className={classes.formControl}>
-						<TextField
-							id='search-animal'
-							label='Search Animal By Id'
-							value={input}
-							className={classes.search}
-							onChange={handleChange}
-							variant='outlined'
-						/>
-					</div>
-				</Grid>
+								{hasValues(select1, firstSelectOptions2) &&
+									renderMenuItems(secondSelectOptions2)}
+							</Select>
+						</FormControl>
+					</Grid>
+				)}
+
+				{hasValues(select1, firstSelectOptions2) &&
+					hasValues(select2, secondSelectOptions2) && (
+						<Grid item sm={4}>
+							<div className={classes.formControl}>
+								<TextField
+									id='search-animal'
+									label={`Enter ${select2}`}
+									value={textField}
+									className={classes.search}
+									onChange={e => handleChange(e, setTextField)}
+									variant='outlined'
+								/>
+							</div>
+						</Grid>
+					)}
+				{((hasValues(select1, firstSelectOptions1) &&
+					hasValues(select2, secondSelectOptions1)) ||
+					(hasValues(select1, firstSelectOptions2) &&
+						hasValues(select2, secondSelectOptions2))) && (
+					<Grid item sm={4}>
+						<Button variant='outlined'>Submit</Button>
+					</Grid>
+				)}
 			</Grid>
 		</form>
 	);

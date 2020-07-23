@@ -12,16 +12,17 @@ import {
 	Paper,
 } from '@material-ui/core/';
 import SearchIcon from '@material-ui/icons/Search';
+import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import NavBarSmall from '../components/NavBarSmall';
 
 const useStyles = makeStyles(theme => ({
-	search: {
+	icon: {
 		alignItems: 'left',
 	},
-	searchContainer: {
+	iconContainer: {
 		display: 'flex',
 		justifyContent: 'center',
 		alignItems: 'center',
@@ -50,7 +51,11 @@ export default function NavBarLarge({ handleNavigate }) {
 	return (
 		<>
 			<Grid className='large-view' container xs={12}>
-				<Grid item xs={0} sm={1}></Grid>
+				<Grid item xs={0} sm={1}>
+					<div className={classes.iconContainer}>
+						<MenuIcon onClick={handleClick} className={classes.icon} />
+					</div>
+				</Grid>
 				<Grid item xs={0} sm={10}>
 					<Tabs
 						wrapped={true}
@@ -64,8 +69,8 @@ export default function NavBarLarge({ handleNavigate }) {
 					</Tabs>
 				</Grid>
 				<Grid item sm={1}>
-					<div className={classes.searchContainer}>
-						<SearchIcon onClick={handleClick} className={classes.search} />
+					<div className={classes.iconContainer}>
+						<SearchIcon onClick={handleClick} className={classes.icon} />
 					</div>
 				</Grid>
 				<Grid item sm={2}>

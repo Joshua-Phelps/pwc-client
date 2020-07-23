@@ -93,6 +93,23 @@ const getShelterById = id => {
 	}).then(res => res.json());
 };
 
+const getFiles = () => {
+	return fetch(`${API_ROOT}/google_drive`, {
+		headers: headers(),
+	}).then(res => res.json());
+};
+
+const createFile = formData => {
+	return fetch(`${API_ROOT}/google_drive`, {
+		method: 'POST',
+		headers: {
+			Accept: 'application/json',
+			Authorization: token(),
+		},
+		body: formData,
+	}).then(res => res.json());
+};
+
 export const api = {
 	animals: {
 		getAnimals,
@@ -118,5 +135,9 @@ export const api = {
 	},
 	cards: {
 		generateCard,
+	},
+	google: {
+		getFiles,
+		createFile,
 	},
 };

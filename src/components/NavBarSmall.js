@@ -63,13 +63,6 @@ export default function NavBarSmall({ handleNavigate, history }) {
 	const handleSearch = e => {
 		e.preventDefault();
 		history.push(`/animals/${search}`);
-		// let id = parseInt(search);
-		// api.animals
-		// 	.getAnimalById(id)
-		// 	.then(animal => {
-		// 		if(animal,)
-		// 	})
-		// 	.catch(err => console.log(err));
 	};
 
 	const handleChange = e => {
@@ -100,7 +93,9 @@ export default function NavBarSmall({ handleNavigate, history }) {
 					</ListItem>
 				))}
 			</List>
+
 			<Divider />
+
 			<List>
 				<br></br>
 				<div className={classes.caption}>
@@ -123,7 +118,9 @@ export default function NavBarSmall({ handleNavigate, history }) {
 							variant='outlined'
 						/>
 						<div className={classes.button}>
-							<Button variant='contained'>Search</Button>
+							<Button onClick={handleSearch} variant='contained'>
+								Search
+							</Button>
 						</div>
 					</form>
 				</ListItem>

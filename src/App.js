@@ -49,6 +49,15 @@ const theme = createMuiTheme({
 			dark: '#017d6d',
 		},
 	},
+	overrides: {
+		MuiInputLabel: {
+			outlined: {
+				backgroundColor: 'white',
+				paddingLeft: '2px',
+				paddingRight: '2px',
+			},
+		},
+	},
 });
 
 function App() {
