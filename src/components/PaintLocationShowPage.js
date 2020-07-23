@@ -20,13 +20,13 @@ export default function PaintLocationShowPage({ history, location }) {
 		initialState
 	);
 	const [update, setUpdate] = useState(false);
+	const id = parseInt(location.pathname.split('/paint-locations/')[1]);
 
 	useEffect(() => {
 		fetchLocation();
-	}, []);
+	}, [location.pathname]);
 
 	const fetchLocation = () => {
-		let id = parseInt(location.pathname.split('/paint-locations/')[1]);
 		api.paintLocs
 			.getPaintLocById(id)
 			.then(paintLoc => {

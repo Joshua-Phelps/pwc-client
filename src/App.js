@@ -71,7 +71,7 @@ function App() {
 	const [shelters, sheltersDispatch] = useReducer(sheltersReducer, []);
 	const [form, formDispatch] = useReducer(formReducer, {});
 
-	const state = { animals, galleries, paintLocs, selectAnimal, form };
+	const state = { animals, galleries, paintLocs, selectAnimal, form, shelters };
 	const dispatch = { selectAnimalDispatch, formDispatch };
 
 	useEffect(() => {
@@ -135,12 +135,12 @@ function App() {
 	const setShelters = () => {
 		api.shelters
 			.getShelters()
-			.then(shelters =>
+			.then(shelters => {
 				sheltersDispatch({
 					type: 'SET_SHELTERS',
 					payload: shelters,
-				})
-			)
+				});
+			})
 			.catch(err => console.log(err));
 	};
 

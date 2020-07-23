@@ -39,8 +39,8 @@ export default function GalleryShowPage({ history, location }) {
 	const classes = useStyles();
 	const [gallery, galleryDispatch] = useReducer(galleryReducer, initialState);
 	const [loaded, setLoaded] = useState(false);
+	const id = parseInt(location.pathname.split('/animals/')[1]);
 	const {
-		id,
 		name,
 		address,
 		email,
@@ -51,7 +51,7 @@ export default function GalleryShowPage({ history, location }) {
 
 	useEffect(() => {
 		fetchGallery().then(() => setLoaded(true));
-	}, [loaded]);
+	}, [loaded, location.pathname]);
 
 	const fetchGallery = () => {
 		let id = parseInt(location.pathname.split('/galleries/')[1]);

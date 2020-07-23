@@ -16,13 +16,13 @@ export default function PaintLocationShowPage({ location }) {
 	// const { shelter } = useContext(StateContext);
 	const [shelter, shelterDispatch] = useReducer(shelterReducer, []);
 	const [loaded, setLoaded] = useState(false);
+	const id = parseInt(location.pathname.split('/shelters/')[1]);
 
 	useEffect(() => {
 		fetchShelter();
-	}, []);
+	}, [location.pathname]);
 
 	const fetchShelter = () => {
-		let id = parseInt(location.pathname.split('/shelters/')[1]);
 		api.shelters
 			.getShelterById(id)
 			.then(shelter => {

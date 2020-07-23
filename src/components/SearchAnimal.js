@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
+import { StateContext } from '../App';
 import { makeStyles } from '@material-ui/core/styles';
 import {
 	Grid,
@@ -11,6 +12,7 @@ import {
 } from '@material-ui/core/';
 import SearchIcon from '@material-ui/icons/Search';
 import { api } from '../services/api';
+import { render } from '@testing-library/react';
 
 const useStyles = makeStyles(theme => ({
 	formControl: {
@@ -35,18 +37,18 @@ const useStyles = makeStyles(theme => ({
 
 export default function SearchAnimal({ history }) {
 	const classes = useStyles();
+	const { galleries, shelters, paintLocs } = useContext(StateContext);
 	const [select1, setSelect1] = useState('');
 	const [select2, setSelect2] = useState('');
 	const [textField, setTextField] = useState('');
+
+	const getId = (arr, name) => arr.filter(el => el.name === name && el.id)[0];
+
 	const firstOptions = {
 		tasks: ['Tasks'],
 		animals: ['Animals'],
 		other: ['Galleries', 'Shelters', 'Paint Locations'],
 	};
-	// const firstOptions1 = ['Tasks'];
-	// const firstOptions2 = ['Animals'];
-	// const firstOptions3 = ['Galleries', 'Shelters', 'Paint Locations'];
-
 	const secondOptions = {
 		tasks: ['Photos need background removed', 'Photos ready for print'],
 		animals: ['ID', 'Name'],
@@ -55,7 +57,9 @@ export default function SearchAnimal({ history }) {
 		.concat(firstOptions.animals)
 		.concat(firstOptions.other);
 
-	const handleChange = (e, setState) => setState(e.target.value);
+	const handleChange = (e, setState, bool) => {
+		setState(e.target.value);
+	};
 
 	const handleSubmit = e => {
 		e.preventDefault();
@@ -77,17 +81,27 @@ export default function SearchAnimal({ history }) {
 				api.animals
 					.getAnimalByName(textField)
 					.then(res => {
-						res.id
-							? history.push(`/animals/${res.id}`)
-							: alert('Animal Not Found!');
+						if (res.ids) {
+							if (res.ids.length > 1) {
+								console.log(res.ids);
+								// render animal cards with results
+							} else {
+								return history.push(`/animals/${res.id}`);
+							}
+						} else alert('Animal Not Found!');
 					})
 					.catch(err => console.log(err));
 			}
 
-			//for Galleries, paint locs, and shelters
-		} else if (hasValues(select1, firstOptions.other)) {
-			// look through state
-			console.log('looking through state');
+			// for Galleries, paint locs, and shelters
+		} else {
+			if (select1 === firstOptions.other[0]) {
+				history.push(`/galleries/${select2}`);
+			} else if (select1 === firstOptions.other[1]) {
+				history.push(`/shelters/${select2}`);
+			} else if (select1 === firstOptions.other[2]) {
+				history.push(`/paint-locations/${select2}`);
+			}
 		}
 	};
 
@@ -102,6 +116,16 @@ export default function SearchAnimal({ history }) {
 			return (
 				<MenuItem key={text} value={text}>
 					{text}
+				</MenuItem>
+			);
+		});
+	};
+
+	const renderOtherMenuItems = arr => {
+		return arr.map(el => {
+			return (
+				<MenuItem key={el.id} value={el.id}>
+					{el.name}
 				</MenuItem>
 			);
 		});
@@ -133,10 +157,7 @@ export default function SearchAnimal({ history }) {
 					</FormControl>
 				</Grid>
 
-				{hasValues(
-					select1,
-					firstOptions.tasks.concat(firstOptions.animals)
-				) && (
+				{hasValues(select1, allFirstOptions) && (
 					<Grid item sm={3}>
 						<FormControl variant='outlined' className={classes.formControl}>
 							<InputLabel className={classes.label} id='select-attribute-label'>
@@ -155,6 +176,15 @@ export default function SearchAnimal({ history }) {
 
 								{hasValues(select1, firstOptions.animals) &&
 									renderMenuItems(secondOptions.animals)}
+
+								{hasValues(select1, [firstOptions.other[0]]) &&
+									renderOtherMenuItems(galleries)}
+
+								{hasValues(select1, [firstOptions.other[1]]) &&
+									renderOtherMenuItems(shelters)}
+
+								{hasValues(select1, [firstOptions.other[2]]) &&
+									renderOtherMenuItems(paintLocs)}
 							</Select>
 						</FormControl>
 					</Grid>
