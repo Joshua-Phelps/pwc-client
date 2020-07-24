@@ -156,7 +156,7 @@ export default function SearchAnimal({ history }) {
 						variant='outlined'
 						className={classes.formControl}>
 						<InputLabel className={classes.label} id='select-type-label'>
-							Search
+							Select
 						</InputLabel>
 						<Select
 							labelId='select-type-label'

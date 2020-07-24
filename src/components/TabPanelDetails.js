@@ -38,13 +38,12 @@ export default function TabPanelDetails() {
 		return details.map(info => {
 			return (
 				<>
-					<Typography display='inline' variant='h5'>
+					<Typography display='inline' variant='body2'>
 						{info.key}
 					</Typography>{' '}
-					<Typography display='inline' variant='h6'>
+					<Typography display='inline' variant='body2'>
 						{info.value}
 					</Typography>
-					<br></br>
 					<br></br>
 				</>
 			);

@@ -37,7 +37,7 @@ const useStyles = makeStyles(theme => ({
 		padding: theme.spacing(2),
 		textAlign: 'center',
 		color: theme.palette.text.secondary,
-		backgroundColor: theme.palette.secondary.main,
+		backgroundColor: theme.palette.secondary.grey.main,
 	},
 }));
 

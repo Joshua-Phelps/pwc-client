@@ -14,12 +14,12 @@ import {
 	Paper,
 	Container,
 	ThemeProvider,
+	Typography,
 } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
 	container: {
-		paddingLeft: '5%',
-		paddingRight: '5%',
+		width: '100%',
 	},
 }));
 
@@ -69,19 +69,27 @@ export default function PaintingsTable({
 			let paintLocation = getPaintLocation(p.paint_location_id);
 			return (
 				<TableRow key={p.id}>
-					<TableCell component='th' scope='p'>
-						{p.id}
+					<TableCell align='center'>
+						<Typography variant='body2'>{p.id}</Typography>
 					</TableCell>
-					<TableCell align='right'>{p.painting_status}</TableCell>
-					<TableCell align='right'>{gallery && gallery.name}</TableCell>
-					<TableCell align='right'>{p.painter}</TableCell>
-					<TableCell align='right'>
-						{paintLocation && paintLocation.name}
+					<TableCell align='center'>
+						<Typography variant='body2'>{p.painting_status}</Typography>
+					</TableCell>
+					<TableCell align='center'>
+						<Typography variant='body2'>{gallery && gallery.name}</Typography>
+					</TableCell>
+					<TableCell align='center'>
+						<Typography variant='body2'>{p.painter}</Typography>
+					</TableCell>
+					<TableCell align='center'>
+						<Typography variant='body2'>
+							{paintLocation && paintLocation.name}
+						</Typography>
 					</TableCell>
 					<TableCell align='right'>
 						<EditIcon onClick={() => handleEdit(p.id)} />
 					</TableCell>
-					<TableCell align='right'>
+					<TableCell align='left'>
 						<DeleteIcon onClick={() => handleDelete(p.id)} />
 					</TableCell>
 				</TableRow>
@@ -90,23 +98,41 @@ export default function PaintingsTable({
 	};
 
 	return (
-		<Container className={classes.container} maxWidth='lg'>
-			<TableContainer component={Paper}>
-				<Table aria-label='simple table'>
-					<TableHead>
-						<TableRow>
-							<TableCell>Painting ID</TableCell>
-							<TableCell align='right'>Status</TableCell>
-							<TableCell align='right'>Gallery</TableCell>
-							<TableCell align='right'>Painted By</TableCell>
-							<TableCell align='right'>Painted at</TableCell>
-							<TableCell align='right'></TableCell>
-							<TableCell align='right'></TableCell>
-						</TableRow>
-					</TableHead>
-					<TableBody>{renderRows()}</TableBody>
-				</Table>
-			</TableContainer>
-		</Container>
+		<TableContainer component={Paper}>
+			<Table aria-label='simple table'>
+				<TableHead>
+					<TableRow>
+						<TableCell align='center'>
+							<Typography variant='overline'>
+								<b>Painting ID</b>
+							</Typography>
+						</TableCell>
+						<TableCell align='center'>
+							<Typography variant='overline'>
+								<b>Status</b>
+							</Typography>
+						</TableCell>
+						<TableCell align='center'>
+							<Typography variant='overline'>
+								<b>Gallery</b>
+							</Typography>
+						</TableCell>
+						<TableCell align='center'>
+							<Typography variant='overline'>
+								<b>Painted By</b>
+							</Typography>
+						</TableCell>
+						<TableCell align='center'>
+							<Typography variant='overline'>
+								<b>Painted at</b>
+							</Typography>
+						</TableCell>
+						<TableCell align='center'></TableCell>
+						<TableCell align='center'></TableCell>
+					</TableRow>
+				</TableHead>
+				<TableBody>{renderRows()}</TableBody>
+			</Table>
+		</TableContainer>
 	);
 }

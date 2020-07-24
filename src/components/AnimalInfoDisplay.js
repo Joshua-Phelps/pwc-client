@@ -47,7 +47,7 @@ const useStyles = makeStyles(theme => ({
 		backgroundColor: theme.palette.background.paper,
 		display: 'flex',
 		height: '370px',
-		backgroundColor: theme.palette.secondary.grey.dark,
+		backgroundColor: theme.palette.secondary.grey.main,
 		// overflowX: 'auto',
 	},
 	verticalTabs: {

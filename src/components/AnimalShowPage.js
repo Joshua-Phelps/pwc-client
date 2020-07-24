@@ -16,12 +16,17 @@ const useStyles = makeStyles(theme => ({
 	button: {
 		padding: theme.spacing(2),
 		marginTop: theme.spacing(2),
+		display: 'inline-block',
 	},
-	tabs: {
-		padding: theme.spacing(3),
+	gridContainer: {
+		paddingBottom: theme.spacing(4),
 	},
-	divider: {
-		borderTop: `1px solid`,
+	addButtonContainer: {
+		display: 'flex',
+		alignItems: 'center',
+		justifyContent: 'center',
+		padding: theme.spacing(4),
+		marginLeft: theme.spacing(4),
 	},
 }));
 
@@ -105,31 +110,38 @@ export default function AnimalShowPage({ history, location }) {
 					<div className={classes.root}>
 						<AnimalHeading />
 
-						<Divider variant='fullWidth' className={classes.divider} />
-
-						<Grid container className={classes.dividerSpacing}>
+						<Grid container className={classes.gridContainer}>
 							<Grid item xs={false} sm={1} className='large-view'></Grid>
 							<Grid item xs={12} sm={10}>
-								<div className={classes.tabs}>
-									<AnimalInfoDisplay />
-								</div>
+								<AnimalInfoDisplay />
 							</Grid>
-							<Grid item xs={false} sm={1} className='large-view'></Grid>
+							{/* <Grid item xs={false} sm={1} className='large-view'></Grid> */}
 						</Grid>
 
-						<Divider variant='fullWidth' className={classes.divider} />
+						<Grid container>
+							<Grid item xs={false} sm={1} className='large-view'></Grid>
+							<Grid item xs={12} sm={10}>
+								<PaintingsTable
+									paintings={animal.paintings}
+									setPaintingId={setPaintingId}
+									setOpenForm={setOpenForm}
+									openForm={openForm}
+								/>
+							</Grid>
+							{/* <Grid item xs={false} sm={1} className='large-view'></Grid> */}
+						</Grid>
 
-						<PaintingsTableHeader
-							handleOpenBlankForm={handleOpenBlankForm}
-							handleOpenForm={handleOpenForm}
-						/>
-
-						<PaintingsTable
-							paintings={animal.paintings}
-							setPaintingId={setPaintingId}
-							setOpenForm={setOpenForm}
-							openForm={openForm}
-						/>
+						<Grid container>
+							<Grid item xs={false} sm={9} className='large-view'></Grid>
+							<div className={classes.addButtonContainer}>
+								<PaintingsTableHeader
+									handleOpenBlankForm={handleOpenBlankForm}
+									handleOpenForm={handleOpenForm}
+								/>
+							</div>
+							<Grid item xs={12} sm={3}></Grid>
+							{/* <Grid item xs={false} sm={1} className='large-view'></Grid> */}
+						</Grid>
 					</div>
 
 					<PaintingForm

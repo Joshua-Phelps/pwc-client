@@ -13,7 +13,7 @@ const useStyles = makeStyles(theme => ({
 		padding: theme.spacing(2),
 	},
 	imageContainer: {
-		paddingBottom: theme.spacing(2),
+		// paddingBottom: theme.spacing(2),
 		textAlign: 'center',
 	},
 	imageContainer2: {
@@ -26,8 +26,8 @@ const useStyles = makeStyles(theme => ({
 	image: {
 		width: '100%',
 		height: '100%',
-		maxWidth: '275px',
-		maxHeight: '275px',
+		maxWidth: '350px',
+		// maxHeight: '275px',
 		display: 'block',
 	},
 }));
@@ -40,12 +40,12 @@ export default function Animalheading() {
 	return (
 		<Grid container>
 			<Grid item xs={12} sm={12}>
-				<Typography className={classes.heading} variant='h1'>
+				<Typography className={classes.heading} variant='h2'>
 					{name}
 				</Typography>
 			</Grid>
-			<Grid item sm={2} xs={0}></Grid>
-			<Grid className={classes.imageContainer} item xs={12} sm={3}>
+			<Grid item sm={0} xs={0}></Grid>
+			<Grid className={classes.imageContainer} item xs={12} sm={12}>
 				<span className={classes.imageContainer2}>
 					<Box className={classes.box} borderRadius='borderRadius' border={2}>
 						<img className={classes.image} src={photos[3].url}></img>
@@ -53,9 +53,9 @@ export default function Animalheading() {
 				</span>
 			</Grid>
 			<Grid className={classes.subheader} item sm={6} xs={12}>
-				<Typography align='right' variant='h5'>
+				{/* <Typography align='right' variant='h5'>
 					{description}
-				</Typography>
+				</Typography> */}
 			</Grid>
 		</Grid>
 	);
