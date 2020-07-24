@@ -13,14 +13,15 @@ import {
 	TableRow,
 	Paper,
 	Container,
+	ThemeProvider,
 } from '@material-ui/core';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
 	container: {
 		paddingLeft: '5%',
 		paddingRight: '5%',
 	},
-});
+}));
 
 export default function PaintingsTable({
 	paintings,

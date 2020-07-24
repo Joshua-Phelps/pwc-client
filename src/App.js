@@ -39,12 +39,18 @@ const theme = createMuiTheme({
 			main: '#60326a', //Paws Purple
 			light: '#7f5b87', //#efefef
 			dark: '#43234a', //#29434e
-			gradient: 'linear-gradient(45deg, #09203f 0%, #537895 100%)',
+			gradient: 'linear-gradient(45deg, #e4dde6 0%, #60326a 100%)',
+			// gradient: 'linear-gradient(45deg, #09203f 0%, #537895 100%)',
 		},
 		secondary: {
 			main: '#e44c26', //Paws Orange
-			light: '#e96f51', //lime green
+			light: '#e96f51',
 			dark: '#9f351a',
+			lightest: '#e79d8c',
+			grey: {
+				light: '#e3e1e5',
+				dark: '#d4d4d4',
+			},
 		},
 		info: {
 			main: '#02b39c',
@@ -58,6 +64,16 @@ const theme = createMuiTheme({
 				backgroundColor: 'white',
 				paddingLeft: '2px',
 				paddingRight: '2px',
+			},
+		},
+		MuiSelect: {
+			root: {
+				backgroundColor: 'white',
+			},
+		},
+		MuiInputBase: {
+			root: {
+				backgroundColor: 'white',
 			},
 		},
 	},
@@ -81,8 +97,9 @@ function App() {
 		gallery,
 		paintLocs,
 		paintLoc,
-		form,
 		shelters,
+		shelter,
+		form,
 	};
 	const dispatch = {
 		animalDispatch,
@@ -101,12 +118,12 @@ function App() {
 		// const token = localStorage.getItem("token");
 		// if (token) {
 		// setLoading(true)
-		api.animals
-			.getAnimals()
-			.then(animals => {
-				animalsDispatch({ type: 'SET_ANIMALS', payload: animals });
-			})
-			.catch(error => console.log(error));
+		// api.animals
+		// 	.getAnimals()
+		// 	.then(animals => {
+		// 		animalsDispatch({ type: 'SET_ANIMALS', payload: animals });
+		// 	})
+		// 	.catch(error => console.log(error));
 	}, []);
 
 	// const animalsByDisplayLocation = dispLocId => {

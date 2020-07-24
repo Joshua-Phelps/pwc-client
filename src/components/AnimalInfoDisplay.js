@@ -3,7 +3,8 @@ import { StateContext } from '../App';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { Tabs, Tab, Typography, Box, Grid, Button } from '@material-ui/core';
-import DetailsTabPanel from './DetailsTabPanel';
+import TabPanelDetails from './TabPanelDetails';
+import TabPanelShelter from './TabPanelShelter';
 import PhoneIcon from '@material-ui/icons/Phone';
 import HomeIcon from '@material-ui/icons/Home';
 import EmailIcon from '@material-ui/icons/Email';
@@ -46,6 +47,7 @@ const useStyles = makeStyles(theme => ({
 		backgroundColor: theme.palette.background.paper,
 		display: 'flex',
 		height: '370px',
+		backgroundColor: theme.palette.secondary.grey.dark,
 		// overflowX: 'auto',
 	},
 	verticalTabs: {
@@ -60,6 +62,7 @@ const useStyles = makeStyles(theme => ({
 		overflowX: 'auto',
 		height: '100%',
 		width: '100%',
+		backgroundColor: theme.palette.secondary.grey.light,
 	},
 	heading: {
 		textAlign: 'center',
@@ -186,36 +189,11 @@ export default function AnimalInfoDisplay() {
 
 					<Grid className={classes.tabPanel} item xs={12} sm={9}>
 						<TabPanel value={value} index={0}>
-							<DetailsTabPanel />
+							<TabPanelDetails />
 						</TabPanel>
 
 						<TabPanel value={value} index={1}>
-							<div className={classes.heading}>
-								<h3>{animal.shelter.name}</h3>
-							</div>
-
-							<Grid className={classes.icon} container>
-								<Grid item xs={12} sm={12} md={4}>
-									<div>
-										<PhoneIcon />
-									</div>
-									{animal.shelter.phone_number}
-								</Grid>
-
-								<Grid item xs={12} sm={12} md={4}>
-									<div>
-										<HomeIcon />
-									</div>
-									{animal.shelter.address}
-								</Grid>
-
-								<Grid item xs={12} sm={12} md={4}>
-									<div>
-										<EmailIcon />
-									</div>
-									{animal.shelter.email}
-								</Grid>
-							</Grid>
+							<TabPanelShelter />
 						</TabPanel>
 
 						<TabPanel value={value} index={2}>

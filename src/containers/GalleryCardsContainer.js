@@ -8,6 +8,7 @@ const useStyles = makeStyles(theme => ({
 	container: {
 		width: '100%',
 		margin: 0,
+		padding: theme.spacing(4),
 	},
 }));
 

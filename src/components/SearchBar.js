@@ -15,6 +15,9 @@ import { api } from '../services/api';
 import { render } from '@testing-library/react';
 
 const useStyles = makeStyles(theme => ({
+	root: {
+		// backgroundColor: theme.palette.secondary.light,
+	},
 	formControl: {
 		margin: theme.spacing(1),
 		width: '100%',
@@ -57,7 +60,11 @@ export default function SearchAnimal({ history }) {
 		.concat(firstOptions.animals)
 		.concat(firstOptions.other);
 
-	const handleChange = (e, setState, bool) => {
+	const handleChange = (e, setState, inputNum) => {
+		if (inputNum === 1) {
+			setSelect2('');
+			setTextField('');
+		}
 		setState(e.target.value);
 	};
 
@@ -73,6 +80,8 @@ export default function SearchAnimal({ history }) {
 
 			// for ANIMALS
 		} else if (hasValues(select1, firstOptions.animals)) {
+			if (!textField)
+				return alert(`Please enter animal ${select2.toLowerCase()}`);
 			if (select2 === secondOptions.animals[0]) {
 				// for ID
 				history.push(`/animals/${textField}`);
@@ -139,10 +148,13 @@ export default function SearchAnimal({ history }) {
 	};
 
 	return (
-		<form onSubmit={handleSubmit}>
+		<form className={classes.root} onSubmit={handleSubmit}>
 			<Grid container spacing={1}>
 				<Grid item sm={3}>
-					<FormControl variant='outlined' className={classes.formControl}>
+					<FormControl
+						color='primary'
+						variant='outlined'
+						className={classes.formControl}>
 						<InputLabel className={classes.label} id='select-type-label'>
 							Search
 						</InputLabel>
@@ -151,7 +163,7 @@ export default function SearchAnimal({ history }) {
 							id='select-type'
 							value={select1}
 							name='input-one'
-							onChange={e => handleChange(e, setSelect1)}>
+							onChange={e => handleChange(e, setSelect1, 1)}>
 							{renderMenuItems(allFirstOptions)}
 						</Select>
 					</FormControl>
@@ -159,7 +171,10 @@ export default function SearchAnimal({ history }) {
 
 				{hasValues(select1, allFirstOptions) && (
 					<Grid item sm={3}>
-						<FormControl variant='outlined' className={classes.formControl}>
+						<FormControl
+							color='primary'
+							variant='outlined'
+							className={classes.formControl}>
 							<InputLabel className={classes.label} id='select-attribute-label'>
 								{hasValues(select1, firstOptions.tasks) && 'To-do'}
 								{hasValues(select1, firstOptions.animals) && 'By'}
@@ -170,7 +185,7 @@ export default function SearchAnimal({ history }) {
 								id='select-attribute'
 								value={select2}
 								name='input-two'
-								onChange={e => handleChange(e, setSelect2)}>
+								onChange={e => handleChange(e, setSelect2, 2)}>
 								{hasValues(select1, firstOptions.tasks) &&
 									renderMenuItems(secondOptions.tasks)}
 
@@ -194,34 +209,28 @@ export default function SearchAnimal({ history }) {
 					<Grid item sm={3}>
 						<div className={classes.formControl}>
 							<TextField
+								color='primary'
 								id='search-animal'
 								label={`Enter ${select2}`}
 								value={textField}
 								type={select2 === 'ID' ? 'number' : 'string'}
 								className={classes.search}
-								onChange={e => handleChange(e, setTextField)}
+								onChange={e => handleChange(e, setTextField, 3)}
 								variant='outlined'
 							/>
 						</div>
 					</Grid>
 				)}
-				{(hasValues(select1, firstOptions.tasks) &&
-					hasValues(select2, secondOptions.tasks)) ||
-					(hasValues(select1, firstOptions.animals) &&
-						hasValues(select2, secondOptions.animals)) ||
-					(hasValues(select1, firstOptions.other) &&
-						!hasValues(
-							select2,
-							secondOptions.tasks.concat(secondOptions.animals).concat([''])
-						) && (
-							<Grid item sm={3}>
-								<div className={classes.buttonContainer}>
-									<Button type='submit' color='primary' variant='outlined'>
-										Submit
-									</Button>
-								</div>
-							</Grid>
-						))}
+
+				{select1 && select2 && (
+					<Grid item sm={3}>
+						<div className={classes.buttonContainer}>
+							<Button type='submit' color='primary' variant='contained'>
+								Submit
+							</Button>
+						</div>
+					</Grid>
+				)}
 			</Grid>
 		</form>
 	);

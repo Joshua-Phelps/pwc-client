@@ -7,6 +7,7 @@ import EmailIcon from '@material-ui/icons/Email';
 
 const useStyles = makeStyles(theme => ({
 	box: {
+		background: theme.palette.secondary.grey.light,
 		padding: theme.spacing(2),
 		paddingTop: theme.spacing(0),
 		margin: theme.spacing(2),
@@ -16,6 +17,9 @@ const useStyles = makeStyles(theme => ({
 	},
 	details: {
 		paddingLeft: theme.spacing(1),
+	},
+	icon: {
+		color: theme.palette.info.main,
 	},
 }));
 
@@ -30,26 +34,31 @@ export default function GalleryCard({
 	};
 
 	return (
-		<div onClick={handleClick}>
+		<>
 			<Box className={classes.box} borderRadius='borderRadius' border={1}>
 				<Typography align='center' variant='subtitle1'>
 					<h3>{name}</h3>
 				</Typography>
 				<p>
-					<PhoneIcon /> <span className={classes.details}>{phone_number}</span>
+					<PhoneIcon className={classes.icon} />{' '}
+					<span className={classes.details}>{phone_number}</span>
 				</p>
 				<p>
 					{' '}
-					<EmailIcon /> <span className={classes.details}>{email}</span>
+					<EmailIcon className={classes.icon} />{' '}
+					<span className={classes.details}>{email}</span>
 				</p>
 				<p>
 					{' '}
-					<HomeIcon /> <span className={classes.details}>{address}</span>
+					<HomeIcon className={classes.icon} />{' '}
+					<span className={classes.details}>{address}</span>
 				</p>
 				<div className={classes.center}>
-					<Button variant='contained'>Visit Gallery</Button>
+					<Button onClick={handleClick} color='secondary' variant='contained'>
+						Visit Gallery
+					</Button>
 				</div>
 			</Box>
-		</div>
+		</>
 	);
 }

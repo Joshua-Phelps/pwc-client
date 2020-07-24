@@ -40,7 +40,7 @@ export default function AnimalShowPage({ history, location }) {
 			.getAnimalById(id)
 			.then(ani => {
 				if (ani.error) {
-					history.push('/not-found');
+					return history.push('/not-found');
 				} else {
 					return animalDispatch({
 						type: 'SET_ANIMAL',
