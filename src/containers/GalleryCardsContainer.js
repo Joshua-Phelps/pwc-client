@@ -12,7 +12,7 @@ const useStyles = makeStyles(theme => ({
 	},
 }));
 
-export default function CardsContainer({ history }) {
+function CardsContainer({ history }) {
 	const classes = useStyles();
 	const { galleries } = useContext(StateContext);
 
@@ -32,3 +32,5 @@ export default function CardsContainer({ history }) {
 		</Grid>
 	);
 }
+
+export default CardsContainer;

@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import NavBarSmall from '../components/NavBarSmall';
 import NavBarLarge from '../components/NavBarLarge';
 
-export default function NavBarContainer({ history }) {
+function NavBarContainer({ history }) {
 	const handleNavigate = value => {
 		value === 0 && history.push('/galleries');
 		value === 1 && history.push('/shelters');
@@ -40,3 +40,5 @@ export default function NavBarContainer({ history }) {
 		</>
 	);
 }
+
+export default NavBarContainer;

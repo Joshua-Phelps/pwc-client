@@ -87,7 +87,7 @@ export default function GalleryShowPage({ history, location }) {
 								{name}
 							</Typography>
 						</Grid>
-						<Grid item sm={2} xs={0}></Grid>
+						<Grid item sm={2} xs={false}></Grid>
 						<Grid className={classes.detailsDisplay} item xs={12} sm={10}>
 							<Typography variant='subtitle1'>
 								<PhoneIcon />{' '}

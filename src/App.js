@@ -1,5 +1,12 @@
 import React, { useReducer, useEffect, createContext, useState } from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import {
+	BrowserRouter as Router,
+	Route,
+	Redirect,
+	useHistory,
+} from 'react-router-dom';
+import PrivateRoute from './helpers/PrivateRoute';
+import PublicRoute from './helpers/PublicRoute';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { api } from './services/api';
@@ -16,6 +23,7 @@ import PaintingForm from './components/PaintingForm';
 import SheltersContainer from './containers/SheltersContainer';
 import ShelterShowPage from './components/ShelterShowPage';
 import Login from './components/Login';
+import SignUp from './components/SignUp';
 import SearchContainer from './containers/SearchContainer';
 import {
 	animalsReducer,
@@ -29,6 +37,7 @@ import {
 	formReducer,
 } from './reducers/Reducers';
 import AnimalCard from './components/AnimalCard';
+import NavBarLarge from './components/NavBarLarge';
 
 export const StateContext = createContext();
 export const DispatchContext = createContext();
@@ -90,6 +99,9 @@ function App() {
 	const [shelter, shelterDispatch] = useReducer(shelterReducer, {});
 	const [paintLoc, paintLocDispatch] = useReducer(paintLocReducer, {});
 	const [form, formDispatch] = useReducer(formReducer, {});
+	const [loaded, setLoaded] = useState(false);
+	const [loggedIn, setLoggedIn] = useState(false);
+	const token = localStorage.getItem('token');
 
 	const state = {
 		animals,
@@ -111,35 +123,49 @@ function App() {
 	};
 
 	useEffect(() => {
-		setPaintLocs();
-		setGalleries();
-		setShelters();
-		setPaintLocs();
+		// const token = localStorage.getItem('token');
+		if (token) {
+			api.auth
+				.getCurrentUser()
+				.then(res => {
+					if (res.message) return localStorage.removeItem('token');
+					setPaintLocs();
+					setGalleries();
+					setShelters();
+					// setLoggedIn(true);
+					return;
+				})
+				.then(() => setLoaded(true))
+				.catch(error => console.log(error));
+		}
+	}, [token]);
 
-		// const token = localStorage.getItem("token");
-		// if (token) {
-		// setLoading(true)
-		// api.animals
-		// 	.getAnimals()
-		// 	.then(animals => {
-		// 		animalsDispatch({ type: 'SET_ANIMALS', payload: animals });
-		// 	})
-		// 	.catch(error => console.log(error));
-	}, []);
-
-	// const animalsByDisplayLocation = dispLocId => {
-	// 	return animals.filter(a => a.current_display_location_id === dispLocId);
-	// };
-	console.log('rnning in app');
+	const login = loginData => {
+		return api.auth
+			.login(loginData)
+			.then(res => {
+				if (res.message) {
+					alert('Unable to login');
+				} else {
+					localStorage.setItem('token', res.jwt);
+					return setLoggedIn(true);
+				}
+			})
+			.catch(err => console.log(err));
+	};
 
 	const setPaintLocs = () => {
 		api.paintLocs
 			.getPaintLocs()
-			.then(paintLocs => {
-				paintLocsDispatch({
-					type: 'SET_PAINT_LOCS',
-					payload: paintLocs,
-				});
+			.then(res => {
+				if (res.message) {
+					return;
+				} else {
+					return paintLocsDispatch({
+						type: 'SET_PAINT_LOCS',
+						payload: paintLocs,
+					});
+				}
 			})
 			.catch(err => console.log(err));
 	};
@@ -174,72 +200,81 @@ function App() {
 				<StateContext.Provider value={state}>
 					<DispatchContext.Provider value={dispatch}>
 						<CssBaseline />
-						<Route path='/' render={props => <NavBarContainer {...props} />} />
-						<Route path='/login' render={props => <Login {...props} />}></Route>
-						<Route path='/home' render={props => <HomePage {...props} />} />
-						<Route
-							path='/search-page'
-							render={props => <SearchContainer {...props} />}
+
+						<PublicRoute
+							restricted={true}
+							path='/'
+							component={NavBarContainer}
 						/>
+
+						<Route path='/sign-up' exact component={SignUp} />
+
 						<Route
+							path='/login'
+							render={props => <Login login={login} {...props} />}></Route>
+
+						<Route path='/home' render={props => <HomePage {...props} />} />
+
+						<PrivateRoute path='/search-page' component={SearchContainer} />
+
+						<PrivateRoute
 							path='/animals'
 							exact
-							render={props => (
-								<AnimalCardsContainer animals={animals} {...props} />
-							)}
+							component={AnimalCardsContainer}
 						/>
-						<Route
+
+						<PrivateRoute
 							path='/galleries'
 							exact
-							render={props => <GalleryCardsContainer {...props} />}
+							component={GalleryCardsContainer}
 						/>
-						<Route
+
+						<PrivateRoute
 							path='/galleries/:id'
 							exact
-							render={props => <GalleryShowPage {...props} />}
+							component={GalleryShowPage}
 						/>
-						<Route
+						<PrivateRoute
 							path='/animals/:id'
 							exact
-							render={props => <AnimalShowPage {...props} />}
+							component={AnimalShowPage}
 						/>
-						<Route
+
+						<PrivateRoute
 							path='/paint-locations'
 							exact
-							render={props => (
-								<PaintLocContainer paintLocs={paintLocs} {...props} />
-							)}
+							component={PaintLocContainer}
 						/>
+
 						<Route
 							path='/paint-locations/:id'
 							exact
-							render={props => <PaintLocationShowPage {...props} />}
+							component={PaintLocationShowPage}
 						/>
-						<Route
+
+						{/* <PrivateRoute
 							path='/paintings/create'
 							exact
-							render={props => (
-								<PaintingForm animals={animals} editMode={false} {...props} />
-							)}
-						/>
-						<Route
+							component={PaintingForm}
+						/> */}
+
+						{/* <Route
 							path='/paintings/edit/:id'
 							exact
 							render={props => (
 								<PaintingForm animals={animals} editMode={true} {...props} />
 							)}
-						/>
-						<Route
+						/> */}
+
+						<PrivateRoute
 							path='/shelters'
 							exact
-							render={props => (
-								<SheltersContainer shelters={shelters} {...props} />
-							)}
+							component={SheltersContainer}
 						/>
-						<Route
+						<PrivateRoute
 							path='/shelters/:id'
 							exact
-							render={props => <ShelterShowPage {...props} />}
+							component={ShelterShowPage}
 						/>
 					</DispatchContext.Provider>
 				</StateContext.Provider>

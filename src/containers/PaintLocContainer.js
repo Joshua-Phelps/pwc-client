@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import GalleryCard from '../components/GalleryCard';
 import { Grid } from '@material-ui/core';
+import { StateContext } from '../App';
 
-export default function CardsContainer({ paintLocs, history }) {
+export default function CardsContainer({ history }) {
+	const { paintLocs } = useContext(StateContext);
+
 	const handleClick = id => {
 		history.push(`/paint-locations/${id}`);
 	};

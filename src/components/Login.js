@@ -67,24 +67,18 @@ const useStyles = makeStyles(theme => ({
 	},
 }));
 
-export default function Login({ history }) {
+export default function Login({ history, login }) {
 	const classes = useStyles();
-	const [username, setUsername] = useState();
+	const [email, setEmail] = useState();
 	const [password, setPassword] = useState();
-	// const { login } = useContext(MethodContext)
 
 	const handleSubmit = e => {
 		e.preventDefault();
-		// login(username, password).then((itemLength) => {
-		//   if (itemLength > 0 ) {
-		//     history.push('/closet')
-		//   } else {
-		//     history.push('/guide')
-		//   }
-		// })
+		login({ email, password }).then(history.push('/galleries'));
 	};
 
-	console.log('running in login');
+	const handleChange = (e, cb) => cb(e.target.value);
+
 	return (
 		<Grid container component='main' className={classes.root}>
 			<CssBaseline />
@@ -103,13 +97,13 @@ export default function Login({ history }) {
 							margin='normal'
 							required
 							fullWidth
-							id='username'
-							label='Username'
-							name='username'
-							autoComplete='username'
+							id='email'
+							label='email'
+							name='email'
+							autoComplete='email'
 							autoFocus
-							value={username}
-							onChange={e => setUsername(e.target.value)}
+							value={email}
+							onChange={e => handleChange(e, setEmail)}
 						/>
 						<TextField
 							variant='outlined'
@@ -122,7 +116,7 @@ export default function Login({ history }) {
 							id='password'
 							autoComplete='current-password'
 							value={password}
-							onChange={e => setPassword(e.target.value)}
+							onChange={e => handleChange(e, setPassword)}
 						/>
 						<FormControlLabel
 							control={<Checkbox value='remember' color='primary' />}
@@ -144,7 +138,7 @@ export default function Login({ history }) {
 								</Link>
 							</Grid>
 							<Grid item>
-								<Link href='signup' variant='body2'>
+								<Link href='sign-up' variant='body2'>
 									{"Don't have an account? Sign Up"}
 								</Link>
 							</Grid>

@@ -44,7 +44,7 @@ export default function Animalheading() {
 					{name}
 				</Typography>
 			</Grid>
-			<Grid item sm={0} xs={0}></Grid>
+
 			<Grid className={classes.imageContainer} item xs={12} sm={12}>
 				<span className={classes.imageContainer2}>
 					<Box className={classes.box} borderRadius='borderRadius' border={2}>

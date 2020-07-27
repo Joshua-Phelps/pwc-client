@@ -81,7 +81,7 @@ export default function SearchPage({ history }) {
 				className={classes.root}
 				container
 				spacing={3}>
-				<Grid className='form-large' item xs={0} sm={4}>
+				<Grid className='form-large' item xs={false} sm={4}>
 					<div className={classes.paper}></div>
 				</Grid>
 				<Grid item xs={12} sm={4}>
@@ -146,7 +146,7 @@ export default function SearchPage({ history }) {
 						</form>
 					</Paper>
 				</Grid>
-				<Grid className='form-large' item xs={0} sm={4}>
+				<Grid className='form-large' item xs={false} sm={4}>
 					<div className={classes.paper}></div>
 				</Grid>
 			</Grid>

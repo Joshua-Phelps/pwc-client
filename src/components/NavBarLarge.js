@@ -44,24 +44,52 @@ const useStyles = makeStyles(theme => ({
 export default function NavBarLarge({ handleNavigate, history }) {
 	const classes = useStyles();
 	const [openSearch, setOpenSearch] = useState(false);
+	const [openMenu, setOpenMenu] = useState(false);
 	const [tabEl, setTabEl] = useState(false);
+	const [anchorEl, setAnchorEl] = useState(null);
 
 	const handleChange = (e, newValue) => {
 		setTabEl(newValue);
 		handleNavigate(newValue);
 	};
 
-	const handleClick = () => setOpenSearch(!openSearch);
+	const handleClick = (cb, value) => cb(!value);
+
+	const handleMenu = event => {
+		setAnchorEl(event.currentTarget);
+	};
+
+	const handleClose = (path, cb) => {
+		setAnchorEl(null);
+		cb && cb();
+		history.push(path);
+	};
+
+	const logout = () => {
+		localStorage.removeItem('token');
+	};
 
 	return (
 		<>
 			<Grid container xs={12} className='large-view'>
-				<Grid className={classes.mainColor} item xs={0} sm={1}>
+				<Grid className={classes.mainColor} item xs={false} sm={1}>
 					<div className={classes.iconContainer}>
-						<MenuIcon onClick={handleClick} className={classes.icon} />
+						<MenuIcon onClick={handleMenu} className={classes.icon} />
+						<Menu
+							anchorEl={anchorEl}
+							keepMounted
+							open={Boolean(anchorEl)}
+							onClose={() => setAnchorEl(null)}>
+							<MenuItem onClick={() => handleClose('/account')}>
+								My account
+							</MenuItem>
+							<MenuItem onClick={() => handleClose('/login', logout)}>
+								Logout
+							</MenuItem>
+						</Menu>
 					</div>
 				</Grid>
-				<Grid className={classes.mainColor} item xs={0} sm={10}>
+				<Grid className={classes.mainColor} item xs={false} sm={10}>
 					<Tabs
 						textColor='white'
 						wrapped={true}
@@ -76,7 +104,10 @@ export default function NavBarLarge({ handleNavigate, history }) {
 				</Grid>
 				<Grid className={classes.mainColor} item sm={1}>
 					<div className={classes.iconContainer}>
-						<SearchIcon onClick={handleClick} className={classes.icon} />
+						<SearchIcon
+							onClick={() => handleClick(setOpenSearch, openSearch)}
+							className={classes.icon}
+						/>
 					</div>
 				</Grid>
 				{openSearch && (

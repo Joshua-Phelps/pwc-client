@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import AnimalCard from '../components/AnimalCard';
 import { Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { StateContext } from '../App';
 
 const useStyles = makeStyles(theme => ({
 	container: {
@@ -13,14 +14,15 @@ const useStyles = makeStyles(theme => ({
 	},
 }));
 
-export default function CardsContainer({ animals, history }) {
+export default function CardsContainer() {
 	const classes = useStyles();
+	const { animals } = useContext(StateContext);
 
 	const renderCards = () => {
 		return animals.map(animal => {
 			return (
 				<Grid key={animal.id} className={classes.gridItem} item xs={12} sm={4}>
-					<AnimalCard animal={animal} history={history} />
+					<AnimalCard animal={animal} />
 				</Grid>
 			);
 		});

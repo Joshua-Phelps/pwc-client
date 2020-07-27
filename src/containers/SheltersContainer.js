@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Grid } from '@material-ui/core';
+import { StateContext } from '../App';
 
-export default function SheltersContainers({ shelters, history }) {
+export default function SheltersContainers({ history }) {
+	const { shelters } = useContext(StateContext);
+
 	const handleClick = id => {
 		history.push(`/shelters/${id}`);
 	};

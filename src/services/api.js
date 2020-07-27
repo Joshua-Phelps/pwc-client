@@ -10,6 +10,28 @@ const headers = () => {
 	};
 };
 
+const login = data => {
+	return fetch(`${API_ROOT}/auth`, {
+		method: 'POST',
+		headers: headers(),
+		body: JSON.stringify(data),
+	}).then(res => res.json());
+};
+
+const signup = (email, password) => {
+	return fetch(`${API_ROOT}/users`, {
+		method: 'POST',
+		headers: headers(),
+		body: JSON.stringify({ user: { email, password } }),
+	}).then(res => res.json());
+};
+
+const getCurrentUser = () => {
+	return fetch(`${API_ROOT}/current_user`, {
+		headers: headers(),
+	}).then(res => res.json());
+};
+
 const generateCard = id => {
 	return fetch(`${API_ROOT}/card_generator/${id}`, {
 		headers: headers(),
@@ -138,6 +160,11 @@ const createFile = formData => {
 };
 
 export const api = {
+	auth: {
+		login,
+		getCurrentUser,
+		signup,
+	},
 	animals: {
 		getAnimals,
 		getAnimalById,
