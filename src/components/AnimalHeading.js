@@ -13,7 +13,9 @@ const useStyles = makeStyles(theme => ({
 		padding: theme.spacing(2),
 	},
 	imageContainer: {
-		// paddingBottom: theme.spacing(2),
+		paddingBottom: theme.spacing(2),
+		paddingLeft: theme.spacing(2),
+		paddingRight: theme.spacing(2),
 		textAlign: 'center',
 	},
 	imageContainer2: {

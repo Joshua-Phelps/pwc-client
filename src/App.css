@@ -48,16 +48,13 @@ body {
 	.small-view {
 		display: none !important;
 	}
-	.form-small {
-		display: none !important;
-	}
+	/* .form-large {
+		height: 100%;
+	} */
 }
 
 @media (max-width: 601px) {
 	.large-view {
-		display: none !important;
-	}
-	.form-large {
 		display: none !important;
 	}
 }

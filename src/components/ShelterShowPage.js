@@ -2,17 +2,17 @@ import React, { useState, useEffect, useContext } from 'react';
 import { StateContext, DispatchContext } from '../App';
 import { api } from '../services/api';
 import VenueHeader from './VenueHeader';
+import AnimalCard from './AnimalCard';
+import { Grid, makeStyles } from '@material-ui/core';
 
-// const initialState = {
-// 	id: null,
-// 	address: '',
-// 	name: '',
-// 	max_paintings: null,
-// 	current_paintings: [],
-// 	available_paintings: [],
-// };
+const useStyles = makeStyles(theme => ({
+	container: {
+		padding: theme.spacing(4),
+	},
+}));
 
-export default function PaintLocationShowPage({ location }) {
+export default function ShelterShowPage({ location }) {
+	const classes = useStyles();
 	const { shelter } = useContext(StateContext);
 	const { shelterDispatch } = useContext(DispatchContext);
 	const [loaded, setLoaded] = useState(false);
@@ -38,8 +38,12 @@ export default function PaintLocationShowPage({ location }) {
 
 	const renderAnimals = () => {
 		if (shelter) {
-			return shelter.animals.map(ani => {
-				return <div>{ani.name}</div>;
+			return shelter.animals.map(animal => {
+				return (
+					<Grid key={animal.id} item xs={12} sm={4}>
+						<AnimalCard shelter_name={name} animal={animal} />
+					</Grid>
+				);
 			});
 		}
 	};
@@ -54,7 +58,9 @@ export default function PaintLocationShowPage({ location }) {
 						email={email}
 						phone_number={phone_number}
 					/>
-					<div>{renderAnimals()}</div>
+					<Grid className={classes.container} container spacing={4}>
+						{renderAnimals()}
+					</Grid>
 				</>
 			)}
 		</>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import clsx from 'clsx';
 import { StateContext, DispatchContext } from '../App';
 import { api } from '../services/api';
 import { makeStyles } from '@material-ui/core/styles';
@@ -46,11 +47,14 @@ export default function PaintingForm({
 	open,
 	animalName,
 	updateAnimal,
+	updateGallery,
 }) {
 	const classes = useStyles();
 	const [loaded, setLoaded] = useState(false);
 	const { galleries, paintLocs, form } = useContext(StateContext);
-	const { formDispatch, animalDispatch } = useContext(DispatchContext);
+	const { formDispatch, animalDispatch, galleryDispatch } = useContext(
+		DispatchContext
+	);
 
 	useEffect(() => {
 		if (paintingId) {
@@ -80,8 +84,19 @@ export default function PaintingForm({
 		});
 	};
 
-	const updateSoloAnimalPainting = painting => {
+	const updateAnimalPaintings = painting => {
 		animalDispatch({
+			type: 'UPDATE_PAINTING',
+			payload: painting,
+		});
+		galleryDispatch({
+			type: 'UPDATE_PAINTING',
+			payload: painting,
+		});
+	};
+
+	const updateGalleryPaintings = painting => {
+		galleryDispatch({
 			type: 'UPDATE_PAINTING',
 			payload: painting,
 		});
@@ -106,7 +121,8 @@ export default function PaintingForm({
 			api.paintings
 				.updatePainting(painting)
 				.then(painting => {
-					if (updateAnimal) updateSoloAnimalPainting(painting);
+					if (updateAnimal) updateAnimalPaintings(painting);
+					if (updateGallery) updateGalleryPaintings(painting);
 				})
 				.catch(err => console.log(err));
 		} else {
@@ -173,15 +189,14 @@ export default function PaintingForm({
 
 	return (
 		<div>
-			{console.log('running in form')}
 			{/* <button type='button' onClick={handleOpen}>
 				Add Painting
 			</button> */}
 			{loaded && (
 				<Modal
-					aria-labelledby='transition-modal-title'
-					aria-describedby='transition-modal-description'
-					className={classes.modal}
+					aria-labelledby='add-painting-form'
+					aria-describedby='add-painting-form'
+					className={clsx(classes.modal, 'form-large')}
 					open={open}
 					onClose={handleClose}
 					closeAfterTransition
@@ -195,6 +210,7 @@ export default function PaintingForm({
 							<form onSubmit={handleSubmit}>
 								<FormControl className={classes.formControl}>
 									<TextField
+										InputLabelProps={{ shrink: true }}
 										id='painter-name'
 										label='Painter Name'
 										value={form.painter || ''}
@@ -207,6 +223,7 @@ export default function PaintingForm({
 
 								<FormControl className={classes.formControl}>
 									<InputLabel
+										shrink={true}
 										// shrink={form.paint_location_id && true}
 										id='select-paint-location-label'>
 										Painting Location
@@ -225,20 +242,19 @@ export default function PaintingForm({
 
 								<FormControl className={classes.formControl}>
 									<TextField
+										InputLabelProps={{ shrink: true }}
 										label='Card Stock'
 										id='card-stock'
 										type='number'
 										value={form.card_stock || ''}
 										name='card_stock'
-										onChange={handleChange}>
-										{renderStatusValues()}
-									</TextField>
+										onChange={handleChange}></TextField>
 								</FormControl>
 
 								<br></br>
 
 								<FormControl className={classes.formControl}>
-									<InputLabel id='select-status-label'>
+									<InputLabel shrink={true} id='select-status-label'>
 										Painting Status
 									</InputLabel>
 									<Select
@@ -255,7 +271,9 @@ export default function PaintingForm({
 
 								{form.painting_status === 'Displayed' && (
 									<FormControl className={classes.formControl}>
-										<InputLabel id='select-gallery-label'>Gallery</InputLabel>
+										<InputLabel shrink={true} id='select-gallery-label'>
+											Gallery
+										</InputLabel>
 										<Select
 											labelId='select-gallery-label'
 											id='simple-select-status'

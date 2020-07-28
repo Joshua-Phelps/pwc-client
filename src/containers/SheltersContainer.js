@@ -1,12 +1,16 @@
 import React, { useContext } from 'react';
+import clsx from 'clsx';
 import VenueCard from '../components/VenueCard';
 import { Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { StateContext } from '../App';
 
 const useStyles = makeStyles(theme => ({
-	container: {
+	containerLarge: {
 		padding: theme.spacing(4),
+	},
+	containerSmall: {
+		// padding: theme.spacing(4),
 	},
 }));
 
@@ -30,9 +34,20 @@ function SheltersContainer({ history }) {
 	};
 
 	return (
-		<Grid className={classes.container} container spacing={3}>
-			{renderCards()}
-		</Grid>
+		<>
+			<Grid
+				className={clsx(classes.containerLarge, 'large-view')}
+				container
+				spacing={3}>
+				{renderCards()}
+			</Grid>
+			<Grid
+				className={clsx(classes.containerSmall, 'small-view')}
+				container
+				spacing={1}>
+				{renderCards()}
+			</Grid>
+		</>
 	);
 }
 

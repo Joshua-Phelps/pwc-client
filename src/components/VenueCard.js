@@ -38,6 +38,7 @@ export default function VenueCard({
 	history,
 	pushPath,
 	buttonText,
+	totalPaintings,
 }) {
 	const classes = useStyles();
 
@@ -49,37 +50,37 @@ export default function VenueCard({
 		<>
 			<Box className={classes.box} borderRadius='borderRadius' border={1}>
 				<Grid className={classes.container} container>
-					<Grid className={classes.title} item sm={12}>
+					<Grid className={classes.title} item sm={12} xs={12}>
 						<Typography align='center' variant='h6'>
-							{name}
+							{name} {totalPaintings ? `- (${totalPaintings} paintings)` : null}
 						</Typography>
 					</Grid>
 
-					<Grid className={classes.gridSpacing} item sm={1}>
+					<Grid className={classes.gridSpacing} item xs={1} sm={1}>
 						<PhoneIcon className={classes.icon} />{' '}
 					</Grid>
-					<Grid className={classes.details} item sm={11}>
+					<Grid className={classes.details} item xs={11} sm={11}>
 						<Typography variant='body1'>{phone_number}</Typography>
 					</Grid>
 
-					<Grid className={classes.gridSpacing} item sm={1}>
+					<Grid className={classes.gridSpacing} item xs={1} sm={1}>
 						<EmailIcon className={classes.icon} />{' '}
 					</Grid>
-					<Grid className={classes.details} item sm={11}>
+					<Grid className={classes.details} item xs={11} sm={11}>
 						<Typography variant='body1'>{email}</Typography>
 					</Grid>
 
-					<Grid className={classes.gridSpacing} item sm={1}>
+					<Grid className={classes.gridSpacing} item xs={1} sm={1}>
 						<HomeIcon className={classes.icon} />{' '}
 					</Grid>
-					<Grid className={classes.details} item sm={10}>
+					<Grid className={classes.details} item xs={11} sm={11}>
 						<Typography variant='body1'>
 							{address.street_address} <br></br>
 							{address.city}, {address.state} {address.zip}
 						</Typography>
 					</Grid>
 
-					<Grid className={classes.button} item sm={12}>
+					<Grid className={classes.button} item xs={12} sm={12}>
 						<Button onClick={handleClick} color='secondary' variant='contained'>
 							{buttonText}
 						</Button>

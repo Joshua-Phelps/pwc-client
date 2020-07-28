@@ -94,7 +94,11 @@ export default function GalleryShowPage({ history, location }) {
 								<Typography align='center' variant='h6'>
 									Current Paintings - {paintings.length}/{max_paintings}
 								</Typography>
-								<Grid className={classes.container} container spacing={3}>
+								<Grid
+									className={classes.container}
+									container
+									alignItems='center'
+									spacing={3}>
 									{renderPaintings()}
 								</Grid>
 							</>

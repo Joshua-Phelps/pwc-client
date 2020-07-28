@@ -52,9 +52,16 @@ const galleriesReducer = (state, action) => {
 };
 
 const galleryReducer = (state, action) => {
+	let paintings;
 	switch (action.type) {
 		case SET_GALLERY:
 			return { ...action.payload };
+		case UPDATE_PAINTING:
+			paintings = state.paintings.map(p => {
+				return p.id === action.payload.id ? action.payload : p;
+			});
+			console.log('here');
+			return { ...state, paintings: paintings };
 		default:
 			return state;
 	}

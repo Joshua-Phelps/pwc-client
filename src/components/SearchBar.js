@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import { StateContext } from '../App';
 import { makeStyles } from '@material-ui/core/styles';
 import {
@@ -38,7 +39,8 @@ const useStyles = makeStyles(theme => ({
 	},
 }));
 
-export default function SearchAnimal({ history }) {
+export default function SearchAnimal() {
+	const history = useHistory();
 	const classes = useStyles();
 	const { galleries, shelters, paintLocs } = useContext(StateContext);
 	const [select1, setSelect1] = useState('');
@@ -153,7 +155,7 @@ export default function SearchAnimal({ history }) {
 	return (
 		<form className={classes.root} onSubmit={handleSubmit}>
 			<Grid container spacing={1}>
-				<Grid item sm={3}>
+				<Grid item xs={10} sm={3}>
 					<FormControl
 						color='primary'
 						variant='outlined'
@@ -173,7 +175,7 @@ export default function SearchAnimal({ history }) {
 				</Grid>
 
 				{hasValues(select1, allFirstOptions) && (
-					<Grid item sm={3}>
+					<Grid item xs={10} sm={3}>
 						<FormControl
 							color='primary'
 							variant='outlined'
@@ -209,7 +211,7 @@ export default function SearchAnimal({ history }) {
 				)}
 
 				{hasValues(select1, firstOptions.animals) && (
-					<Grid item sm={3}>
+					<Grid item xs={10} sm={3}>
 						<div className={classes.formControl}>
 							<TextField
 								color='primary'
@@ -226,7 +228,7 @@ export default function SearchAnimal({ history }) {
 				)}
 
 				{select1 && select2 && (
-					<Grid item sm={3}>
+					<Grid item xs={10} sm={3}>
 						<div className={classes.buttonContainer}>
 							<Button type='submit' color='primary' variant='contained'>
 								Submit

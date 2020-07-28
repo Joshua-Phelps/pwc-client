@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import SearchBar from './SearchBar';
 import { makeStyles } from '@material-ui/core/styles';
 import {
 	FormControl,
@@ -75,7 +76,8 @@ export default function SearchPage({ history }) {
 
 	return (
 		<div className={classes.root}>
-			<Grid
+			<SearchBar />
+			{/* <Grid
 				justify='center'
 				alignItems='center'
 				className={classes.root}
@@ -149,7 +151,7 @@ export default function SearchPage({ history }) {
 				<Grid className='form-large' item xs={false} sm={4}>
 					<div className={classes.paper}></div>
 				</Grid>
-			</Grid>
+			</Grid> */}
 		</div>
 	);
 }

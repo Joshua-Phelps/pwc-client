@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import {
@@ -39,18 +40,11 @@ const useStyles = makeStyles(theme => ({
 	},
 }));
 
-export default function AnimalCard({ animal, history }) {
+export default function AnimalCard({ shelter_name, animal }) {
 	const classes = useStyles();
+	const history = useHistory();
 	const [expanded, setExpanded] = React.useState(false);
-	const {
-		animal_type,
-		name,
-		id,
-		photo_url,
-		shelter_name,
-		total_paintings,
-		photo_status,
-	} = animal;
+	const { name, id, photo_url, total_paintings, photo_status } = animal;
 
 	const handleExpandClick = () => setExpanded(!expanded);
 
@@ -76,6 +70,7 @@ export default function AnimalCard({ animal, history }) {
 			/>
 			<CardActions disableSpacing>
 				<Button
+					color='secondary'
 					onClick={handleVisitAnimalShowPage}
 					aria-label='visit animal homepage'
 					variant='contained'>

@@ -81,7 +81,7 @@ export default function NavBarLarge({ handleNavigate, history }) {
 							open={Boolean(anchorEl)}
 							onClose={() => setAnchorEl(null)}>
 							<MenuItem onClick={() => handleClose('/account')}>
-								My account
+								My Account
 							</MenuItem>
 							<MenuItem onClick={() => handleClose('/login', logout)}>
 								Logout

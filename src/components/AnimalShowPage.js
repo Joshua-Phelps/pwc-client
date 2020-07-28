@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useContext, useReducer } from 'react';
+import clsx from 'clsx';
 import { api } from '../services/api';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Box, Button, Typography, Divider } from '@material-ui/core';
 import PaintingForm from './PaintingForm';
 import PaintingsTable from './PaintingsTable';
-import PaintingsTableHeader from './PaintingsTableHeader';
+import AddPaintingButton from './AddPaintingButton';
 import AnimalInfoDisplay from './AnimalInfoDisplay';
 import AnimalHeading from './AnimalHeading';
 import { StateContext, DispatchContext } from '../App';
@@ -20,13 +21,17 @@ const useStyles = makeStyles(theme => ({
 	},
 	gridContainer: {
 		paddingBottom: theme.spacing(4),
+		paddingLeft: theme.spacing(2),
+		paddingRight: theme.spacing(2),
 	},
 	addButtonContainer: {
 		display: 'flex',
 		alignItems: 'center',
 		justifyContent: 'center',
 		padding: theme.spacing(4),
-		marginLeft: theme.spacing(4),
+	},
+	formSmall: {
+		height: '10px',
 	},
 }));
 
@@ -44,6 +49,7 @@ export default function AnimalShowPage({ history, location }) {
 		api.animals
 			.getAnimalById(id)
 			.then(ani => {
+				console.log(ani);
 				if (ani.error) {
 					return history.push('/not-found');
 				} else {
@@ -115,10 +121,9 @@ export default function AnimalShowPage({ history, location }) {
 							<Grid item xs={12} sm={10}>
 								<AnimalInfoDisplay />
 							</Grid>
-							{/* <Grid item xs={false} sm={1} className='large-view'></Grid> */}
 						</Grid>
 
-						<Grid container>
+						<Grid container className={classes.gridContainer}>
 							<Grid item xs={false} sm={1} className='large-view'></Grid>
 							<Grid item xs={12} sm={10}>
 								<PaintingsTable
@@ -128,19 +133,20 @@ export default function AnimalShowPage({ history, location }) {
 									openForm={openForm}
 								/>
 							</Grid>
-							{/* <Grid item xs={false} sm={1} className='large-view'></Grid> */}
 						</Grid>
 
 						<Grid container>
 							<Grid item xs={false} sm={9} className='large-view'></Grid>
 							<div className={classes.addButtonContainer}>
-								<PaintingsTableHeader
-									handleOpenBlankForm={handleOpenBlankForm}
-									handleOpenForm={handleOpenForm}
-								/>
+								<Button
+									color='secondary'
+									variant='contained'
+									type='button'
+									onClick={() => handleOpenBlankForm(handleOpenForm)}>
+									Add Painting
+								</Button>
 							</div>
 							<Grid item xs={12} sm={3}></Grid>
-							{/* <Grid item xs={false} sm={1} className='large-view'></Grid> */}
 						</Grid>
 					</div>
 

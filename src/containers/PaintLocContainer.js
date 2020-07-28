@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import clsx from 'clsx';
 import VenueCard from '../components/VenueCard';
 import { Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -31,9 +32,17 @@ function PaintLocContainer({ history }) {
 	};
 
 	return (
-		<Grid className={classes.container} container spacing={3}>
-			{renderCards()}
-		</Grid>
+		<>
+			<Grid
+				className={clsx(classes.container, 'large-view')}
+				container
+				spacing={3}>
+				{renderCards()}
+			</Grid>
+			<Grid className='small-view' container spacing={3}>
+				{renderCards()}
+			</Grid>
+		</>
 	);
 }
 

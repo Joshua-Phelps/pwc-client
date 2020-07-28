@@ -8,17 +8,25 @@ import {
 	CardMedia,
 	Button,
 	Typography,
+	Grid,
 } from '@material-ui/core';
 import PaintingForm from './PaintingForm';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
 	root: {
 		maxWidth: 345,
 	},
 	center: {
 		textAlign: 'center',
 	},
-});
+	buttonContainer: {
+		display: 'flex',
+		justifyContent: 'center',
+		alignItems: 'center',
+		height: '100%',
+		padding: theme.spacing(1),
+	},
+}));
 
 export default function PaintingCard({ painting, galleryName }) {
 	const classes = useStyles();
@@ -38,7 +46,7 @@ export default function PaintingCard({ painting, galleryName }) {
 						{painting.animal.name}
 					</Typography>
 					<Typography variant='body2' color='textSecondary' component='p'>
-						Card Stock: Card Stock goes here
+						Card Stock: {painting.card_stock || 0}
 						<br></br>
 						Status:{' '}
 						{painting.painting_status === 'Displayed'
@@ -55,18 +63,24 @@ export default function PaintingCard({ painting, galleryName }) {
 				/> */}
 			</CardActionArea>
 			<CardActions>
-				<Button
-					onClick={handleClick}
-					size='small'
-					variant='contained'
-					color='primary'>
-					Update Painting
-				</Button>
+				<Grid className={classes.center} container>
+					<Grid item sm={12} xs={12}>
+						<Button
+							onClick={handleClick}
+							size='small'
+							variant='contained'
+							color='primary'>
+							Update Painting
+						</Button>
+					</Grid>
+				</Grid>
+
 				{open && (
 					<PaintingForm
 						paintingId={painting.id}
 						animalId={painting.animal.id}
 						updateSelectAnimal={false}
+						updateGallery={true}
 						animalName={painting.animal.name}
 						open={open}
 						setOpen={handleOpen}
