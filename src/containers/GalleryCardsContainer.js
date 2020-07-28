@@ -1,18 +1,16 @@
 import React, { useContext } from 'react';
-import GalleryCard from '../components/GalleryCard';
+import VenueCard from '../components/VenueCard';
 import { Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { StateContext } from '../App';
 
 const useStyles = makeStyles(theme => ({
 	container: {
-		width: '100%',
-		margin: 0,
 		padding: theme.spacing(4),
 	},
 }));
 
-function CardsContainer({ history }) {
+function GalleryCardsContainer({ history }) {
 	const classes = useStyles();
 	const { galleries } = useContext(StateContext);
 
@@ -20,7 +18,12 @@ function CardsContainer({ history }) {
 		return galleries.map(gallery => {
 			return (
 				<Grid key={gallery.id} item sm={4} xs={12}>
-					<GalleryCard gallery={gallery} history={history} />
+					<VenueCard
+						venue={gallery}
+						buttonText='Visit Gallery'
+						pushPath={`/galleries/${gallery.id}`}
+						history={history}
+					/>
 				</Grid>
 			);
 		});
@@ -33,4 +36,4 @@ function CardsContainer({ history }) {
 	);
 }
 
-export default CardsContainer;
+export default GalleryCardsContainer;

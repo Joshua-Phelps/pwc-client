@@ -1,37 +1,40 @@
 import React, { useContext } from 'react';
-import GalleryCard from '../components/GalleryCard';
+import VenueCard from '../components/VenueCard';
 import { Grid } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import { StateContext } from '../App';
 
-export default function CardsContainer({ history }) {
+const useStyles = makeStyles(theme => ({
+	container: {
+		padding: theme.spacing(4),
+	},
+}));
+
+function PaintLocContainer({ history }) {
+	const classes = useStyles();
 	const { paintLocs } = useContext(StateContext);
-
-	const handleClick = id => {
-		history.push(`/paint-locations/${id}`);
-	};
-
-	const handleUpdate = () => {};
+	console.log(paintLocs);
 
 	const renderCards = () => {
-		return paintLocs.map(paintLoc => {
+		return paintLocs.map(pl => {
 			return (
-				<Grid
-					onClick={() => handleClick(paintLoc.id)}
-					key={paintLoc.id}
-					item
-					xs={3}>
-					<div>{paintLoc.name}</div>
-					<br></br>
-					<div>{paintLoc.address}</div>
-					<button onClick={handleUpdate}>Edit</button>
+				<Grid key={pl.id} item sm={4} xs={12}>
+					<VenueCard
+						venue={pl}
+						buttonText='Visit Paint Location'
+						pushPath={`/paint-locations/${pl.id}`}
+						history={history}
+					/>
 				</Grid>
 			);
 		});
 	};
 
 	return (
-		<Grid container spacing={3}>
+		<Grid className={classes.container} container spacing={3}>
 			{renderCards()}
 		</Grid>
 	);
 }
+
+export default PaintLocContainer;

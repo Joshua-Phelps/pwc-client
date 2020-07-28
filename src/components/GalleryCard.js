@@ -36,8 +36,8 @@ export default function GalleryCard({
 	return (
 		<>
 			<Box className={classes.box} borderRadius='borderRadius' border={1}>
-				<Typography align='center' variant='subtitle1'>
-					<h3>{name}</h3>
+				<Typography align='center' variant='h6'>
+					{name}
 				</Typography>
 				<p>
 					<PhoneIcon className={classes.icon} />{' '}

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext, useReducer } from 'react';
 import { StateContext, DispatchContext } from '../App';
 import { api } from '../services/api';
 import PaintingCard from './PaintingCard';
+import VenueHeader from './VenueHeader';
 import { Grid, Typography, Divider } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import PhoneIcon from '@material-ui/icons/Phone';
@@ -81,26 +82,12 @@ export default function GalleryShowPage({ history, location }) {
 		<>
 			{loaded && (
 				<>
-					<Grid container>
-						<Grid item xs={12} sm={12}>
-							<Typography className={classes.heading} variant='h1'>
-								{name}
-							</Typography>
-						</Grid>
-						<Grid item sm={2} xs={false}></Grid>
-						<Grid className={classes.detailsDisplay} item xs={12} sm={10}>
-							<Typography variant='subtitle1'>
-								<PhoneIcon />{' '}
-								<span className={classes.icon}>{phone_number}</span>
-								<br></br>
-								<EmailIcon /> <span className={classes.icon}>{email}</span>
-								<br></br>
-								<HomeIcon /> <span className={classes.icon}>{address}</span>
-								<br></br>
-							</Typography>
-						</Grid>
-					</Grid>
-					<Divider className={classes.divider} />
+					<VenueHeader
+						address={address}
+						name={name}
+						email={email}
+						phone_number={phone_number}
+					/>
 					<div className={classes.paintingsDisplay}>
 						{paintings.length > 0 ? (
 							<>

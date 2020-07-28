@@ -41,6 +41,7 @@ import NavBarLarge from './components/NavBarLarge';
 
 export const StateContext = createContext();
 export const DispatchContext = createContext();
+export const AuthContext = createContext();
 
 const theme = createMuiTheme({
 	palette: {
@@ -61,6 +62,9 @@ const theme = createMuiTheme({
 				main: '#d4d4d4',
 				dark: '#5a514e',
 			},
+		},
+		colors: {
+			white: '#ffffff',
 		},
 		info: {
 			main: '#02b39c',
@@ -114,12 +118,26 @@ function App() {
 		shelter,
 		form,
 	};
+
 	const dispatch = {
 		animalDispatch,
 		galleryDispatch,
 		paintLocDispatch,
 		shelterDispatch,
 		formDispatch,
+	};
+	const login = loginData => {
+		return api.auth
+			.login(loginData)
+			.then(res => {
+				if (res.message) {
+					alert('Unable to login');
+				} else {
+					localStorage.setItem('token', res.jwt);
+					return setLoggedIn(true);
+				}
+			})
+			.catch(err => console.log(err));
 	};
 
 	useEffect(() => {
@@ -140,20 +158,6 @@ function App() {
 		}
 	}, [token]);
 
-	const login = loginData => {
-		return api.auth
-			.login(loginData)
-			.then(res => {
-				if (res.message) {
-					alert('Unable to login');
-				} else {
-					localStorage.setItem('token', res.jwt);
-					return setLoggedIn(true);
-				}
-			})
-			.catch(err => console.log(err));
-	};
-
 	const setPaintLocs = () => {
 		api.paintLocs
 			.getPaintLocs()
@@ -163,7 +167,7 @@ function App() {
 				} else {
 					return paintLocsDispatch({
 						type: 'SET_PAINT_LOCS',
-						payload: paintLocs,
+						payload: res,
 					});
 				}
 			})
@@ -194,6 +198,8 @@ function App() {
 			.catch(err => console.log(err));
 	};
 
+	const auth = { login };
+
 	return (
 		<MuiThemeProvider theme={theme}>
 			<Router>
@@ -209,9 +215,11 @@ function App() {
 
 						<Route path='/sign-up' exact component={SignUp} />
 
-						<Route
-							path='/login'
-							render={props => <Login login={login} {...props} />}></Route>
+						<AuthContext.Provider value={auth}>
+							<Route
+								path='/login'
+								render={props => <Login login={login} {...props} />}></Route>
+						</AuthContext.Provider>
 
 						<Route path='/home' render={props => <HomePage {...props} />} />
 
@@ -226,6 +234,7 @@ function App() {
 						<PrivateRoute
 							path='/galleries'
 							exact
+							cards={galleries}
 							component={GalleryCardsContainer}
 						/>
 

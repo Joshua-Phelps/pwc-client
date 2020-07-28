@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { StateContext } from '../App';
+import React, { useState, useContext } from 'react';
+import { AuthContext } from '../App';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { api } from '../services/api';
 
@@ -67,10 +67,11 @@ const useStyles = makeStyles(theme => ({
 	},
 }));
 
-export default function Login({ history, login }) {
+export default function Login({ history }) {
 	const classes = useStyles();
 	const [email, setEmail] = useState();
 	const [password, setPassword] = useState();
+	const { login } = useContext(AuthContext);
 
 	const handleSubmit = e => {
 		e.preventDefault();

@@ -22,7 +22,7 @@ import NavBarSmall from '../components/NavBarSmall';
 const useStyles = makeStyles(theme => ({
 	mainColor: {
 		backgroundColor: theme.palette.primary.main,
-		color: 'white',
+		color: theme.palette.colors.white,
 	},
 	icon: {
 		alignItems: 'left',
@@ -91,8 +91,7 @@ export default function NavBarLarge({ handleNavigate, history }) {
 				</Grid>
 				<Grid className={classes.mainColor} item xs={false} sm={10}>
 					<Tabs
-						textColor='white'
-						wrapped={true}
+						textColor='inherit'
 						variant='fullWidth'
 						value={tabEl}
 						onChange={handleChange}

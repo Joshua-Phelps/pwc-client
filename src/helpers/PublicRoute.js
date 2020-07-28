@@ -9,7 +9,7 @@ const PublicRoute = ({
 }) => {
 	const token = localStorage.getItem('token');
 
-	const publicUrls = ['/login', '/signup'];
+	const publicUrls = ['/login', '/sign-up'];
 
 	const isPath = (arr, path) => {
 		for (let i = 0; i < arr.length; i++) {
