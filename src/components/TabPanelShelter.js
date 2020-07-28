@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { StateContext } from '../App';
 import { makeStyles } from '@material-ui/core/styles';
-import { Grid } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
 import PhoneIcon from '@material-ui/icons/Phone';
 import HomeIcon from '@material-ui/icons/Home';
 import EmailIcon from '@material-ui/icons/Email';
@@ -16,11 +16,12 @@ export default function Detailanel() {
 	const classes = useStyles();
 	const { animal } = useContext(StateContext);
 	const { shelter } = animal;
+	const { name, phone_number, address, email } = shelter;
 
 	return (
 		<>
 			<div className={classes.center}>
-				<h3>{shelter.name}</h3>
+				<h3>{name}</h3>
 			</div>
 
 			<Grid className={classes.center} container>
@@ -28,21 +29,24 @@ export default function Detailanel() {
 					<div>
 						<PhoneIcon />
 					</div>
-					{shelter.phone_number}
+					{phone_number}
 				</Grid>
 
 				<Grid item xs={12} sm={12} md={4}>
 					<div>
 						<HomeIcon />
 					</div>
-					{shelter.address}
+					<Typography variant='body1'>
+						{address.street_address} <br></br>
+						{address.city}, {address.state} {address.zip}
+					</Typography>
 				</Grid>
 
 				<Grid item xs={12} sm={12} md={4}>
 					<div>
 						<EmailIcon />
 					</div>
-					{shelter.email}
+					{email}
 				</Grid>
 			</Grid>
 		</>

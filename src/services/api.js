@@ -50,19 +50,19 @@ const getAnimalById = id => {
 	}).then(res => res.json());
 };
 
-const getAnimalByName = name => {
-	let titleizedName = toTitleCase(name);
-	return fetch(`${API_ROOT}/animals_by_name/${titleizedName}`, {
-		headers: headers(),
-	}).then(res => res.json());
-};
-
 const toTitleCase = phrase => {
 	return phrase
 		.toLowerCase()
 		.split(' ')
 		.map(word => word.charAt(0).toUpperCase() + word.slice(1))
 		.join(' ');
+};
+
+const getAnimalByName = name => {
+	let titleizedName = toTitleCase(name);
+	return fetch(`${API_ROOT}/animals_by_name/${titleizedName}`, {
+		headers: headers(),
+	}).then(res => res.json());
 };
 
 const getGalleries = () => {

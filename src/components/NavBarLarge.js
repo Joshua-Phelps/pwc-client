@@ -71,7 +71,7 @@ export default function NavBarLarge({ handleNavigate, history }) {
 
 	return (
 		<>
-			<Grid container xs={12} className='large-view'>
+			<Grid container className='large-view'>
 				<Grid className={classes.mainColor} item xs={false} sm={1}>
 					<div className={classes.iconContainer}>
 						<MenuIcon onClick={handleMenu} className={classes.icon} />

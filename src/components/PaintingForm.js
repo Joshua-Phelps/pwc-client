@@ -207,13 +207,13 @@ export default function PaintingForm({
 
 								<FormControl className={classes.formControl}>
 									<InputLabel
-										shrink={form.paint_location_id && true}
+										// shrink={form.paint_location_id && true}
 										id='select-paint-location-label'>
 										Painting Location
 									</InputLabel>
 									<Select
 										labelId='select-paint-location-label'
-										id='simple-select-paint-location'
+										id='select-paint-location'
 										value={form.paint_location_id || ''}
 										name='paint_location_id'
 										onChange={handleChange}>

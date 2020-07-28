@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { StateContext, DispatchContext } from '../App';
 import { api } from '../services/api';
+import VenueHeader from './VenueHeader';
 
 // const initialState = {
 // 	id: null,
@@ -16,6 +17,7 @@ export default function PaintLocationShowPage({ location }) {
 	const { shelterDispatch } = useContext(DispatchContext);
 	const [loaded, setLoaded] = useState(false);
 	const id = parseInt(location.pathname.split('/shelters/')[1]);
+	const { name, email, phone_number, address, animals } = shelter;
 
 	useEffect(() => {
 		fetchShelter();
@@ -42,5 +44,19 @@ export default function PaintLocationShowPage({ location }) {
 		}
 	};
 
-	return <>{loaded && <div>{renderAnimals()}</div>}</>;
+	return (
+		<>
+			{loaded && (
+				<>
+					<VenueHeader
+						address={address}
+						name={name}
+						email={email}
+						phone_number={phone_number}
+					/>
+					<div>{renderAnimals()}</div>
+				</>
+			)}
+		</>
+	);
 }

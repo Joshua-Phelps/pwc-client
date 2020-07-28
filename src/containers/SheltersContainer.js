@@ -1,39 +1,39 @@
 import React, { useContext } from 'react';
+import VenueCard from '../components/VenueCard';
 import { Grid } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import { StateContext } from '../App';
 
-export default function SheltersContainers({ history }) {
+const useStyles = makeStyles(theme => ({
+	container: {
+		padding: theme.spacing(4),
+	},
+}));
+
+function SheltersContainer({ history }) {
+	const classes = useStyles();
 	const { shelters } = useContext(StateContext);
-
-	const handleClick = id => {
-		history.push(`/shelters/${id}`);
-	};
-
-	const handleUpdate = () => {};
 
 	const renderCards = () => {
 		return shelters.map(shelter => {
-			let animalCount = shelter.animals.length;
 			return (
-				<Grid
-					// onClick={() => handleClick(shelter.id)}
-					key={shelter.id}
-					item
-					xs={3}>
-					<div>
-						{shelter.name} ({animalCount})
-					</div>
-					<br></br>
-					{/* <div>{shelter.address}</div> */}
-					<button onClick={() => handleClick(shelter.id)}>Edit</button>
+				<Grid key={shelter.id} item sm={4} xs={12}>
+					<VenueCard
+						venue={shelter}
+						buttonText='Visit Shelter'
+						pushPath={`/shelters/${shelter.id}`}
+						history={history}
+					/>
 				</Grid>
 			);
 		});
 	};
 
 	return (
-		<Grid container spacing={3}>
+		<Grid className={classes.container} container spacing={3}>
 			{renderCards()}
 		</Grid>
 	);
 }
+
+export default SheltersContainer;

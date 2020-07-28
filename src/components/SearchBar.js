@@ -90,12 +90,15 @@ export default function SearchAnimal({ history }) {
 				api.animals
 					.getAnimalByName(textField)
 					.then(res => {
-						if (res.ids) {
-							if (res.ids.length > 1) {
-								console.log(res.ids);
+						console.log(res);
+						if (!res.message) {
+							if (res.length > 1) {
+								console.log(res);
+								return;
 								// render animal cards with results
 							} else {
-								return history.push(`/animals/${res.id}`);
+								console.log(res);
+								return history.push(`/animals/${res[0].id}`);
 							}
 						} else alert('Animal Not Found!');
 					})
