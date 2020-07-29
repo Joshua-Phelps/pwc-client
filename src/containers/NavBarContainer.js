@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext } from 'react';
+import { StateContext } from '../App';
 import { makeStyles } from '@material-ui/core/styles';
 import NavBarSmall from '../components/NavBarSmall';
 import NavBarLarge from '../components/NavBarLarge';
 
-function NavBarContainer({ history }) {
+function NavBarContainer({ history, loggedIn }) {
+	// const { loggedIn } = useContext(StateContext);
+	const token = localStorage.getItem('token');
 	const handleNavigate = value => {
 		value === 0 && history.push('/galleries');
 		value === 1 && history.push('/shelters');
@@ -13,30 +16,13 @@ function NavBarContainer({ history }) {
 
 	return (
 		<>
-			<NavBarLarge handleNavigate={handleNavigate} history={history} />
+			{loggedIn && (
+				<>
+					<NavBarLarge handleNavigate={handleNavigate} history={history} />
 
-			<NavBarSmall history={history} handleNavigate={handleNavigate} />
-
-			{/* <Grid item xs={1}>
-					<AccountCircleIcon
-						aria-controls='simple-menu'
-						aria-haspopup='true'
-						// className={classes.account}
-						onClick={handleClick}
-						fontSize='large'
-					/>
-					<Menu
-						id='simple-menu'
-						anchorEl={anchorEl}
-						keepMounted
-						open={anchorEl}
-						onClose={handleClose}>
-						<MenuItem>My account</MenuItem>
-						<MenuItem component={Link} to='/'>
-							Logout
-						</MenuItem>
-					</Menu>
-				</Grid> */}
+					<NavBarSmall history={history} handleNavigate={handleNavigate} />
+				</>
+			)}
 		</>
 	);
 }

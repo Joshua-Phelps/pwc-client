@@ -75,7 +75,9 @@ export default function Login({ history }) {
 
 	const handleSubmit = e => {
 		e.preventDefault();
-		login({ email, password }).then(history.push('/galleries'));
+		login({ email, password }).then(() => {
+			history.push('/galleries');
+		});
 	};
 
 	const handleChange = (e, cb) => cb(e.target.value);

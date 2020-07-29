@@ -1,11 +1,4 @@
-const SET_ANIMALS = 'SET_ANIMALS';
-const SET_GALLERIES = 'SET_GALLERIES';
-const SET_GALLERY = 'SET_GALLERY';
-const SET_PAINT_LOCS = 'SET_PAINT_LOCS';
-const SET_PAINT_LOCATION = 'SET_PAINT_LOCATION';
-const SET_SHELTERS = 'SET_SHELTERS';
-const SET_SHELTER = 'SET_SHELTER';
-const SET_FORM = 'SET_FORM';
+const SET = 'SET';
 const UPDATE_FORM = 'UPDATE_FORM';
 const CLEAR_FORM = 'CLEAR_FORM';
 const SET_ANIMAL = 'SET_ANIMAL';
@@ -13,9 +6,19 @@ const ADD_PAINTING = 'ADD_PAINTING';
 const UPDATE_PAINTING = 'UPDATE_PAINTING';
 const DELETE_PAINTING = 'DELETE_PAINTING';
 
+const userReducer = (state, action) => {
+	switch (action.type) {
+		case SET: {
+			return { ...action.payload };
+		}
+		default:
+			return state;
+	}
+};
+
 const animalsReducer = (state, action) => {
 	switch (action.type) {
-		case SET_ANIMALS:
+		case SET:
 			return [...action.payload];
 		default:
 			return state;
@@ -25,7 +28,7 @@ const animalsReducer = (state, action) => {
 const animalReducer = (state, action) => {
 	let paintings;
 	switch (action.type) {
-		case SET_ANIMAL:
+		case SET:
 			return { ...action.payload };
 		case ADD_PAINTING:
 			return { ...state, paintings: [...state.paintings, action.payload] };
@@ -44,7 +47,7 @@ const animalReducer = (state, action) => {
 
 const galleriesReducer = (state, action) => {
 	switch (action.type) {
-		case SET_GALLERIES:
+		case SET:
 			return [...action.payload];
 		default:
 			return state;
@@ -54,7 +57,7 @@ const galleriesReducer = (state, action) => {
 const galleryReducer = (state, action) => {
 	let paintings;
 	switch (action.type) {
-		case SET_GALLERY:
+		case SET:
 			return { ...action.payload };
 		case UPDATE_PAINTING:
 			paintings = state.paintings.map(p => {
@@ -69,7 +72,7 @@ const galleryReducer = (state, action) => {
 
 const paintLocsReducer = (state, action) => {
 	switch (action.type) {
-		case SET_PAINT_LOCS:
+		case SET:
 			return [...action.payload];
 		default:
 			return state;
@@ -78,7 +81,7 @@ const paintLocsReducer = (state, action) => {
 
 const paintLocReducer = (state, action) => {
 	switch (action.type) {
-		case SET_PAINT_LOCATION:
+		case SET:
 			return { ...action.payload };
 		default:
 			return state;
@@ -87,7 +90,7 @@ const paintLocReducer = (state, action) => {
 
 const sheltersReducer = (state, action) => {
 	switch (action.type) {
-		case SET_SHELTERS:
+		case SET:
 			return [...action.payload];
 		default:
 			return state;
@@ -96,7 +99,7 @@ const sheltersReducer = (state, action) => {
 
 const shelterReducer = (state, action) => {
 	switch (action.type) {
-		case SET_SHELTER:
+		case SET:
 			return { ...action.payload };
 		default:
 			return state;
@@ -105,7 +108,7 @@ const shelterReducer = (state, action) => {
 
 const formReducer = (state, action) => {
 	switch (action.type) {
-		case SET_FORM:
+		case SET:
 			return { ...action.payload };
 		case UPDATE_FORM:
 			return { ...state, [action.key]: action.payload };
@@ -117,6 +120,7 @@ const formReducer = (state, action) => {
 };
 
 export {
+	userReducer,
 	animalsReducer,
 	galleriesReducer,
 	galleryReducer,

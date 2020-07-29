@@ -3,7 +3,7 @@ import { StateContext, DispatchContext } from '../App';
 import { api } from '../services/api';
 import PaintingCard from './PaintingCard';
 import VenueHeader from './VenueHeader';
-import { Grid, Typography, Divider } from '@material-ui/core';
+import { Grid, Typography, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import PhoneIcon from '@material-ui/icons/Phone';
 import HomeIcon from '@material-ui/icons/Home';
@@ -25,6 +25,9 @@ const useStyles = makeStyles(theme => ({
 	},
 	paintingsDisplay: {
 		paddingTop: theme.spacing(3),
+	},
+	buttonContainer: {
+		paddingLeft: theme.spacing(2),
 	},
 }));
 
@@ -61,7 +64,7 @@ export default function GalleryShowPage({ history, location }) {
 			.getGalleryById(id)
 			.then(gallery => {
 				return galleryDispatch({
-					type: 'SET_GALLERY',
+					type: 'SET',
 					payload: { ...gallery },
 				});
 			})
@@ -89,6 +92,11 @@ export default function GalleryShowPage({ history, location }) {
 						phone_number={phone_number}
 					/>
 					<div className={classes.paintingsDisplay}>
+						<div className={classes.buttonContainer}>
+							<Button variant='contained' color='secondary'>
+								Add Painting
+							</Button>
+						</div>
 						{paintings.length > 0 ? (
 							<>
 								<Typography align='center' variant='h6'>

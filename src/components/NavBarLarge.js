@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
+import { AuthContext } from '../App';
 import clsx from 'clsx';
 import SearchBar from './SearchBar';
 import {
@@ -43,6 +44,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function NavBarLarge({ handleNavigate, history }) {
 	const classes = useStyles();
+	const { logout } = useContext(AuthContext);
 	const [openSearch, setOpenSearch] = useState(false);
 	const [openMenu, setOpenMenu] = useState(false);
 	const [tabEl, setTabEl] = useState(false);
@@ -65,10 +67,6 @@ export default function NavBarLarge({ handleNavigate, history }) {
 		history.push(path);
 	};
 
-	const logout = () => {
-		localStorage.removeItem('token');
-	};
-
 	return (
 		<>
 			<Grid container className='large-view'>
@@ -83,6 +81,7 @@ export default function NavBarLarge({ handleNavigate, history }) {
 							<MenuItem onClick={() => handleClose('/account')}>
 								My Account
 							</MenuItem>
+							<MenuItem onClick={() => handleClose('/admin')}>Admin</MenuItem>
 							<MenuItem onClick={() => handleClose('/login', logout)}>
 								Logout
 							</MenuItem>

@@ -28,7 +28,7 @@ export default function ShelterShowPage({ location }) {
 			.getShelterById(id)
 			.then(shelter => {
 				return shelterDispatch({
-					type: 'SET_SHELTER',
+					type: 'SET',
 					payload: shelter,
 				});
 			})

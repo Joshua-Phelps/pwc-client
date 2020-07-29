@@ -25,7 +25,9 @@ import ShelterShowPage from './components/ShelterShowPage';
 import Login from './components/Login';
 import SignUp from './components/SignUp';
 import SearchContainer from './containers/SearchContainer';
+import AdminPage from './components/AdminPage';
 import {
+	userReducer,
 	animalsReducer,
 	animalReducer,
 	galleriesReducer,
@@ -94,6 +96,7 @@ const theme = createMuiTheme({
 });
 
 function App() {
+	const [user, userDispatch] = useReducer(userReducer, []);
 	const [animals, animalsDispatch] = useReducer(animalsReducer, []);
 	const [animal, animalDispatch] = useReducer(animalReducer, {});
 	const [galleries, galleriesDispatch] = useReducer(galleriesReducer, []);
@@ -106,6 +109,7 @@ function App() {
 	const [loaded, setLoaded] = useState(false);
 	const [loggedIn, setLoggedIn] = useState(false);
 	const token = localStorage.getItem('token');
+	const history = useHistory();
 
 	const state = {
 		animals,
@@ -130,43 +134,59 @@ function App() {
 		return api.auth
 			.login(loginData)
 			.then(res => {
-				if (res.message) {
+				if (res.error) {
 					alert('Unable to login');
 				} else {
 					localStorage.setItem('token', res.jwt);
+					setUser(res.user);
+					setPaintLocs();
+					setGalleries();
+					setShelters();
 					return setLoggedIn(true);
 				}
 			})
 			.catch(err => console.log(err));
 	};
 
+	const logout = () => {
+		localStorage.removeItem('token');
+		setLoggedIn(false);
+	};
+
 	useEffect(() => {
-		// const token = localStorage.getItem('token');
 		if (token) {
 			api.auth
 				.getCurrentUser()
 				.then(res => {
-					if (res.message) return localStorage.removeItem('token');
+					console.log(res);
+					if (res.error) return localStorage.removeItem('token');
+					setUser(res);
 					setPaintLocs();
 					setGalleries();
 					setShelters();
-					// setLoggedIn(true);
 					return;
 				})
-				.then(() => setLoaded(true))
+				.then(() => setLoggedIn(true))
 				.catch(error => console.log(error));
 		}
-	}, [token]);
+	}, []);
+
+	const setUser = user => {
+		userDispatch({
+			type: 'SET',
+			payload: user,
+		});
+	};
 
 	const setPaintLocs = () => {
 		api.paintLocs
 			.getPaintLocs()
 			.then(res => {
-				if (res.message) {
+				if (res.error) {
 					return;
 				} else {
 					return paintLocsDispatch({
-						type: 'SET_PAINT_LOCS',
+						type: 'SET',
 						payload: res,
 					});
 				}
@@ -179,7 +199,7 @@ function App() {
 			.getGalleries()
 			.then(galleries => {
 				galleriesDispatch({
-					type: 'SET_GALLERIES',
+					type: 'SET',
 					payload: galleries,
 				});
 			})
@@ -191,14 +211,14 @@ function App() {
 			.getShelters()
 			.then(shelters => {
 				sheltersDispatch({
-					type: 'SET_SHELTERS',
+					type: 'SET',
 					payload: shelters,
 				});
 			})
 			.catch(err => console.log(err));
 	};
 
-	const auth = { login };
+	const auth = { login, logout, user };
 
 	return (
 		<MuiThemeProvider theme={theme}>
@@ -206,24 +226,33 @@ function App() {
 				<StateContext.Provider value={state}>
 					<DispatchContext.Provider value={dispatch}>
 						<CssBaseline />
-
-						<PublicRoute
-							restricted={true}
-							path='/'
-							component={NavBarContainer}
-						/>
-
-						<Route path='/sign-up' exact component={SignUp} />
-
 						<AuthContext.Provider value={auth}>
+							<Route
+								path='/'
+								render={props => (
+									<NavBarContainer {...props} loggedIn={loggedIn} />
+								)}
+							/>
+
+							<Route path='/sign-up' exact component={SignUp} />
+
 							<Route
 								path='/login'
 								render={props => <Login login={login} {...props} />}></Route>
+
+							<PrivateRoute path='/admin' component={AdminPage} />
 						</AuthContext.Provider>
 
 						<Route path='/home' render={props => <HomePage {...props} />} />
 
 						<PrivateRoute path='/search-page' component={SearchContainer} />
+
+						<PrivateRoute
+							path='/galleries'
+							exact
+							cards={galleries}
+							component={GalleryCardsContainer}
+						/>
 
 						<PrivateRoute
 							path='/animals'

@@ -92,17 +92,18 @@ export default function SearchAnimal() {
 				api.animals
 					.getAnimalByName(textField)
 					.then(res => {
-						console.log(res);
-						if (!res.message) {
+						if (!res.error) {
 							if (res.length > 1) {
 								console.log(res);
 								return;
 								// render animal cards with results
 							} else {
-								console.log(res);
 								return history.push(`/animals/${res[0].id}`);
 							}
-						} else alert('Animal Not Found!');
+						} else {
+							console.log(res);
+							alert('Animal Not Found!');
+						}
 					})
 					.catch(err => console.log(err));
 			}

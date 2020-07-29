@@ -54,7 +54,7 @@ export default function AnimalShowPage({ history, location }) {
 					return history.push('/not-found');
 				} else {
 					return animalDispatch({
-						type: 'SET_ANIMAL',
+						type: 'SET',
 						payload: ani,
 					});
 				}

@@ -45,7 +45,7 @@ export default function PaintLocationShowPage({ history, location }) {
 			.getPaintLocById(id)
 			.then(paintLoc => {
 				return paintLocDispatch({
-					type: 'SET_PAINT_LOCATION',
+					type: 'SET',
 					payload: paintLoc,
 				});
 			})

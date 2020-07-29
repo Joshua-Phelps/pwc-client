@@ -61,7 +61,7 @@ export default function PaintingForm({
 			fetchPainting()
 				.then(p => {
 					return formDispatch({
-						type: 'SET_FORM',
+						type: 'SET',
 						payload: p,
 					});
 				})
