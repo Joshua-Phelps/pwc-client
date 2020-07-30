@@ -96,7 +96,7 @@ const theme = createMuiTheme({
 });
 
 function App() {
-	const [user, userDispatch] = useReducer(userReducer, []);
+	const [user, userDispatch] = useReducer(userReducer, {});
 	const [animals, animalsDispatch] = useReducer(animalsReducer, []);
 	const [animal, animalDispatch] = useReducer(animalReducer, {});
 	const [galleries, galleriesDispatch] = useReducer(galleriesReducer, []);
@@ -158,8 +158,8 @@ function App() {
 			api.auth
 				.getCurrentUser()
 				.then(res => {
-					console.log(res);
 					if (res.error) return localStorage.removeItem('token');
+					console.log(res);
 					setUser(res);
 					setPaintLocs();
 					setGalleries();
@@ -245,12 +245,16 @@ function App() {
 
 						<Route path='/home' render={props => <HomePage {...props} />} />
 
-						<PrivateRoute path='/search-page' component={SearchContainer} />
+						<PrivateRoute
+							exact
+							path='/search-page'
+							component={SearchContainer}
+						/>
 
 						<PrivateRoute
 							path='/galleries'
 							exact
-							cards={galleries}
+							// cards={galleries}
 							component={GalleryCardsContainer}
 						/>
 

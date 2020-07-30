@@ -44,7 +44,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function NavBarLarge({ handleNavigate, history }) {
 	const classes = useStyles();
-	const { logout } = useContext(AuthContext);
+	const { logout, user } = useContext(AuthContext);
 	const [openSearch, setOpenSearch] = useState(false);
 	const [openMenu, setOpenMenu] = useState(false);
 	const [tabEl, setTabEl] = useState(false);
@@ -81,7 +81,9 @@ export default function NavBarLarge({ handleNavigate, history }) {
 							<MenuItem onClick={() => handleClose('/account')}>
 								My Account
 							</MenuItem>
-							<MenuItem onClick={() => handleClose('/admin')}>Admin</MenuItem>
+							{user.isAdmin && (
+								<MenuItem onClick={() => handleClose('/admin')}>Admin</MenuItem>
+							)}
 							<MenuItem onClick={() => handleClose('/login', logout)}>
 								Logout
 							</MenuItem>
