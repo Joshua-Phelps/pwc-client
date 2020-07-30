@@ -1,3 +1,5 @@
 const states = ['WA', 'OR'];
 
-export { states };
+const photoStatusList = ['this', 'is', 'a', 'test'];
+
+export { states, photoStatusList };

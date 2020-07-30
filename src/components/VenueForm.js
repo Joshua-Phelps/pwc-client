@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { api } from '../services/api';
 import VenueFormHeader from './VenueFormHeader';
 import { states } from '../utils/index';
 import {
@@ -54,6 +55,23 @@ export default function VenueForm({ max_paintings, venueType, venue }) {
 		}
 	}, []);
 
+	const handleSubmit = e => {
+		e.preventDefault();
+		if (venueType === 'Gallery') {
+			api.galleries.createGallery(form).then(res => {
+				console.log(res);
+			});
+		} else if (venueType === 'Shelter') {
+			api.shelters.createShelter(form).then(res => {
+				console.log(res);
+			});
+		} else if (venueType === 'Paint Location') {
+			api.paintLocs.createPaintLoc(form).then(res => {
+				console.log(res);
+			});
+		}
+	};
+
 	const handleChange = ({ target: { name, value } }) => {
 		setForm(prevState => {
 			return { ...prevState, [`${name}`]: value };
@@ -85,7 +103,7 @@ export default function VenueForm({ max_paintings, venueType, venue }) {
 	return (
 		<>
 			<VenueFormHeader venueType={venueType} />
-			<form>
+			<form onSubmit={handleSubmit}>
 				<Grid className={classes.container} spacing={2} container>
 					<Grid item xs={false} sm={2}>
 						{''}
@@ -195,13 +213,27 @@ export default function VenueForm({ max_paintings, venueType, venue }) {
 								</Select>
 							</FormControl>
 						</div>
+
+						{venueType === 'Gallery' && (
+							<div className={classes.input}>
+								<TextField
+									aria-label='max paintings field'
+									variant='outlined'
+									label='Max paintings'
+									id='max-paintings-field'
+									name='max_paintings'
+									value={form.max_paintings}
+									onChange={handleChange}
+								/>
+							</div>
+						)}
 					</Grid>
 
 					<Grid item xs={false} sm={2}></Grid>
 
 					<Grid item xs={12} sm={10}>
 						<div className={classes.input}>
-							<Button color='secondary' variant='contained'>
+							<Button type='submit' color='secondary' variant='contained'>
 								Submit
 							</Button>
 						</div>

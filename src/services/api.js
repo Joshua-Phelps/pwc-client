@@ -50,6 +50,14 @@ const getAnimalById = id => {
 	}).then(res => res.json());
 };
 
+const createAnimal = animal => {
+	return fetch(`${API_ROOT}/animals`, {
+		headers: headers(),
+		method: 'POST',
+		body: JSON.stringify(animal),
+	}).then(res => res.json());
+};
+
 const toTitleCase = phrase => {
 	return phrase
 		.toLowerCase()
@@ -77,6 +85,14 @@ const getGalleryById = id => {
 	}).then(res => res.json());
 };
 
+const createGallery = gallery => {
+	return fetch(`${API_ROOT}/galleries`, {
+		headers: headers(),
+		method: 'POST',
+		body: JSON.stringify(gallery),
+	}).then(res => res.json());
+};
+
 const getPaintLocs = () => {
 	return fetch(`${API_ROOT}/paint_locations`, {
 		headers: headers(),
@@ -86,6 +102,14 @@ const getPaintLocs = () => {
 const getPaintLocById = id => {
 	return fetch(`${API_ROOT}/paint_locations/${id}`, {
 		headers: headers(),
+	}).then(res => res.json());
+};
+
+const createPaintLoc = paint_location => {
+	return fetch(`${API_ROOT}/paint_locations`, {
+		headers: headers(),
+		method: 'POST',
+		body: JSON.stringify(paint_location),
 	}).then(res => res.json());
 };
 
@@ -130,6 +154,14 @@ const getShelterById = id => {
 	}).then(res => res.json());
 };
 
+const createShelter = shelter => {
+	return fetch(`${API_ROOT}/shelters`, {
+		headers: headers(),
+		method: 'POST',
+		body: JSON.stringify(shelter),
+	}).then(res => res.json());
+};
+
 const getIncompletePhotos = () => {
 	return fetch(`${API_ROOT}/photos/incomplete`, {
 		headers: headers(),
@@ -169,14 +201,17 @@ export const api = {
 		getAnimals,
 		getAnimalById,
 		getAnimalByName,
+		createAnimal,
 	},
 	galleries: {
 		getGalleries,
 		getGalleryById,
+		createGallery,
 	},
 	paintLocs: {
 		getPaintLocs,
 		getPaintLocById,
+		createPaintLoc,
 	},
 	paintings: {
 		getPaintingById,
@@ -187,6 +222,7 @@ export const api = {
 	shelters: {
 		getShelters,
 		getShelterById,
+		createShelter,
 	},
 	cards: {
 		generateCard,
