@@ -5,6 +5,7 @@ import {
 	Redirect,
 	useHistory,
 } from 'react-router-dom';
+import { initialState } from './reducers/initialState';
 import PrivateRoute from './helpers/PrivateRoute';
 import PublicRoute from './helpers/PublicRoute';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -19,7 +20,7 @@ import PaintLocContainer from './containers/PaintLocContainer';
 import AnimalShowPage from './components/AnimalShowPage';
 import GalleryShowPage from './components/GalleryShowPage';
 import PaintLocationShowPage from './components/PaintLocationShowPage';
-import PaintingForm from './components/PaintingForm';
+import PasswordReset from './components/PasswordReset';
 import SheltersContainer from './containers/SheltersContainer';
 import ShelterShowPage from './components/ShelterShowPage';
 import Login from './components/Login';
@@ -27,6 +28,7 @@ import SignUp from './components/SignUp';
 import SearchContainer from './containers/SearchContainer';
 import AdminPage from './components/AdminPage';
 import DialogMessage from './components/DialogMessage';
+import PasswordSendEmail from './components/PasswordSendEmail';
 import {
 	userReducer,
 	animalsReducer,
@@ -38,12 +40,12 @@ import {
 	sheltersReducer,
 	shelterReducer,
 	formReducer,
+	dialogReducer,
 } from './reducers/Reducers';
 import AnimalCard from './components/AnimalCard';
 import NavBarLarge from './components/NavBarLarge';
 
 export const StateContext = createContext();
-export const SetStateContext = createContext();
 export const DispatchContext = createContext();
 export const AuthContext = createContext();
 
@@ -108,7 +110,10 @@ function App() {
 	const [shelter, shelterDispatch] = useReducer(shelterReducer, {});
 	const [paintLoc, paintLocDispatch] = useReducer(paintLocReducer, {});
 	const [form, formDispatch] = useReducer(formReducer, {});
-	const [openDialog, setOpenDialog] = useState(false);
+	const [dialog, dialogDispatch] = useReducer(
+		dialogReducer,
+		initialState.dialog
+	);
 	const [loggedIn, setLoggedIn] = useState(false);
 	const token = localStorage.getItem('token');
 	const history = useHistory();
@@ -123,7 +128,7 @@ function App() {
 		shelters,
 		shelter,
 		form,
-		openDialog,
+		dialog,
 	};
 
 	const dispatch = {
@@ -132,11 +137,9 @@ function App() {
 		paintLocDispatch,
 		shelterDispatch,
 		formDispatch,
+		dialogDispatch,
 	};
 
-	const setStateMethods = {
-		setOpenDialog,
-	};
 	const login = loginData => {
 		return api.auth
 			.login(loginData)
@@ -231,85 +234,95 @@ function App() {
 		<MuiThemeProvider theme={theme}>
 			<Router>
 				<StateContext.Provider value={state}>
-					<SetStateContext.Provider value={setStateMethods}>
-						<DispatchContext.Provider value={dispatch}>
-							<CssBaseline />
-							<AuthContext.Provider value={auth}>
-								<DialogMessage />
-								<Route
-									path='/'
-									render={props => (
-										<NavBarContainer {...props} loggedIn={loggedIn} />
-									)}
-								/>
-
-								<Route path='/sign-up' exact component={SignUp} />
-
-								<Route
-									path='/login'
-									render={props => <Login login={login} {...props} />}></Route>
-
-								<PrivateRoute path='/admin' component={AdminPage} />
-							</AuthContext.Provider>
-
-							<Route path='/home' render={props => <HomePage {...props} />} />
-
-							<PrivateRoute
-								exact
-								path='/search-page'
-								component={SearchContainer}
+					<DispatchContext.Provider value={dispatch}>
+						<CssBaseline />
+						<AuthContext.Provider value={auth}>
+							<DialogMessage />
+							<Route
+								path='/'
+								render={props => (
+									<NavBarContainer {...props} loggedIn={loggedIn} />
+								)}
 							/>
 
-							<PrivateRoute
-								path='/galleries'
-								exact
-								// cards={galleries}
-								component={GalleryCardsContainer}
-							/>
-
-							<PrivateRoute
-								path='/animals'
-								exact
-								component={AnimalCardsContainer}
-							/>
-
-							<PrivateRoute
-								path='/galleries'
-								exact
-								cards={galleries}
-								component={GalleryCardsContainer}
-							/>
-
-							<PrivateRoute
-								path='/galleries/:id'
-								exact
-								component={GalleryShowPage}
-							/>
-							<PrivateRoute
-								path='/animals/:id'
-								exact
-								component={AnimalShowPage}
-							/>
-
-							<PrivateRoute
-								path='/paint-locations'
-								exact
-								component={PaintLocContainer}
-							/>
+							<Route path='/sign-up' exact component={SignUp} />
 
 							<Route
-								path='/paint-locations/:id'
-								exact
-								component={PaintLocationShowPage}
-							/>
+								path='/login'
+								render={props => <Login login={login} {...props} />}></Route>
 
-							{/* <PrivateRoute
+							<PrivateRoute path='/admin' component={AdminPage} />
+						</AuthContext.Provider>
+
+						<Route path='/home' render={props => <HomePage {...props} />} />
+						<Route
+							path='/password-reset-send-email'
+							exact
+							render={props => <PasswordSendEmail {...props} />}
+						/>
+
+						<Route
+							path='/password-reset/:token'
+							exact
+							render={props => <PasswordReset {...props} />}
+						/>
+
+						<PrivateRoute
+							exact
+							path='/search-page'
+							component={SearchContainer}
+						/>
+
+						<PrivateRoute
+							path='/galleries'
+							exact
+							// cards={galleries}
+							component={GalleryCardsContainer}
+						/>
+
+						<PrivateRoute
+							path='/animals'
+							exact
+							component={AnimalCardsContainer}
+						/>
+
+						<PrivateRoute
+							path='/galleries'
+							exact
+							cards={galleries}
+							component={GalleryCardsContainer}
+						/>
+
+						<PrivateRoute
+							path='/galleries/:id'
+							exact
+							component={GalleryShowPage}
+						/>
+						<PrivateRoute
+							path='/animals/:id'
+							exact
+							component={AnimalShowPage}
+						/>
+
+						<PrivateRoute
+							path='/paint-locations'
+							exact
+							component={PaintLocContainer}
+						/>
+
+						<Route
+							path='/paint-locations/:id'
+							exact
+							component={PaintLocationShowPage}
+						/>
+
+						{/* <PrivateRoute
 							path='/paintings/create'
 							exact
 							component={PaintingForm}
 						/> */}
 
-							{/* <Route
+						{/* <Route
 							path='/paintings/edit/:id'
 							exact
 							render={props => (
@@ -317,18 +330,17 @@ function App() {
 							)}
 						/> */}
 
-							<PrivateRoute
-								path='/shelters'
-								exact
-								component={SheltersContainer}
-							/>
-							<PrivateRoute
-								path='/shelters/:id'
-								exact
-								component={ShelterShowPage}
-							/>
-						</DispatchContext.Provider>
-					</SetStateContext.Provider>
+						<PrivateRoute
+							path='/shelters'
+							exact
+							component={SheltersContainer}
+						/>
+						<PrivateRoute
+							path='/shelters/:id'
+							exact
+							component={ShelterShowPage}
+						/>
+					</DispatchContext.Provider>
 				</StateContext.Provider>
 			</Router>
 		</MuiThemeProvider>

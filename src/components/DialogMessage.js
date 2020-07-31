@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { StateContext, SetStateContext } from '../App';
+import { StateContext, DispatchContext } from '../App';
 import {
 	Button,
 	Dialog,
@@ -20,23 +20,19 @@ const useStyles = makeStyles(theme => ({
 	},
 }));
 
-export default function DeleteForm() {
-	const { setOpenDialog } = useContext(SetStateContext);
-	const { openDialog } = useContext(StateContext);
+export default function DialogMessage() {
+	const { dialogDispatch } = useContext(DispatchContext);
+	const { dialog } = useContext(StateContext);
 	const classes = useStyles();
 
 	const handleClose = () => {
-		setOpenDialog(false);
-	};
-
-	const handleDelete = () => {
-		// setOpen(false);
+		dialogDispatch({ type: 'CLOSE', payload: {} });
 	};
 
 	return (
 		<div>
 			<Dialog
-				open={openDialog}
+				open={dialog.open}
 				onClose={handleClose}
 				aria-labelledby='alert-dialog-title'
 				aria-describedby='alert-dialog-description'
@@ -45,10 +41,12 @@ export default function DeleteForm() {
 					paper: classes.border,
 				}}>
 				<DialogTitle className={classes.color} id='alert-dialog-title'>
+					{dialog.title}
 					{`Are you sure you want to delete ?`}
 				</DialogTitle>
 				<DialogContent>
 					<DialogContentText id='alert-dialog-description'>
+						{dialog.message}
 						Message goes here
 						<br></br>
 					</DialogContentText>
@@ -57,8 +55,8 @@ export default function DeleteForm() {
 					<Button onClick={handleClose} color='primary'>
 						Go Back
 					</Button>
-					<Button onClick={handleDelete} autoFocus>
-						Delete
+					<Button onClick={dialog.handleButton} autoFocus>
+						{dialog.buttonText}
 					</Button>
 				</DialogActions>
 			</Dialog>

@@ -18,11 +18,17 @@ const login = data => {
 	}).then(res => res.json());
 };
 
-const signup = (email, password) => {
+const signup = user => {
 	return fetch(`${API_ROOT}/users`, {
 		method: 'POST',
 		headers: headers(),
-		body: JSON.stringify({ user: { email, password } }),
+		body: JSON.stringify({
+			user: {
+				username: user.username,
+				password: user.password,
+				email: user.email,
+			},
+		}),
 	}).then(res => res.json());
 };
 
@@ -191,11 +197,29 @@ const createFile = formData => {
 	}).then(res => res.json());
 };
 
+const sendPasswordResetEmail = email => {
+	return fetch(`${API_ROOT}/password_resets`, {
+		method: 'POST',
+		headers: headers(),
+		body: JSON.stringify({ password_reset: { email } }),
+	}).then(res => res.json());
+};
+
+const updatePassword = (password, passwordToken) => {
+	return fetch(`${API_ROOT}/password_resets/${passwordToken}`, {
+		method: 'POST',
+		headers: headers(),
+		body: JSON.stringify(password),
+	}).then(res => res.json());
+};
+
 export const api = {
 	auth: {
 		login,
 		getCurrentUser,
 		signup,
+		sendPasswordResetEmail,
+		updatePassword,
 	},
 	animals: {
 		getAnimals,

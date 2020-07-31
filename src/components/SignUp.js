@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { SetStateContext, DispatchContext } from '../App';
 import { api } from '../services/api';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import {
@@ -13,25 +14,33 @@ import {
 	Button,
 } from '@material-ui/core';
 
+const initialState = {
+	username: '',
+	email: '',
+	password: '',
+	retypePassword: '',
+};
+
 export default function SignUp(props) {
-	const [email, setEmail] = useState('');
-	const [password, setPassword] = useState('');
-	const [password2, setPassword2] = useState('');
+	const { dialogDispatch } = useContext(DispatchContext);
+	const [state, setState] = useState(initialState);
 	const classes = useStyles();
+
+	const handleChange = ({ target: { name, value } }) => {
+		setState(prevState => {
+			return { ...prevState, [name]: value };
+		});
+	};
 
 	const handleSubmit = e => {
 		e.preventDefault();
-		if (password !== password2) return alert('Your passwords do not match');
-		api.auth.signup(email, password).then(res => {
-			if (res.password) {
-				setPassword('');
-				setPassword2('');
-				alert(res.password);
-			} else if (res.error) {
-				setPassword('');
-				setPassword2('');
-				alert(res.error);
+		if (state.password !== state.retypePassword)
+			return alert('Your passwords do not match');
+		api.auth.signup(state).then(res => {
+			if (res.error) {
+				// set Dialog failure message
 			} else {
+				// set Dialod success message
 				props.history.push('/login');
 			}
 		});
@@ -57,11 +66,24 @@ export default function SignUp(props) {
 									required
 									fullWidth
 									id='email'
-									label='email'
+									label='Email'
 									name='email'
-									value={email.value}
+									value={state.email}
 									autoComplete='email'
-									onChange={e => setEmail(e.target.value.replace(/\s+/g, ''))}
+									onChange={handleChange}
+								/>
+							</Grid>
+							<Grid item xs={12}>
+								<TextField
+									variant='outlined'
+									required
+									fullWidth
+									id='username'
+									label='Username'
+									name='username'
+									value={state.username}
+									autoComplete='username'
+									onChange={handleChange}
 								/>
 							</Grid>
 							<Grid item xs={12}>
@@ -70,13 +92,11 @@ export default function SignUp(props) {
 									required
 									fullWidth
 									name='password'
-									value={password}
+									value={state.password}
 									label='Password'
 									type='password'
 									id='password'
-									onChange={e =>
-										setPassword(e.target.value.replace(/\s+/g, ''))
-									}
+									onChange={handleChange}
 								/>
 							</Grid>
 							<Grid item xs={12}>
@@ -84,14 +104,12 @@ export default function SignUp(props) {
 									variant='outlined'
 									required
 									fullWidth
-									value={password2}
-									name='password2'
-									label='Retype Password'
+									value={state.retypePassword}
+									name='retypePassword'
+									label='Confirm Password'
 									type='password'
-									id='password2'
-									onChange={e =>
-										setPassword2(e.target.value.replace(/\s+/g, ''))
-									}
+									id='retype-password'
+									onChange={handleChange}
 								/>
 							</Grid>
 						</Grid>

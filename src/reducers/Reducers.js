@@ -119,6 +119,17 @@ const formReducer = (state, action) => {
 	}
 };
 
+const dialogReducer = (state, action) => {
+	switch (action.type) {
+		case SET:
+			return { ...action.payload };
+		case CLEAR_FORM:
+			return {};
+		default:
+			return state;
+	}
+};
+
 export {
 	userReducer,
 	animalsReducer,
@@ -130,4 +141,5 @@ export {
 	shelterReducer,
 	animalReducer,
 	formReducer,
+	dialogReducer,
 };

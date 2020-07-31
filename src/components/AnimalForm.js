@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import clsx from 'clsx';
-import { StateContext, SetStateContext } from '../App';
+import { StateContext, DispatchContext } from '../App';
 import VenueFormHeader from './VenueFormHeader';
 import { photoStatusList } from '../utils/index';
 import {
@@ -56,7 +56,7 @@ export default function AnimalForm({ animal }) {
 	const classes = useStyles();
 	const [form, setForm] = useState(intialState);
 	const { shelters } = useContext(StateContext);
-	const { setOpenDialog } = useContext(SetStateContext);
+	const { dialogDispatch } = useContext(DispatchContext);
 
 	useEffect(() => {
 		if (animal) {
@@ -72,8 +72,10 @@ export default function AnimalForm({ animal }) {
 				.createAnimal(form)
 				.then(res => {
 					if (res.error)
-						return alert('Unable to dreate animal. Please try again');
-					return setOpenDialog(true);
+						return dialogDispatch({
+							type: 'OPEN',
+							payload: { title: 'Unable to Create Animal' },
+						});
 				})
 				.catch(err => console.log(err));
 		}
