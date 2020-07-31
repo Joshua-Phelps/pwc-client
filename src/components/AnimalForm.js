@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import clsx from 'clsx';
+import { StateContext, SetStateContext } from '../App';
 import VenueFormHeader from './VenueFormHeader';
 import { photoStatusList } from '../utils/index';
 import {
@@ -13,14 +14,15 @@ import {
 	FormHelperText,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { api } from '../services/api';
 
 const useStyles = makeStyles(theme => ({
 	container: {
-		padding: theme.spacing(4),
+		padding: theme.spacing(1),
 	},
 	item: {
 		width: '100%',
-		textAlign: 'left',
+		// textAlign: 'left',
 	},
 	input: {
 		display: 'inline-block',
@@ -31,9 +33,6 @@ const useStyles = makeStyles(theme => ({
 	},
 	helperText: {
 		paddingLeft: theme.spacing(1),
-	},
-	description: {
-		width: '100%',
 	},
 	button: {
 		marginTop: '30px',
@@ -50,17 +49,35 @@ const intialState = {
 	age: '',
 	photo_status: '',
 	photo_local_path: '',
+	shelter_id: '',
 };
 
 export default function AnimalForm({ animal }) {
 	const classes = useStyles();
 	const [form, setForm] = useState(intialState);
+	const { shelters } = useContext(StateContext);
+	const { setOpenDialog } = useContext(SetStateContext);
 
 	useEffect(() => {
 		if (animal) {
 			setForm(animal);
 		}
 	}, []);
+
+	const handlSubmit = e => {
+		e.preventDefault();
+		if (form.id) {
+		} else {
+			api.animals
+				.createAnimal(form)
+				.then(res => {
+					if (res.error)
+						return alert('Unable to dreate animal. Please try again');
+					return setOpenDialog(true);
+				})
+				.catch(err => console.log(err));
+		}
+	};
 
 	const handleChange = ({ target: { name, value } }) => {
 		setForm(prevState => {
@@ -78,15 +95,29 @@ export default function AnimalForm({ animal }) {
 		});
 	};
 
+	const renderShelterValues = () => {
+		return shelters.map(s => {
+			return (
+				<MenuItem key={s.id} value={s.id}>
+					{s.name}
+				</MenuItem>
+			);
+		});
+	};
+
 	return (
 		<>
 			<VenueFormHeader venueType='Animal' />
-			<form>
+			<form onSubmit={handlSubmit}>
 				<Grid className={classes.container} spacing={2} container>
 					<Grid item xs={false} sm={2}>
 						{''}
 					</Grid>
-					<Grid className={classes.item} item xs={12} sm={10}>
+					<Grid
+						className={clsx(classes.item, 'center-inputs')}
+						item
+						xs={12}
+						sm={10}>
 						<div className={classes.input}>
 							<FormHelperText
 								className={classes.helperText}
@@ -98,7 +129,7 @@ export default function AnimalForm({ animal }) {
 								variant='outlined'
 								label='Type'
 								id='type-field'
-								name='type'
+								name='animal_type'
 								value={form.animal_type}
 								onChange={handleChange}
 							/>
@@ -127,13 +158,6 @@ export default function AnimalForm({ animal }) {
 								onChange={handleChange}
 							/>
 						</div>
-					</Grid>
-
-					<Grid item xs={false} sm={2}>
-						{''}
-					</Grid>
-
-					<Grid className={classes.item} item xs={12} sm={10}>
 						<div className={classes.input}>
 							<TextField
 								aria-label='age field'
@@ -145,7 +169,17 @@ export default function AnimalForm({ animal }) {
 								onChange={handleChange}
 							/>
 						</div>
+					</Grid>
 
+					<Grid item xs={false} sm={2}>
+						{''}
+					</Grid>
+
+					<Grid
+						className={clsx(classes.item, 'center-inputs')}
+						item
+						xs={12}
+						sm={10}>
 						<div className={classes.input}>
 							<TextField
 								aria-label='photo local path field'
@@ -173,13 +207,31 @@ export default function AnimalForm({ animal }) {
 								</Select>
 							</FormControl>
 						</div>
+						<div className={classes.input}>
+							<FormControl variant='outlined' className={classes.formControl}>
+								<InputLabel id='shelter-select-label'>Shelter</InputLabel>
+								<Select
+									labelId='shelter-select-label'
+									id='shelter-select'
+									value={form.shelter_id}
+									name='shelter_id'
+									onChange={handleChange}>
+									{renderShelterValues()}
+								</Select>
+							</FormControl>
+						</div>
 					</Grid>
 
 					<Grid item xs={false} sm={2}>
 						{''}
 					</Grid>
-					<Grid className={classes.item} item xs={12} sm={6}>
-						<div className={clsx(classes.input, classes.description)}>
+
+					<Grid
+						className={clsx(classes.item, 'center-inputs')}
+						item
+						xs={12}
+						sm={10}>
+						<div className={clsx(classes.input, 'description')}>
 							<TextField
 								aria-label='description field'
 								variant='outlined'
@@ -196,10 +248,9 @@ export default function AnimalForm({ animal }) {
 							/>
 						</div>
 					</Grid>
-
-					<Grid item xs={false} sm={4}>
+					{/* <Grid item xs={false} sm={4}>
 						{''}
-					</Grid>
+					</Grid> */}
 
 					<Grid item xs={false} sm={2}>
 						{''}
@@ -207,7 +258,7 @@ export default function AnimalForm({ animal }) {
 
 					<Grid item xs={12} sm={10}>
 						<div className={clsx(classes.input, classes.button)}>
-							<Button color='secondary' variant='contained'>
+							<Button type='submit' color='secondary' variant='contained'>
 								Submit
 							</Button>
 						</div>

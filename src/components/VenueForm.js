@@ -144,16 +144,15 @@ export default function VenueForm({ max_paintings, venueType, venue }) {
 								onChange={handleChange}
 							/>
 						</div>
-
-						{max_paintings && (
+						{venueType === 'Gallery' && (
 							<div className={classes.input}>
 								<TextField
-									aria-label='name text field'
+									aria-label='max paintings field'
 									variant='outlined'
-									label='Phone Number'
-									id='name-field'
-									name='phone_number'
-									value={form.phone_number}
+									label='Max paintings'
+									id='max-paintings-field'
+									name='max_paintings'
+									value={form.max_paintings}
 									onChange={handleChange}
 								/>
 							</div>
@@ -213,20 +212,6 @@ export default function VenueForm({ max_paintings, venueType, venue }) {
 								</Select>
 							</FormControl>
 						</div>
-
-						{venueType === 'Gallery' && (
-							<div className={classes.input}>
-								<TextField
-									aria-label='max paintings field'
-									variant='outlined'
-									label='Max paintings'
-									id='max-paintings-field'
-									name='max_paintings'
-									value={form.max_paintings}
-									onChange={handleChange}
-								/>
-							</div>
-						)}
 					</Grid>
 
 					<Grid item xs={false} sm={2}></Grid>

@@ -9,10 +9,10 @@ const useStyles = makeStyles(theme => ({
 		padding: theme.spacing(4),
 	},
 	item: {
-		width: '100%',
 		textAlign: 'center',
 	},
 	input: {
+		verticalAlign: 'middle',
 		display: 'inline-block',
 		padding: theme.spacing(1),
 	},
@@ -43,9 +43,7 @@ export default function PermissionsForm() {
 								onChange={handleChange}
 							/>
 						</div>
-					</Grid>
 
-					<Grid className={classes.item} item xs={12} sm={12}>
 						<div className={classes.input}>
 							<Button color='secondary' variant='contained'>
 								Submit

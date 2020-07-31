@@ -48,9 +48,27 @@ body {
 	.small-view {
 		display: none !important;
 	}
+	.description {
+		width: 420px;
+	}
+
+	.center-inputs {
+		text-align: left;
+		padding: 8px !important;
+	}
 }
 
 @media (max-width: 600px) {
+	.center-inputs {
+		text-align: center;
+		padding: 0px !important;
+		width: 90%;
+	}
+
+	.description {
+		width: 90%;
+	}
+
 	.large-view {
 		display: none !important;
 	}
