@@ -146,13 +146,15 @@ function App() {
 			.then(res => {
 				if (res.error) {
 					alert('Unable to login');
+					return false;
 				} else {
 					localStorage.setItem('token', res.jwt);
 					setUser(res.user);
 					setPaintLocs();
 					setGalleries();
 					setShelters();
-					return setLoggedIn(true);
+					setLoggedIn(true);
+					return true;
 				}
 			})
 			.catch(err => console.log(err));
@@ -169,7 +171,6 @@ function App() {
 				.getCurrentUser()
 				.then(res => {
 					if (res.error) return localStorage.removeItem('token');
-					console.log(res);
 					setUser(res);
 					setPaintLocs();
 					setGalleries();
@@ -248,6 +249,12 @@ function App() {
 							<Route path='/sign-up' exact component={SignUp} />
 
 							<Route
+								path='/password-reset-send-email'
+								exact
+								component={PasswordSendEmail}
+							/>
+
+							<Route
 								path='/login'
 								render={props => <Login login={login} {...props} />}></Route>
 
@@ -255,16 +262,11 @@ function App() {
 						</AuthContext.Provider>
 
 						<Route path='/home' render={props => <HomePage {...props} />} />
-						<Route
-							path='/password-reset-send-email'
-							exact
-							render={props => <PasswordSendEmail {...props} />}
-						/>
 
 						<Route
 							path='/password-reset/:token'
 							exact
-							render={props => <PasswordReset {...props} />}
+							component={PasswordReset}
 						/>
 
 						<PrivateRoute

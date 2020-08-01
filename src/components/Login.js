@@ -75,8 +75,9 @@ export default function Login({ history }) {
 
 	const handleSubmit = e => {
 		e.preventDefault();
-		login({ email, password }).then(() => {
-			history.push('/galleries');
+		login({ email, password }).then(redirect => {
+			console.log(redirect);
+			redirect && history.push('/galleries');
 		});
 	};
 
@@ -132,13 +133,13 @@ export default function Login({ history }) {
 						</Button>
 						<Grid container>
 							<Grid item xs>
-								<Link href='/password-reset' variant='body2'>
+								<Link href='/password-reset-send-email' variant='body2'>
 									Forgot password?
 								</Link>
 							</Grid>
 							<Grid item>
 								<Link href='/sign-up' variant='body2'>
-									{"Don't have an account? Sign Up"}
+									Don't have an account? Sign Up
 								</Link>
 							</Grid>
 						</Grid>

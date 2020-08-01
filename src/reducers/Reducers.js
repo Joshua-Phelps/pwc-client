@@ -1,4 +1,7 @@
+import { initialState } from './initialState';
+
 const SET = 'SET';
+const CLOSE = 'CLOSE';
 const UPDATE_FORM = 'UPDATE_FORM';
 const CLEAR_FORM = 'CLEAR_FORM';
 const SET_ANIMAL = 'SET_ANIMAL';
@@ -123,8 +126,8 @@ const dialogReducer = (state, action) => {
 	switch (action.type) {
 		case SET:
 			return { ...action.payload };
-		case CLEAR_FORM:
-			return {};
+		case CLOSE:
+			return initialState.dialog;
 		default:
 			return state;
 	}

@@ -207,7 +207,7 @@ const sendPasswordResetEmail = email => {
 
 const updatePassword = (password, passwordToken) => {
 	return fetch(`${API_ROOT}/password_resets/${passwordToken}`, {
-		method: 'POST',
+		method: 'PATCH',
 		headers: headers(),
 		body: JSON.stringify(password),
 	}).then(res => res.json());

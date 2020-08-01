@@ -42,22 +42,23 @@ export default function DialogMessage() {
 				}}>
 				<DialogTitle className={classes.color} id='alert-dialog-title'>
 					{dialog.title}
-					{`Are you sure you want to delete ?`}
 				</DialogTitle>
 				<DialogContent>
 					<DialogContentText id='alert-dialog-description'>
 						{dialog.message}
-						Message goes here
+
 						<br></br>
 					</DialogContentText>
 				</DialogContent>
 				<DialogActions>
 					<Button onClick={handleClose} color='primary'>
-						Go Back
+						Close
 					</Button>
-					<Button onClick={dialog.handleButton} autoFocus>
-						{dialog.buttonText}
-					</Button>
+					{dialog.handleButton && (
+						<Button onClick={dialog.handleButton} autoFocus>
+							{dialog.buttonText}
+						</Button>
+					)}
 				</DialogActions>
 			</Dialog>
 		</div>
