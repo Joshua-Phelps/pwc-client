@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { api } from '../services/api';
 import VenueFormHeader from './VenueFormHeader';
 import { states } from '../utils/index';
 import { TextField, Grid, Button } from '@material-ui/core';
@@ -18,7 +19,7 @@ const useStyles = makeStyles(theme => ({
 	},
 }));
 
-export default function PermissionsForm() {
+export default function PermissionsForm({ isAdd }) {
 	const classes = useStyles();
 	const [email, setEmail] = useState('');
 
@@ -26,10 +27,22 @@ export default function PermissionsForm() {
 		setEmail(value);
 	};
 
+	const handleSubmit = e => {
+		e.preventDefault();
+		api.auth
+			.updatePermissions(email, isAdd)
+			.then(res => {
+				console.log(res);
+			})
+			.catch(err => console.log(err));
+	};
+
 	return (
 		<>
-			<VenueFormHeader venueType={'Permissions'} />
-			<form>
+			<VenueFormHeader
+				headerText={isAdd ? 'Add Permissions' : 'Remove Permissions'}
+			/>
+			<form onSubmit={handleSubmit}>
 				<Grid className={classes.container} spacing={2} container>
 					<Grid className={classes.item} item xs={12} sm={12}>
 						<div className={classes.input}>
@@ -45,7 +58,7 @@ export default function PermissionsForm() {
 						</div>
 
 						<div className={classes.input}>
-							<Button color='secondary' variant='contained'>
+							<Button type='submit' color='secondary' variant='contained'>
 								Submit
 							</Button>
 						</div>

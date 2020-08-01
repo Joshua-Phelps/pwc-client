@@ -76,7 +76,6 @@ export default function Login({ history }) {
 	const handleSubmit = e => {
 		e.preventDefault();
 		login({ email, password }).then(redirect => {
-			console.log(redirect);
 			redirect && history.push('/galleries');
 		});
 	};

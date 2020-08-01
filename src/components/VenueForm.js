@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { api } from '../services/api';
+import { DispatchContext } from '../App';
 import VenueFormHeader from './VenueFormHeader';
 import { states } from '../utils/index';
 import {
@@ -48,6 +49,12 @@ const intialState = {
 export default function VenueForm({ max_paintings, venueType, venue }) {
 	const classes = useStyles();
 	const [form, setForm] = useState(intialState);
+	const {
+		galleriesDispatch,
+		sheltersDispatch,
+		paintLocsDispatch,
+		dialogDispatch,
+	} = useContext(DispatchContext);
 
 	useEffect(() => {
 		if (venue) {
@@ -59,17 +66,34 @@ export default function VenueForm({ max_paintings, venueType, venue }) {
 		e.preventDefault();
 		if (venueType === 'Gallery') {
 			api.galleries.createGallery(form).then(res => {
+				if (res.error) return displayDialogMessage();
 				console.log(res);
+				return galleriesDispatch({ type: 'ADD', payload: res });
 			});
 		} else if (venueType === 'Shelter') {
 			api.shelters.createShelter(form).then(res => {
-				console.log(res);
+				if (res.error) return displayDialogMessage();
+				sheltersDispatch({ type: 'ADD', payload: res });
 			});
 		} else if (venueType === 'Paint Location') {
 			api.paintLocs.createPaintLoc(form).then(res => {
-				console.log(res);
+				if (res.error) return displayDialogMessage();
+				paintLocsDispatch({ type: 'ADD', payload: res });
 			});
 		}
+	};
+
+	const displayDialogMessage = () => {
+		return dialogDispatch({
+			type: 'SET',
+			payload: {
+				title: 'Unable to create!',
+				message: 'Please try again',
+				// buttonText: 'Login Page',
+				// handleButton: visitLogin,
+				open: true,
+			},
+		});
 	};
 
 	const handleChange = ({ target: { name, value } }) => {
@@ -102,7 +126,7 @@ export default function VenueForm({ max_paintings, venueType, venue }) {
 
 	return (
 		<>
-			<VenueFormHeader venueType={venueType} />
+			<VenueFormHeader headerText={`Add ${venueType}`} />
 			<form onSubmit={handleSubmit}>
 				<Grid className={classes.container} spacing={2} container>
 					<Grid item xs={false} sm={2}>

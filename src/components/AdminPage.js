@@ -9,10 +9,7 @@ const useStyles = makeStyles(theme => ({
 	root: {
 		padding: theme.spacing(2),
 	},
-	buttonContainer: {
-		display: 'inline-block',
-		padding: theme.spacing(2),
-	},
+
 	item: {
 		textAlign: 'center',
 	},
@@ -25,23 +22,36 @@ export default function AdminPage() {
 	const classes = useStyles();
 	const [venueType, setVenueType] = useState('');
 	const [openAnimalForm, setOpenAnimalForm] = useState('');
-	const [openPermissionsForm, setPermissionsForm] = useState('');
+	const [openAddPermissionsForm, setOpenAddPermissionsForm] = useState('');
+	const [openRemovePermissionsForm, setOpenRemovePermissionsForm] = useState(
+		''
+	);
 	const { user } = useContext(AuthContext);
 
 	const handleVenueClick = type => {
 		setVenueType(type);
 		setOpenAnimalForm('');
-		setPermissionsForm('');
+		setOpenAddPermissionsForm(false);
+		setOpenRemovePermissionsForm(false);
 	};
 
 	const handleAnimalClick = () => {
 		setOpenAnimalForm(!openAnimalForm);
 		setVenueType('');
-		setPermissionsForm('');
+		setOpenAddPermissionsForm(false);
+		setOpenRemovePermissionsForm(false);
 	};
 
-	const handlePermissionsClick = () => {
-		setPermissionsForm(!openPermissionsForm);
+	const handleAddPermissionsClick = () => {
+		setOpenAddPermissionsForm(!openAddPermissionsForm);
+		setOpenRemovePermissionsForm(false);
+		setOpenAnimalForm('');
+		setVenueType('');
+	};
+
+	const handleRemovePermissionsClick = () => {
+		setOpenRemovePermissionsForm(!openRemovePermissionsForm);
+		setOpenAddPermissionsForm(false);
 		setOpenAnimalForm('');
 		setVenueType('');
 	};
@@ -51,57 +61,66 @@ export default function AdminPage() {
 			{user.isAdmin ? (
 				<div className={classes.root}>
 					<Grid container spacing={3}>
-						<Grid className={classes.item} item xs={12} sm={12}>
-							<div className={classes.buttonContainer}>
-								<Button
-									variant='contained'
-									color='secondary'
-									onClick={() => handleVenueClick('Gallery')}>
-									Add Gallery
-								</Button>
-							</div>
+						<Grid item xs={12} sm={3} lg={2} className={classes.item}>
+							<Button
+								variant='contained'
+								color='secondary'
+								onClick={() => handleVenueClick('Gallery')}>
+								Add Gallery
+							</Button>
+						</Grid>
 
-							<div className={classes.buttonContainer}>
-								<Button
-									variant='contained'
-									color='secondary'
-									onClick={() => handleVenueClick('Paint Location')}>
-									Add Paint Location
-								</Button>
-							</div>
+						<Grid item xs={12} sm={3} lg={2} className={classes.item}>
+							<Button
+								variant='contained'
+								color='secondary'
+								onClick={() => handleVenueClick('Paint Location')}>
+								Add Paint Location
+							</Button>
+						</Grid>
 
-							<div className={classes.buttonContainer}>
-								<Button
-									variant='contained'
-									color='secondary'
-									onClick={() => handleVenueClick('Shelter')}>
-									Add Shelter
-								</Button>
-							</div>
+						<Grid item xs={12} sm={3} lg={2} className={classes.item}>
+							<Button
+								variant='contained'
+								color='secondary'
+								onClick={() => handleVenueClick('Shelter')}>
+								Add Shelter
+							</Button>
+						</Grid>
 
-							<div className={classes.buttonContainer}>
-								<Button
-									variant='contained'
-									color='secondary'
-									onClick={handleAnimalClick}>
-									Add Animal
-								</Button>
-							</div>
+						<Grid item xs={12} sm={3} lg={2} className={classes.item}>
+							<Button
+								variant='contained'
+								color='secondary'
+								onClick={handleAnimalClick}>
+								Add Animal
+							</Button>
+						</Grid>
 
-							<div className={classes.buttonContainer}>
-								<Button
-									variant='contained'
-									color='secondary'
-									onClick={handlePermissionsClick}>
-									Add Permissions
-								</Button>
-							</div>
+						<Grid item xs={12} sm={3} lg={2} className={classes.item}>
+							<Button
+								variant='contained'
+								color='secondary'
+								onClick={handleAddPermissionsClick}>
+								Add Permissions
+							</Button>
+						</Grid>
+
+						<Grid item xs={12} sm={3} lg={2} className={classes.item}>
+							<Button
+								variant='contained'
+								color='secondary'
+								onClick={handleRemovePermissionsClick}>
+								Remove Permissions
+							</Button>
 						</Grid>
 					</Grid>
+
 					<div className={classes.formContainer}>
 						{venueType && <VenueForm venueType={venueType} />}
 						{openAnimalForm && <AnimalForm />}
-						{openPermissionsForm && <PermissionsForm />}
+						{openAddPermissionsForm && <PermissionsForm isAdd={true} />}
+						{openRemovePermissionsForm && <PermissionsForm isAdd={false} />}
 					</div>
 				</div>
 			) : (

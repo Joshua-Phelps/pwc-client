@@ -7,14 +7,12 @@ const useStyles = makeStyles(theme => ({
 	},
 }));
 
-export default function VenueFormHeader({ venueType, editMode }) {
+export default function VenueFormHeader({ headerText, editMode }) {
 	const classes = useStyles();
 
 	return (
 		<div className={classes.heading}>
-			<Typography variant='h3'>
-				{editMode ? 'Edit' : 'Add'} {venueType}
-			</Typography>
+			<Typography variant='h3'>{headerText}</Typography>
 		</div>
 	);
 }

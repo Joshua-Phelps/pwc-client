@@ -213,6 +213,14 @@ const updatePassword = (password, passwordToken) => {
 	}).then(res => res.json());
 };
 
+const updatePermissions = (email, isAdmin) => {
+	return fetch(`${API_ROOT}/permissions`, {
+		method: 'PATCH',
+		headers: headers(),
+		body: JSON.stringify({ permissions: { email, isAdmin } }),
+	}).then(res => res.json());
+};
+
 export const api = {
 	auth: {
 		login,
@@ -220,6 +228,7 @@ export const api = {
 		signup,
 		sendPasswordResetEmail,
 		updatePassword,
+		updatePermissions,
 	},
 	animals: {
 		getAnimals,

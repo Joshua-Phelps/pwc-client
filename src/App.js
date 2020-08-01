@@ -134,6 +134,7 @@ function App() {
 	const dispatch = {
 		animalDispatch,
 		galleryDispatch,
+		galleriesDispatch,
 		paintLocDispatch,
 		shelterDispatch,
 		formDispatch,
@@ -288,12 +289,12 @@ function App() {
 							component={AnimalCardsContainer}
 						/>
 
-						<PrivateRoute
+						{/* <PrivateRoute
 							path='/galleries'
 							exact
 							cards={galleries}
 							component={GalleryCardsContainer}
-						/>
+						/> */}
 
 						<PrivateRoute
 							path='/galleries/:id'

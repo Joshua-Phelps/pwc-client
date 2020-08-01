@@ -2,6 +2,9 @@ import { initialState } from './initialState';
 
 const SET = 'SET';
 const CLOSE = 'CLOSE';
+const UPDATE = 'UPDATE';
+const ADD = 'ADD';
+const REMOVE = 'REMOVE';
 const UPDATE_FORM = 'UPDATE_FORM';
 const CLEAR_FORM = 'CLEAR_FORM';
 const SET_ANIMAL = 'SET_ANIMAL';
@@ -13,6 +16,9 @@ const userReducer = (state, action) => {
 	switch (action.type) {
 		case SET: {
 			return { ...action.payload };
+		}
+		case UPDATE: {
+			return { ...state, ...action.payload };
 		}
 		default:
 			return state;
@@ -52,6 +58,13 @@ const galleriesReducer = (state, action) => {
 	switch (action.type) {
 		case SET:
 			return [...action.payload];
+		case ADD:
+			return [...state, action.payload];
+		case REMOVE:
+			const updatedGalleries = state.map(g => {
+				return g.id === action.payload.id ? action.payload : g;
+			});
+			return updatedGalleries;
 		default:
 			return state;
 	}
@@ -66,7 +79,6 @@ const galleryReducer = (state, action) => {
 			paintings = state.paintings.map(p => {
 				return p.id === action.payload.id ? action.payload : p;
 			});
-			console.log('here');
 			return { ...state, paintings: paintings };
 		default:
 			return state;

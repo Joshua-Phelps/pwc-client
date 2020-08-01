@@ -109,7 +109,7 @@ export default function AnimalForm({ animal }) {
 
 	return (
 		<>
-			<VenueFormHeader venueType='Animal' />
+			<VenueFormHeader headerText={'Add Animal'} />
 			<form onSubmit={handlSubmit}>
 				<Grid className={classes.container} spacing={2} container>
 					<Grid item xs={false} sm={2}>
