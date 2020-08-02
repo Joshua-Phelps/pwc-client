@@ -9,9 +9,12 @@ const useStyles = makeStyles(theme => ({
 	root: {
 		padding: theme.spacing(2),
 	},
-
 	item: {
 		textAlign: 'center',
+	},
+	buttonContainer: {
+		display: 'inline-block',
+		padding: theme.spacing(2),
 	},
 	formContainer: {
 		paddingTop: theme.spacing(3),
@@ -58,69 +61,65 @@ export default function AdminPage() {
 
 	return (
 		<>
-			{user.isAdmin ? (
+			{user.permission_level > 1 ? (
 				<div className={classes.root}>
 					<Grid container spacing={3}>
-						<Grid item xs={12} sm={3} lg={2} className={classes.item}>
-							<Button
-								variant='contained'
-								color='secondary'
-								onClick={() => handleVenueClick('Gallery')}>
-								Add Gallery
-							</Button>
-						</Grid>
+						<Grid item xs={12} sm={12} lg={12} className={classes.item}>
+							<div className={classes.buttonContainer}>
+								<Button
+									variant='contained'
+									color='secondary'
+									onClick={() => handleVenueClick('Gallery')}>
+									Add Gallery
+								</Button>
+							</div>
+							<div className={classes.buttonContainer}>
+								<Button
+									variant='contained'
+									color='secondary'
+									onClick={() => handleVenueClick('Paint Location')}>
+									Add Paint Location
+								</Button>
+							</div>
 
-						<Grid item xs={12} sm={3} lg={2} className={classes.item}>
-							<Button
-								variant='contained'
-								color='secondary'
-								onClick={() => handleVenueClick('Paint Location')}>
-								Add Paint Location
-							</Button>
-						</Grid>
+							<div className={classes.buttonContainer}>
+								<Button
+									variant='contained'
+									color='secondary'
+									onClick={() => handleVenueClick('Shelter')}>
+									Add Shelter
+								</Button>
+							</div>
 
-						<Grid item xs={12} sm={3} lg={2} className={classes.item}>
-							<Button
-								variant='contained'
-								color='secondary'
-								onClick={() => handleVenueClick('Shelter')}>
-								Add Shelter
-							</Button>
-						</Grid>
+							<div className={classes.buttonContainer}>
+								<Button
+									variant='contained'
+									color='secondary'
+									onClick={handleAnimalClick}>
+									Add Animal
+								</Button>
+							</div>
 
-						<Grid item xs={12} sm={3} lg={2} className={classes.item}>
-							<Button
-								variant='contained'
-								color='secondary'
-								onClick={handleAnimalClick}>
-								Add Animal
-							</Button>
-						</Grid>
-
-						<Grid item xs={12} sm={3} lg={2} className={classes.item}>
-							<Button
-								variant='contained'
-								color='secondary'
-								onClick={handleAddPermissionsClick}>
-								Add Permissions
-							</Button>
-						</Grid>
-
-						<Grid item xs={12} sm={3} lg={2} className={classes.item}>
-							<Button
-								variant='contained'
-								color='secondary'
-								onClick={handleRemovePermissionsClick}>
-								Remove Permissions
-							</Button>
+							{user.permission_level > 2 && (
+								<div className={classes.buttonContainer}>
+									<Button
+										variant='contained'
+										color='secondary'
+										onClick={handleAddPermissionsClick}>
+										Update Permissions
+									</Button>
+								</div>
+							)}
 						</Grid>
 					</Grid>
 
 					<div className={classes.formContainer}>
 						{venueType && <VenueForm venueType={venueType} />}
 						{openAnimalForm && <AnimalForm />}
-						{openAddPermissionsForm && <PermissionsForm isAdd={true} />}
-						{openRemovePermissionsForm && <PermissionsForm isAdd={false} />}
+
+						{user.permission_level > 2 && (
+							<>{openAddPermissionsForm && <PermissionsForm />}</>
+						)}
 					</div>
 				</div>
 			) : (

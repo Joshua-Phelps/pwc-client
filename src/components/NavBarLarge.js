@@ -81,7 +81,7 @@ export default function NavBarLarge({ handleNavigate, history }) {
 							<MenuItem onClick={() => handleClose('/account')}>
 								My Account
 							</MenuItem>
-							{user.isAdmin && (
+							{user.permission_level > 1 && (
 								<MenuItem onClick={() => handleClose('/admin')}>Admin</MenuItem>
 							)}
 							<MenuItem onClick={() => handleClose('/login', logout)}>

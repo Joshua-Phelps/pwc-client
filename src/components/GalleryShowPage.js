@@ -71,6 +71,8 @@ export default function GalleryShowPage({ history, location }) {
 			.catch(err => console.log(err));
 	};
 
+	const handleAddPainting = () => {};
+
 	const renderPaintings = () => {
 		return paintings.map(painting => {
 			return (
@@ -93,7 +95,10 @@ export default function GalleryShowPage({ history, location }) {
 					/>
 					<div className={classes.paintingsDisplay}>
 						<div className={classes.buttonContainer}>
-							<Button variant='contained' color='secondary'>
+							<Button
+								variant='contained'
+								color='secondary'
+								onClick={handleAddPainting}>
 								Add Painting
 							</Button>
 						</div>

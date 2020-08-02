@@ -38,10 +38,11 @@ const useStyles = makeStyles(theme => ({
 export default function AnimalShowPage({ history, location }) {
 	const classes = useStyles();
 	const { animal } = useContext(StateContext);
-	const { animalDispatch } = useContext(DispatchContext);
-	const [paintingId, setPaintingId] = useState(null);
-	const [openForm, setOpenForm] = useState(false);
-	const [showPhotos, setShowPhotos] = useState(false);
+	const { animalDispatch, paintFormPropsDispatch } = useContext(
+		DispatchContext
+	);
+	// const [paintingId, setPaintingId] = useState(null);
+	// const [openForm, setOpenForm] = useState(false);
 	const [loaded, setLoaded] = useState(false);
 	const id = parseInt(location.pathname.split('/animals/')[1]);
 
@@ -73,12 +74,15 @@ export default function AnimalShowPage({ history, location }) {
 	};
 
 	const handleOpenForm = () => {
-		setOpenForm(!openForm);
-	};
-
-	const handleOpenBlankForm = cb => {
-		setPaintingId(false);
-		cb();
+		paintFormPropsDispatch({
+			type: 'SET',
+			payload: {
+				updateAnimal: true,
+				animalId: id,
+				animalName: animal.name,
+				open: true,
+			},
+		});
 	};
 
 	const renderPaintingsList = () => {
@@ -126,12 +130,7 @@ export default function AnimalShowPage({ history, location }) {
 						<Grid container className={classes.gridContainer}>
 							<Grid item xs={false} sm={1} className='large-view'></Grid>
 							<Grid item xs={12} sm={10}>
-								<PaintingsTable
-									paintings={animal.paintings}
-									setPaintingId={setPaintingId}
-									setOpenForm={setOpenForm}
-									openForm={openForm}
-								/>
+								<PaintingsTable />
 							</Grid>
 						</Grid>
 
@@ -142,23 +141,13 @@ export default function AnimalShowPage({ history, location }) {
 									color='secondary'
 									variant='contained'
 									type='button'
-									onClick={() => handleOpenBlankForm(handleOpenForm)}>
+									onClick={handleOpenForm}>
 									Add Painting
 								</Button>
 							</div>
 							<Grid item xs={12} sm={3}></Grid>
 						</Grid>
 					</div>
-
-					<PaintingForm
-						paintingId={paintingId}
-						setPaintingId={setPaintingId}
-						updateAnimal={true}
-						animalId={id}
-						animalName={animal.name}
-						open={openForm}
-						setOpen={setOpenForm}
-					/>
 				</div>
 			)}
 		</>

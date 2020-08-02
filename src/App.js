@@ -7,7 +7,6 @@ import {
 } from 'react-router-dom';
 import { initialState } from './reducers/initialState';
 import PrivateRoute from './helpers/PrivateRoute';
-import PublicRoute from './helpers/PublicRoute';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { api } from './services/api';
@@ -29,6 +28,7 @@ import SearchContainer from './containers/SearchContainer';
 import AdminPage from './components/AdminPage';
 import DialogMessage from './components/DialogMessage';
 import PasswordSendEmail from './components/PasswordSendEmail';
+import PaintingForm from './components/PaintingForm';
 import {
 	userReducer,
 	animalsReducer,
@@ -41,13 +41,14 @@ import {
 	shelterReducer,
 	formReducer,
 	dialogReducer,
+	paintFormPropsReducer,
 } from './reducers/Reducers';
 import AnimalCard from './components/AnimalCard';
-import NavBarLarge from './components/NavBarLarge';
 
 export const StateContext = createContext();
 export const DispatchContext = createContext();
 export const AuthContext = createContext();
+export const MessageContext = createContext();
 
 const theme = createMuiTheme({
 	palette: {
@@ -109,7 +110,10 @@ function App() {
 	const [shelters, sheltersDispatch] = useReducer(sheltersReducer, []);
 	const [shelter, shelterDispatch] = useReducer(shelterReducer, {});
 	const [paintLoc, paintLocDispatch] = useReducer(paintLocReducer, {});
-	const [form, formDispatch] = useReducer(formReducer, {});
+	const [paintFormProps, paintFormPropsDispatch] = useReducer(
+		paintFormPropsReducer,
+		initialState.paintFormProps
+	);
 	const [dialog, dialogDispatch] = useReducer(
 		dialogReducer,
 		initialState.dialog
@@ -127,8 +131,8 @@ function App() {
 		paintLoc,
 		shelters,
 		shelter,
-		form,
 		dialog,
+		paintFormProps,
 	};
 
 	const dispatch = {
@@ -137,7 +141,7 @@ function App() {
 		galleriesDispatch,
 		paintLocDispatch,
 		shelterDispatch,
-		formDispatch,
+		paintFormPropsDispatch,
 		dialogDispatch,
 	};
 
@@ -230,119 +234,137 @@ function App() {
 			.catch(err => console.log(err));
 	};
 
+	const errorMessage = () => {
+		return dialogDispatch({
+			type: 'SET',
+			payload: {
+				title: 'Something went wrong!',
+				message: 'We were unable to proccess you request. Please try again.',
+				open: true,
+			},
+		});
+	};
+
+	const successMessage = message => {
+		return dialogDispatch({
+			type: 'SET',
+			payload: {
+				title: 'Success!',
+				open: true,
+				message,
+			},
+		});
+	};
+
+	const confirmMessage = (message, buttonText, handleButton) => {
+		return dialogDispatch({
+			type: 'SET',
+			payload: {
+				title: 'Are You Sure?',
+				open: true,
+				message,
+				buttonText,
+				handleButton,
+			},
+		});
+	};
+
 	const auth = { login, logout, user };
+	const messages = { errorMessage, successMessage, confirmMessage };
 
 	return (
 		<MuiThemeProvider theme={theme}>
 			<Router>
 				<StateContext.Provider value={state}>
 					<DispatchContext.Provider value={dispatch}>
-						<CssBaseline />
-						<AuthContext.Provider value={auth}>
-							<DialogMessage />
-							<Route
-								path='/'
-								render={props => (
-									<NavBarContainer {...props} loggedIn={loggedIn} />
-								)}
-							/>
+						<MessageContext.Provider value={messages}>
+							<CssBaseline />
+							<AuthContext.Provider value={auth}>
+								<PaintingForm />
+								<DialogMessage />
+								<Route
+									path='/'
+									render={props => (
+										<NavBarContainer {...props} loggedIn={loggedIn} />
+									)}
+								/>
 
-							<Route path='/sign-up' exact component={SignUp} />
+								<Route path='/sign-up' exact component={SignUp} />
+
+								<Route
+									path='/password-reset-send-email'
+									exact
+									component={PasswordSendEmail}
+								/>
+
+								<Route
+									path='/login'
+									render={props => <Login login={login} {...props} />}></Route>
+
+								<PrivateRoute path='/admin' component={AdminPage} />
+							</AuthContext.Provider>
+
+							<Route path='/home' render={props => <HomePage {...props} />} />
 
 							<Route
-								path='/password-reset-send-email'
+								path='/password-reset/:token'
 								exact
-								component={PasswordSendEmail}
+								component={PasswordReset}
+							/>
+
+							<PrivateRoute
+								exact
+								path='/search-page'
+								component={SearchContainer}
+							/>
+
+							<PrivateRoute
+								path='/galleries'
+								exact
+								// cards={galleries}
+								component={GalleryCardsContainer}
+							/>
+
+							<PrivateRoute
+								path='/animals'
+								exact
+								component={AnimalCardsContainer}
+							/>
+
+							<PrivateRoute
+								path='/galleries/:id'
+								exact
+								component={GalleryShowPage}
+							/>
+							<PrivateRoute
+								path='/animals/:id'
+								exact
+								component={AnimalShowPage}
+							/>
+
+							<PrivateRoute
+								path='/paint-locations'
+								exact
+								component={PaintLocContainer}
 							/>
 
 							<Route
-								path='/login'
-								render={props => <Login login={login} {...props} />}></Route>
+								path='/paint-locations/:id'
+								exact
+								component={PaintLocationShowPage}
+							/>
 
-							<PrivateRoute path='/admin' component={AdminPage} />
-						</AuthContext.Provider>
-
-						<Route path='/home' render={props => <HomePage {...props} />} />
-
-						<Route
-							path='/password-reset/:token'
-							exact
-							component={PasswordReset}
-						/>
-
-						<PrivateRoute
-							exact
-							path='/search-page'
-							component={SearchContainer}
-						/>
-
-						<PrivateRoute
-							path='/galleries'
-							exact
-							// cards={galleries}
-							component={GalleryCardsContainer}
-						/>
-
-						<PrivateRoute
-							path='/animals'
-							exact
-							component={AnimalCardsContainer}
-						/>
-
-						{/* <PrivateRoute
-							path='/galleries'
-							exact
-							cards={galleries}
-							component={GalleryCardsContainer}
-						/> */}
-
-						<PrivateRoute
-							path='/galleries/:id'
-							exact
-							component={GalleryShowPage}
-						/>
-						<PrivateRoute
-							path='/animals/:id'
-							exact
-							component={AnimalShowPage}
-						/>
-
-						<PrivateRoute
-							path='/paint-locations'
-							exact
-							component={PaintLocContainer}
-						/>
-
-						<Route
-							path='/paint-locations/:id'
-							exact
-							component={PaintLocationShowPage}
-						/>
-
-						{/* <PrivateRoute
-							path='/paintings/create'
-							exact
-							component={PaintingForm}
-						/> */}
-
-						{/* <Route
-							path='/paintings/edit/:id'
-							exact
-							render={props => (
-								<PaintingForm animals={animals} editMode={true} {...props} />
-							)}
-						/> */}
-
-						<PrivateRoute
-							path='/shelters'
-							exact
-							component={SheltersContainer}
-						/>
-						<PrivateRoute
-							path='/shelters/:id'
-							exact
-							component={ShelterShowPage}
-						/>
+							<PrivateRoute
+								path='/shelters'
+								exact
+								component={SheltersContainer}
+							/>
+							<PrivateRoute
+								path='/shelters/:id'
+								exact
+								component={ShelterShowPage}
+							/>
+						</MessageContext.Provider>
 					</DispatchContext.Provider>
 				</StateContext.Provider>
 			</Router>

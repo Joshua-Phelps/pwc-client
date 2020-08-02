@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import clsx from 'clsx';
-import { StateContext, DispatchContext } from '../App';
+import { StateContext, DispatchContext, MessageContext } from '../App';
 import { api } from '../services/api';
 import { makeStyles } from '@material-ui/core/styles';
 import {
@@ -40,35 +40,45 @@ const useStyles = makeStyles(theme => ({
 	},
 }));
 
-export default function PaintingForm({
-	paintingId,
-	animalId,
-	setOpen,
-	open,
-	animalName,
-	updateAnimal,
-	updateGallery,
-}) {
+const initialState = {
+	painter_id: null,
+	painting_status: '',
+	paint_location_id: null,
+	card_stock: 0,
+	gallery_id: null,
+};
+
+export default function PaintingForm() {
 	const classes = useStyles();
 	const [loaded, setLoaded] = useState(false);
-	const { galleries, paintLocs, form } = useContext(StateContext);
-	const { formDispatch, animalDispatch, galleryDispatch } = useContext(
-		DispatchContext
-	);
+	const { galleries, paintLocs, paintFormProps } = useContext(StateContext);
+	const {
+		animalDispatch,
+		galleryDispatch,
+		paintFormPropsDispatch,
+	} = useContext(DispatchContext);
+	const { errorMessage } = useContext(MessageContext);
+	const [form, setForm] = useState(initialState);
+	const {
+		paintingId,
+		animalId,
+		open,
+		animalName,
+		updateAnimal,
+		updateGallery,
+	} = paintFormProps;
 
 	useEffect(() => {
 		if (paintingId) {
 			fetchPainting()
-				.then(p => {
-					return formDispatch({
-						type: 'SET',
-						payload: p,
-					});
+				.then(res => {
+					if (res.error) return errorMessage;
+					return setForm(res);
 				})
 				.then(() => setLoaded(true))
 				.catch(err => console.log(err));
 		} else {
-			clearForm();
+			setForm(initialState);
 			setLoaded(true);
 		}
 	}, [paintingId]);
@@ -89,10 +99,6 @@ export default function PaintingForm({
 			type: 'UPDATE_PAINTING',
 			payload: painting,
 		});
-		galleryDispatch({
-			type: 'UPDATE_PAINTING',
-			payload: painting,
-		});
 	};
 
 	const updateGalleryPaintings = painting => {
@@ -102,17 +108,15 @@ export default function PaintingForm({
 		});
 	};
 
-	const handleChange = e => {
-		formDispatch({
-			type: 'UPDATE_FORM',
-			payload: e.target.value,
-			key: e.target.name,
+	const handleChange = ({ target: { name, value } }) => {
+		setForm(prevState => {
+			return { ...prevState, [name]: value };
 		});
 	};
 
 	const handleSubmit = e => {
 		e.preventDefault();
-		setOpen(false);
+		paintFormPropsDispatch({ type: 'CLOSE', payload: null });
 		let painting = { ...form, animal_id: animalId };
 		if (form.painting_status !== 'Displayed') {
 			painting = { ...painting, gallery_id: null };
@@ -131,21 +135,13 @@ export default function PaintingForm({
 				.then(painting => {
 					if (updateAnimal) addPainting(painting);
 				})
-				.then(() => clearForm())
+				.then(() => setForm(initialState))
 				.catch(err => console.log(err));
 		}
 	};
 
-	const clearForm = () => {
-		formDispatch({ type: 'CLEAR_FORM', payload: {} });
-	};
-
-	const handleOpen = () => {
-		if (form.id) clearForm();
-		setOpen(true);
-	};
-
-	const handleClose = () => setOpen(false);
+	const handleClose = () =>
+		paintFormPropsDispatch({ type: 'CLOSE', payload: {} });
 
 	const renderStatusValues = () => {
 		const statusValues = [
@@ -189,9 +185,6 @@ export default function PaintingForm({
 
 	return (
 		<div>
-			{/* <button type='button' onClick={handleOpen}>
-				Add Painting
-			</button> */}
 			{loaded && (
 				<Modal
 					aria-labelledby='add-painting-form'
@@ -213,7 +206,7 @@ export default function PaintingForm({
 										InputLabelProps={{ shrink: true }}
 										id='painter-name'
 										label='Painter Name'
-										value={form.painter || ''}
+										value={form.painter}
 										name='painter'
 										onChange={handleChange}
 									/>
@@ -231,7 +224,7 @@ export default function PaintingForm({
 									<Select
 										labelId='select-paint-location-label'
 										id='select-paint-location'
-										value={form.paint_location_id || ''}
+										value={form.paint_location_id}
 										name='paint_location_id'
 										onChange={handleChange}>
 										{renderPaintLocationValues()}
@@ -246,7 +239,7 @@ export default function PaintingForm({
 										label='Card Stock'
 										id='card-stock'
 										type='number'
-										value={form.card_stock || ''}
+										value={form.card_stock}
 										name='card_stock'
 										onChange={handleChange}></TextField>
 								</FormControl>
@@ -260,7 +253,7 @@ export default function PaintingForm({
 									<Select
 										labelId='select-status-label'
 										id='simple-select-status'
-										value={form.painting_status || ''}
+										value={form.painting_status}
 										name='painting_status'
 										onChange={handleChange}>
 										{renderStatusValues()}
@@ -277,7 +270,7 @@ export default function PaintingForm({
 										<Select
 											labelId='select-gallery-label'
 											id='simple-select-status'
-											value={form.gallery_id || ''}
+											value={form.gallery_id}
 											name='gallery_id'
 											onChange={handleChange}>
 											{renderGalleryValues()}
@@ -290,10 +283,9 @@ export default function PaintingForm({
 								<div className={classes.buttonContainer}>
 									<Button
 										variant='contained'
-										color='primary'
+										color='secondary'
 										className={classes.button}
-										type='submit'
-										onClick={handleSubmit}>
+										type='submit'>
 										Submit
 									</Button>
 								</div>

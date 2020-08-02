@@ -9,10 +9,11 @@ import {
 	DialogTitle,
 	makeStyles,
 } from '@material-ui/core';
+import { initialState } from '../reducers/initialState';
 
 const useStyles = makeStyles(theme => ({
 	border: {
-		border: `8px solid ${theme.palette.secondary.main}`,
+		border: `8px solid ${theme.palette.primary.main}`,
 	},
 	root: {},
 	color: {
@@ -26,41 +27,52 @@ export default function DialogMessage() {
 	const classes = useStyles();
 
 	const handleClose = () => {
-		dialogDispatch({ type: 'CLOSE', payload: {} });
+		dialogDispatch({ type: 'CLOSE', payload: null });
+	};
+
+	const handlePropButton = () => {
+		handleClose();
+		dialog.handleButton();
 	};
 
 	return (
 		<div>
-			<Dialog
-				open={dialog.open}
-				onClose={handleClose}
-				aria-labelledby='alert-dialog-title'
-				aria-describedby='alert-dialog-description'
-				classes={{
-					root: classes.root,
-					paper: classes.border,
-				}}>
-				<DialogTitle className={classes.color} id='alert-dialog-title'>
-					{dialog.title}
-				</DialogTitle>
-				<DialogContent>
-					<DialogContentText id='alert-dialog-description'>
-						{dialog.message}
+			{dialog.open && (
+				<Dialog
+					open={dialog.open}
+					onClose={handleClose}
+					aria-labelledby='dialog-title'
+					aria-describedby='dialog-description'
+					classes={{
+						root: classes.root,
+						paper: classes.border,
+					}}>
+					<DialogTitle className={classes.color} id='dialog-title'>
+						{dialog.title}
+					</DialogTitle>
+					<DialogContent>
+						<DialogContentText id='dialog-description'>
+							{dialog.message}
 
-						<br></br>
-					</DialogContentText>
-				</DialogContent>
-				<DialogActions>
-					<Button onClick={handleClose} color='primary'>
-						Close
-					</Button>
-					{dialog.handleButton && (
-						<Button onClick={dialog.handleButton} autoFocus>
-							{dialog.buttonText}
+							<br></br>
+						</DialogContentText>
+					</DialogContent>
+					<DialogActions>
+						<Button variant='contained' onClick={handleClose} color='primary'>
+							Close
 						</Button>
-					)}
-				</DialogActions>
-			</Dialog>
+						{dialog.handleButton && (
+							<Button
+								variant='contained'
+								color='secondary'
+								onClick={handlePropButton}
+								autoFocus>
+								{dialog.buttonText}
+							</Button>
+						)}
+					</DialogActions>
+				</Dialog>
+			)}
 		</div>
 	);
 }

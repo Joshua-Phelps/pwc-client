@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { StateContext, DispatchContext } from '../App';
+import { StateContext, DispatchContext, MessageContext } from '../App';
 import { api } from '../services/api';
 import { makeStyles } from '@material-ui/core/styles';
 import EditIcon from '@material-ui/icons/Edit';
@@ -23,22 +23,30 @@ const useStyles = makeStyles(theme => ({
 	},
 }));
 
-export default function PaintingsTable({
-	paintings,
-	setPaintingId,
-	setOpenForm,
-	openForm,
-}) {
+export default function PaintingsTable() {
 	const classes = useStyles();
-	const { galleries, paintLocs } = useContext(StateContext);
-	const { animalDispatch } = useContext(DispatchContext);
+	const { galleries, paintLocs, animal } = useContext(StateContext);
+	const { animalDispatch, paintFormPropsDispatch, dialogDispatch } = useContext(
+		DispatchContext
+	);
+	const { confirmMessage } = useContext(MessageContext);
+	const { paintings } = animal;
 
 	const handleEdit = id => {
-		setPaintingId(id);
-		setOpenForm(!openForm);
+		paintFormPropsDispatch({
+			type: 'SET',
+			payload: {
+				open: true,
+				animalId: animal.id,
+				animalName: animal.name,
+				paintingId: id,
+				updateAnimal: true,
+			},
+		});
 	};
 
-	const handleDelete = id => {
+	const handleContinue = id => {
+		dialogDispatch({ type: 'CLOSE', payload: null });
 		api.paintings
 			.deletePainting(id)
 			.then(res => {
@@ -49,6 +57,14 @@ export default function PaintingsTable({
 				}
 			})
 			.catch(err => console.log(err));
+	};
+
+	const handleDelete = id => {
+		confirmMessage(
+			'There is no going back. This will permenently delete this painting',
+			'Continue',
+			() => handleContinue(id)
+		);
 	};
 
 	const removePainting = id => {

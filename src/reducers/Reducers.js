@@ -2,6 +2,7 @@ import { initialState } from './initialState';
 
 const SET = 'SET';
 const CLOSE = 'CLOSE';
+const CLEAR = 'CLEAR';
 const UPDATE = 'UPDATE';
 const ADD = 'ADD';
 const REMOVE = 'REMOVE';
@@ -121,25 +122,27 @@ const shelterReducer = (state, action) => {
 	}
 };
 
-const formReducer = (state, action) => {
-	switch (action.type) {
-		case SET:
-			return { ...action.payload };
-		case UPDATE_FORM:
-			return { ...state, [action.key]: action.payload };
-		case CLEAR_FORM:
-			return {};
-		default:
-			return state;
-	}
-};
-
 const dialogReducer = (state, action) => {
 	switch (action.type) {
 		case SET:
 			return { ...action.payload };
 		case CLOSE:
+			return { ...state, open: false };
+		case CLEAR:
 			return initialState.dialog;
+		default:
+			return state;
+	}
+};
+
+const paintFormPropsReducer = (state, action) => {
+	switch (action.type) {
+		case SET:
+			return { ...action.payload };
+		case CLOSE:
+			return { ...state, open: false };
+		case CLEAR:
+			return initialState.paintFormProps;
 		default:
 			return state;
 	}
@@ -155,6 +158,6 @@ export {
 	sheltersReducer,
 	shelterReducer,
 	animalReducer,
-	formReducer,
+	paintFormPropsReducer,
 	dialogReducer,
 };

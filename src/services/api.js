@@ -32,6 +32,12 @@ const signup = user => {
 	}).then(res => res.json());
 };
 
+const getUsers = () => {
+	return fetch(`${API_ROOT}/users`, {
+		headers: headers(),
+	}).then(res => res.json());
+};
+
 const getCurrentUser = () => {
 	return fetch(`${API_ROOT}/current_user`, {
 		headers: headers(),
@@ -96,6 +102,13 @@ const createGallery = gallery => {
 		headers: headers(),
 		method: 'POST',
 		body: JSON.stringify(gallery),
+	}).then(res => res.json());
+};
+
+const deleteGallery = galleryId => {
+	return fetch(`${API_ROOT}/galleries/${galleryId}`, {
+		headers: headers(),
+		method: 'DELETE',
 	}).then(res => res.json());
 };
 
@@ -213,11 +226,11 @@ const updatePassword = (password, passwordToken) => {
 	}).then(res => res.json());
 };
 
-const updatePermissions = (email, isAdmin) => {
-	return fetch(`${API_ROOT}/permissions`, {
+const updatePermissions = (userId, permission_level) => {
+	return fetch(`${API_ROOT}/permissions/${userId}`, {
 		method: 'PATCH',
 		headers: headers(),
-		body: JSON.stringify({ permissions: { email, isAdmin } }),
+		body: JSON.stringify({ permissions: { permission_level } }),
 	}).then(res => res.json());
 };
 
@@ -229,6 +242,7 @@ export const api = {
 		sendPasswordResetEmail,
 		updatePassword,
 		updatePermissions,
+		getUsers,
 	},
 	animals: {
 		getAnimals,
@@ -240,6 +254,7 @@ export const api = {
 		getGalleries,
 		getGalleryById,
 		createGallery,
+		deleteGallery,
 	},
 	paintLocs: {
 		getPaintLocs,

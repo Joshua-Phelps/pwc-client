@@ -1,3 +1,12 @@
 const dialog = { title: '', handleButton: null, buttonText: '', message: '' };
 
-export const initialState = { dialog };
+const paintFormProps = {
+	paintingId: null,
+	updateAnimal: false,
+	updateGallery: false,
+	animalId: null,
+	animalName: '',
+	open: false,
+};
+
+export const initialState = { dialog, paintFormProps };
