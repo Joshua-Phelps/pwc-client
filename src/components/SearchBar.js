@@ -52,12 +52,12 @@ export default function SearchAnimal() {
 	const getId = (arr, name) => arr.filter(el => el.name === name && el.id)[0];
 
 	const firstOptions = {
-		tasks: ['Tasks'],
+		tasks: ['Photos'],
 		animals: ['Animals'],
 		other: ['Galleries', 'Shelters', 'Paint Locations'],
 	};
 	const secondOptions = {
-		tasks: ['Get Photos - Full Background', 'Get Photos - print ready'],
+		tasks: ['Full Background', 'Print Ready'],
 		animals: ['ID', 'Name'],
 	};
 	const allFirstOptions = firstOptions.tasks
@@ -184,7 +184,7 @@ export default function SearchAnimal() {
 							variant='outlined'
 							className={classes.formControl}>
 							<InputLabel className={classes.label} id='select-attribute-label'>
-								{hasValues(select1, firstOptions.tasks) && 'To-do'}
+								{hasValues(select1, firstOptions.tasks) && 'Filter'}
 								{hasValues(select1, firstOptions.animals) && 'By'}
 								{hasValues(select1, firstOptions.other) && 'Name'}
 							</InputLabel>

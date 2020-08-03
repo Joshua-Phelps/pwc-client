@@ -101,6 +101,14 @@ const createCanvasPhoto = photo => {
 	}).then(res => res.json());
 };
 
+const updateCanvasPhoto = photo => {
+	return fetch(`${API_ROOT}/photos/update_canvas_photo/${photo.animal_id}`, {
+		headers: headers(),
+		method: 'PATCH',
+		body: JSON.stringify(photo),
+	}).then(res => res.json());
+};
+
 const getGalleries = () => {
 	return fetch(`${API_ROOT}/galleries`, {
 		headers: headers(),
@@ -283,6 +291,7 @@ export const api = {
 		createAnimal,
 		updateProfilePhoto,
 		createCanvasPhoto,
+		updateCanvasPhoto,
 	},
 	galleries: {
 		getGalleries,

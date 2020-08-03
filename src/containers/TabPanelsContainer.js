@@ -1,14 +1,16 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { StateContext, MessageContext, DispatchContext } from '../App';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { Tabs, Tab, Typography, Box, Grid, Button } from '@material-ui/core';
 import TabPanelDetails from '../components/TabPanelDetails';
 import TabPanelShelter from '../components/TabPanelShelter';
+import TabPanelPhotos from '../components/TabPanelPhotos';
 import PhoneIcon from '@material-ui/icons/Phone';
 import HomeIcon from '@material-ui/icons/Home';
 import EmailIcon from '@material-ui/icons/Email';
 import { api } from '../services/api';
+import CanvasPhotoForm from '../components/CanvasPhotoForm';
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
@@ -96,33 +98,24 @@ const useStyles = makeStyles(theme => ({
 		display: 'flex',
 		justifyContent: 'center',
 	},
+	buttonContainer2: {
+		alignItems: 'center',
+		display: 'inline-block',
+		justifyContent: 'center',
+		padding: theme.spacing(1),
+	},
+	canvasImage: {
+		maxWidth: '350px',
+	},
 }));
 
 export default function TabsPanelContainer({ value }) {
 	const classes = useStyles();
 	const { galleries, animal } = useContext(StateContext);
-	const { animalDispatch } = useContext(DispatchContext);
-	const { errorMessage } = useContext(MessageContext);
-
-	const handleUpdateProfilePhoto = photoId => {
-		api.animals.updateProfilePhoto(photoId, animal.id).then(res => {
-			if (res.error) return errorMessage;
-			animalDispatch({ type: 'UPDATE', payload: res });
-		});
-	};
 
 	const renderPhotos = () => {
 		return animal.photos.map((p, idx) => {
-			return (
-				<div className={classes.image}>
-					<img key={idx} src={p.url} />
-					<div className={classes.buttonContainer}>
-						<Button onClick={() => handleUpdateProfilePhoto(p.id)}>
-							Make Profile Photo
-						</Button>
-					</div>
-				</div>
-			);
+			return <TabPanelPhotos key={p.id} photo={p} />;
 		});
 	};
 
@@ -166,24 +159,16 @@ export default function TabsPanelContainer({ value }) {
 		});
 	};
 
+	const canvasPhoto = () => {
+		for (let i = 0; i < animal.photos.length; i++) {
+			if (animal.photos[i].id === animal.canvas_photo_id)
+				return animal.photos[i];
+		}
+		return { url: '', file_path: '', id: null };
+	};
+
 	const renderCanvasPhoto = () => {
-		let urlStart = 'https://drive.google.com/uc?export=view&id=';
-		let urlEnd = animal.canvas_photo.url.split(
-			'https://drive.google.com/file/d/'
-		)[1];
-		let visibleUrl = urlStart + urlEnd;
-		console.log(visibleUrl);
-		return (
-			<div className={classes.image}>
-				<img src={visibleUrl} />
-				<div className={classes.buttonContainer}>
-					<Button
-						onClick={() => handleUpdateProfilePhoto(animal.canvas_photo.id)}>
-						Make Profile Photo
-					</Button>
-				</div>
-			</div>
-		);
+		return <TabPanelPhotos isCanvas={true} photo={canvasPhoto()} />;
 	};
 
 	return (
@@ -197,18 +182,23 @@ export default function TabsPanelContainer({ value }) {
 			</TabPanel>
 
 			<TabPanel className={classes.imageContainer} value={value} index={2}>
-				{renderPhotos()}
+				<div>{renderPhotos()}</div>
 			</TabPanel>
 
 			<TabPanel value={value} index={3}>
 				<div>{renderGalleries()}</div>
 			</TabPanel>
 
-			{animal.canvas_photo && (
-				<TabPanel value={value} index={4}>
+			<TabPanel value={value} index={4}>
+				{animal.canvas_photo_id ? (
 					<div>{renderCanvasPhoto()}</div>
-				</TabPanel>
-			)}
+				) : (
+					<>
+						<Typography variant='h6'>Add Canvas Photo</Typography>
+						<CanvasPhotoForm />
+					</>
+				)}
+			</TabPanel>
 		</>
 	);
 }

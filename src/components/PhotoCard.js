@@ -58,7 +58,7 @@ const useStyles = makeStyles(theme => ({
 	},
 }));
 
-export default function PhotoCard({ photo }) {
+export default function PhotoCard({ animalInfo }) {
 	const [photoIdx, setPhotoIdx] = useState(0);
 	const [openAddCanvas, setOpenAddCanvas] = useState(false);
 	const [expanded, setExpanded] = React.useState(false);
@@ -67,7 +67,7 @@ export default function PhotoCard({ photo }) {
 	const { photosDispatch } = useContext(DispatchContext);
 	const classes = useStyles();
 	const history = useHistory();
-	const { name, photos, canvas_photo, animal_id } = photo;
+	const { name, photos, canvas_photo, animal_id } = animalInfo;
 
 	const totalPhotos = () => photos.length;
 
@@ -89,7 +89,7 @@ export default function PhotoCard({ photo }) {
 		e.preventDefault();
 		let canvasPhoto = {
 			animal_id,
-			url: canvasUrl,
+			google_drive_url: canvasUrl,
 			bkgd_removed: true,
 			size: 'Canvas',
 		};
@@ -115,6 +115,12 @@ export default function PhotoCard({ photo }) {
 
 	const handleChange = ({ target: { value } }) => setCanvasUrl(value);
 
+	const getPhotoUrl = () => {
+		if (photos[photoIdx]) {
+			return photos[photoIdx].google_drive_url;
+		}
+	};
+
 	const renderInfo = (key, value) => {
 		return (
 			<>
@@ -139,7 +145,7 @@ export default function PhotoCard({ photo }) {
 				className={classes.media}
 				// image='https://drive.google.com/uc?export=view&id=13xmQNRWPiICreCTeWqLxfe_8meH5V82t'
 				// image='https://drive.google.com/file/d/1a-0KMtSagc5ZbRYcNLsTrjKWpTwlhxAv/view?usp=sharing'
-				image={photos[photoIdx] ? photos[photoIdx].url : ''}
+				image={profilePhotoUrl()}
 				title={'animal-photo'}
 			/>
 			<CardActions className={classes.actionsContainer} disableSpacing>
@@ -204,7 +210,7 @@ export default function PhotoCard({ photo }) {
 					<div className={classes.buttonContainer}>
 						<Typography variant='caption'>
 							Google Drive Path:{' '}
-							{photos[photoIdx] && photos[photoIdx].google_drive_path}
+							{photos[photoIdx] && photos[photoIdx].file_path}
 							{/* {renderInfo('ID', id)}
 						{renderInfo('Shelter', shelter_name)}
 						{renderInfo('Total Paintings', total_paintings)}

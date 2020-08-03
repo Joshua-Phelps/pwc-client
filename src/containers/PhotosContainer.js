@@ -37,7 +37,7 @@ function PhotosContainer({ location: { pathname } }) {
 		return photos.map(p => {
 			return (
 				<Grid key={p.id} item xs={12} sm={4}>
-					<PhotoCard photo={p} />
+					<PhotoCard animalInfo={p} />
 				</Grid>
 			);
 		});
