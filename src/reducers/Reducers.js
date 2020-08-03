@@ -159,7 +159,7 @@ const photosReducer = (state, action) => {
 		case ADD:
 			return [...state, action.payload];
 		case REMOVE_ANIMAL_PHOTOS:
-			const newPhotos = state.filter(p => p.animal_id !== action.payload);
+			const newPhotos = state.filter(p => p.animal.id !== action.payload);
 			return newPhotos;
 		default:
 			return state;

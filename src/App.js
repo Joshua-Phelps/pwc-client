@@ -324,6 +324,12 @@ function App() {
 
 							<PrivateRoute
 								exact
+								path='/photos/print-ready'
+								component={PhotosContainer}
+							/>
+
+							<PrivateRoute
+								exact
 								path='/search-page'
 								component={SearchContainer}
 							/>

@@ -74,7 +74,7 @@ export default function SearchAnimal() {
 
 	const handleSubmit = e => {
 		e.preventDefault();
-		// for TASKS
+		// for Photos
 		if (hasValues(select1, firstOptions.tasks)) {
 			if (select2 === secondOptions.tasks[0]) {
 				return history.push('/photos/full-background');

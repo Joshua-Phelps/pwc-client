@@ -72,7 +72,7 @@ function TabPanelPhotos({ photo, isCanvas }) {
 			{openForm && (
 				<>
 					<CanvasPhotoForm />
-					<div>
+					{/* <div>
 						<form onSubmit={handleSubmit}>
 							<TextField
 								onChange={handleChange}
@@ -87,7 +87,7 @@ function TabPanelPhotos({ photo, isCanvas }) {
 								</Button>
 							</div>
 						</form>
-					</div>
+					</div> */}
 				</>
 			)}
 		</div>

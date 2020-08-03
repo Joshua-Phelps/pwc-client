@@ -1,8 +1,9 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, Component } from 'react';
 import clsx from 'clsx';
 import { StateContext, MessageContext, DispatchContext } from '../App';
 import { api } from '../services/api';
 import PhotoCard from '../components/PhotoCard';
+import PrintReadyPhotoCard from '../components/PrintReadyPhotoCard';
 import { Grid, makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
@@ -25,19 +26,27 @@ function PhotosContainer({ location: { pathname } }) {
 				console.log(res);
 				photosDispatch({ type: 'SET', payload: res });
 			});
-		} else if (path === 'ready-for-print') {
+		} else if (path === 'print-ready') {
 			api.photos.getPrintReadyPhotos().then(res => {
 				if (res.error) return errorMessage;
+				console.log(res);
 				photosDispatch({ type: 'SET', payload: res });
 			});
 		}
 	}, [pathname]);
 
 	const renderCards = () => {
+		let path = pathname.split('/photos/')[1];
+		return path === 'full-background'
+			? renderCardshelper(PhotoCard)
+			: renderCardshelper(PrintReadyPhotoCard);
+	};
+
+	const renderCardshelper = Component => {
 		return photos.map(p => {
 			return (
 				<Grid key={p.id} item xs={12} sm={4}>
-					<PhotoCard animalInfo={p} />
+					<Component animalInfo={p} />
 				</Grid>
 			);
 		});

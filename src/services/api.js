@@ -70,6 +70,14 @@ const createAnimal = animal => {
 	}).then(res => res.json());
 };
 
+const updateAnimal = animal => {
+	return fetch(`${API_ROOT}/animals/${animal.id}`, {
+		headers: headers(),
+		method: 'PATCH',
+		body: JSON.stringify(animal),
+	}).then(res => res.json());
+};
+
 const toTitleCase = phrase => {
 	return phrase
 		.toLowerCase()
@@ -289,6 +297,7 @@ export const api = {
 		getAnimalById,
 		getAnimalByName,
 		createAnimal,
+		updateAnimal,
 		updateProfilePhoto,
 		createCanvasPhoto,
 		updateCanvasPhoto,
