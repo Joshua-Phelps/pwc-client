@@ -29,6 +29,7 @@ import AdminPage from './components/AdminPage';
 import DialogMessage from './components/DialogMessage';
 import PasswordSendEmail from './components/PasswordSendEmail';
 import PaintingForm from './components/PaintingForm';
+import PhotosContainer from './containers/PhotosContainer';
 import {
 	userReducer,
 	animalsReducer,
@@ -39,7 +40,7 @@ import {
 	paintLocReducer,
 	sheltersReducer,
 	shelterReducer,
-	formReducer,
+	photosReducer,
 	dialogReducer,
 	paintFormPropsReducer,
 } from './reducers/Reducers';
@@ -118,6 +119,7 @@ function App() {
 		dialogReducer,
 		initialState.dialog
 	);
+	const [photos, photosDispatch] = useReducer(photosReducer, []);
 	const [loggedIn, setLoggedIn] = useState(false);
 	const token = localStorage.getItem('token');
 	const history = useHistory();
@@ -133,6 +135,7 @@ function App() {
 		shelter,
 		dialog,
 		paintFormProps,
+		photos,
 	};
 
 	const dispatch = {
@@ -143,6 +146,7 @@ function App() {
 		shelterDispatch,
 		paintFormPropsDispatch,
 		dialogDispatch,
+		photosDispatch,
 	};
 
 	const login = loginData => {
@@ -310,6 +314,12 @@ function App() {
 								path='/password-reset/:token'
 								exact
 								component={PasswordReset}
+							/>
+
+							<PrivateRoute
+								exact
+								path='/photos/full-background'
+								component={PhotosContainer}
 							/>
 
 							<PrivateRoute

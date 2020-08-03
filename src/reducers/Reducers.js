@@ -148,6 +148,23 @@ const paintFormPropsReducer = (state, action) => {
 	}
 };
 
+const photosReducer = (state, action) => {
+	let newPhotos;
+	switch (action.type) {
+		case SET:
+			return [...action.payload];
+		case ADD:
+			return [...state, action.payload];
+		case REMOVE:
+			const newPhotos = state.map(p => {
+				return p.id === action.payload.id ? action.payload : p;
+			});
+			return newPhotos;
+		default:
+			return state;
+	}
+};
+
 export {
 	userReducer,
 	animalsReducer,
@@ -160,4 +177,5 @@ export {
 	animalReducer,
 	paintFormPropsReducer,
 	dialogReducer,
+	photosReducer,
 };

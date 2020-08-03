@@ -14,7 +14,6 @@ const useStyles = makeStyles(theme => ({
 function PaintLocContainer({ history }) {
 	const classes = useStyles();
 	const { paintLocs } = useContext(StateContext);
-	console.log(paintLocs);
 
 	const renderCards = () => {
 		return paintLocs.map(pl => {

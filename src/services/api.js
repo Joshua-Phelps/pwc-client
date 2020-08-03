@@ -181,8 +181,8 @@ const createShelter = shelter => {
 	}).then(res => res.json());
 };
 
-const getIncompletePhotos = () => {
-	return fetch(`${API_ROOT}/photos/incomplete`, {
+const getFullBgPhotos = () => {
+	return fetch(`${API_ROOT}/photos/full_background`, {
 		headers: headers(),
 	}).then(res => res.json());
 };
@@ -190,6 +190,14 @@ const getIncompletePhotos = () => {
 const getPrintReadyPhotos = () => {
 	return fetch(`${API_ROOT}/photos/print_ready`, {
 		headers: headers(),
+	}).then(res => res.json());
+};
+
+const updatePhoto = photo => {
+	return fetch(`${API_ROOT}/photos/${photo.id}`, {
+		method: 'PATCH',
+		headers: headers(),
+		body: JSON.stringify(photo),
 	}).then(res => res.json());
 };
 
@@ -280,7 +288,8 @@ export const api = {
 		createFile,
 	},
 	photos: {
-		getIncompletePhotos,
+		getFullBgPhotos,
 		getPrintReadyPhotos,
+		updatePhoto,
 	},
 };

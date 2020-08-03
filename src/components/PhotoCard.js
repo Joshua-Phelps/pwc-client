@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
@@ -16,6 +16,8 @@ import {
 
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import { api } from '../services/api';
+import { MessageContext, DispatchContext } from '../App';
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -40,15 +42,23 @@ const useStyles = makeStyles(theme => ({
 	},
 }));
 
-export default function AnimalCard({ shelter_name, animal }) {
+export default function PhotoCard({ photo }) {
+	const { errorMessage } = useContext(MessageContext);
+	const { photosDispatch } = useContext(DispatchContext);
 	const classes = useStyles();
 	const history = useHistory();
 	const [expanded, setExpanded] = React.useState(false);
-	const { name, id, photo_url, total_paintings } = animal;
+	const { id, animal, bkgd_removed, google_drive_path, size, url } = photo;
 
 	const handleExpandClick = () => setExpanded(!expanded);
 
-	const handleVisitAnimalShowPage = () => history.push(`/animals/${id}`);
+	const handleMarkComplete = () => {
+		let completedPhoto = { ...photo, complete: true };
+		api.photos.updatePhoto(photo).then(res => {
+			if (res.error) return errorMessage;
+			return photosDispatch({ type: 'REMOVE', payload: res });
+		});
+	};
 
 	const renderInfo = (key, value) => {
 		return (
@@ -61,21 +71,14 @@ export default function AnimalCard({ shelter_name, animal }) {
 
 	return (
 		<Card className={classes.root}>
-			<CardHeader className={classes.header} title={name} />
+			<CardHeader className={classes.header} title={animal.name} />
 			<CardMedia
 				className={classes.media}
 				// image='https://drive.google.com/uc?export=view&id=13xmQNRWPiICreCTeWqLxfe_8meH5V82t'
-				image={photo_url}
+				image={url}
 				title={'animal-photo'}
 			/>
 			<CardActions disableSpacing>
-				<Button
-					color='secondary'
-					onClick={handleVisitAnimalShowPage}
-					aria-label='visit animal homepage'
-					variant='contained'>
-					My Page
-				</Button>
 				<IconButton
 					className={clsx(classes.expand, {
 						[classes.expandOpen]: expanded,
@@ -89,10 +92,18 @@ export default function AnimalCard({ shelter_name, animal }) {
 			<Collapse in={expanded} timeout='auto' unmountOnExit>
 				<CardContent>
 					<Typography>
-						{renderInfo('ID', id)}
+						<Button
+							color='secondary'
+							onClick={handleMarkComplete}
+							aria-label='mark complete'
+							variant='contained'>
+							Mark Complete
+						</Button>
+						Photo Path:
+						{/* {renderInfo('ID', id)}
 						{renderInfo('Shelter', shelter_name)}
 						{renderInfo('Total Paintings', total_paintings)}
-						{/* {renderInfo('Photo Status', photo_status)} */}
+						{renderInfo('Photo Status', photo_status)} */}
 					</Typography>
 				</CardContent>
 			</Collapse>
