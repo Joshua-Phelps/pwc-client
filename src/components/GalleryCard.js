@@ -37,7 +37,7 @@ export default function GalleryCard({
 		<>
 			<Box className={classes.box} borderRadius='borderRadius' border={1}>
 				<Typography align='center' variant='h6'>
-					{name}
+					{name} ({paintings.length})
 				</Typography>
 				<p>
 					<PhoneIcon className={classes.icon} />{' '}

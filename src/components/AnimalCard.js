@@ -65,7 +65,8 @@ export default function AnimalCard({ shelter_name, animal }) {
 			<CardMedia
 				className={classes.media}
 				// image='https://drive.google.com/uc?export=view&id=13xmQNRWPiICreCTeWqLxfe_8meH5V82t'
-				image={photo_url}
+				image='https://drive.google.com/file/d/1a-0KMtSagc5ZbRYcNLsTrjKWpTwlhxAv/view?usp=sharing'
+				// image={photo_url}
 				title={'animal-photo'}
 			/>
 			<CardActions disableSpacing>

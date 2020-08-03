@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { StateContext } from '../App';
+import { StateContext, MessageContext, DispatchContext } from '../App';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { Tabs, Tab, Typography, Box, Grid, Button } from '@material-ui/core';
@@ -8,6 +8,7 @@ import TabPanelShelter from '../components/TabPanelShelter';
 import PhoneIcon from '@material-ui/icons/Phone';
 import HomeIcon from '@material-ui/icons/Home';
 import EmailIcon from '@material-ui/icons/Email';
+import { api } from '../services/api';
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
@@ -90,17 +91,36 @@ const useStyles = makeStyles(theme => ({
 	button: {
 		padding: theme.spacing(1),
 	},
+	buttonContainer: {
+		alignItems: 'center',
+		display: 'flex',
+		justifyContent: 'center',
+	},
 }));
 
 export default function TabsPanelContainer({ value }) {
 	const classes = useStyles();
 	const { galleries, animal } = useContext(StateContext);
+	const { animalDispatch } = useContext(DispatchContext);
+	const { errorMessage } = useContext(MessageContext);
+
+	const handleUpdateProfilePhoto = photoId => {
+		api.animals.updateProfilePhoto(photoId, animal.id).then(res => {
+			if (res.error) return errorMessage;
+			animalDispatch({ type: 'UPDATE', payload: res });
+		});
+	};
 
 	const renderPhotos = () => {
 		return animal.photos.map((p, idx) => {
 			return (
 				<div className={classes.image}>
 					<img key={idx} src={p.url} />
+					<div className={classes.buttonContainer}>
+						<Button onClick={() => handleUpdateProfilePhoto(p.id)}>
+							Make Profile Photo
+						</Button>
+					</div>
 				</div>
 			);
 		});
@@ -146,6 +166,26 @@ export default function TabsPanelContainer({ value }) {
 		});
 	};
 
+	const renderCanvasPhoto = () => {
+		let urlStart = 'https://drive.google.com/uc?export=view&id=';
+		let urlEnd = animal.canvas_photo.url.split(
+			'https://drive.google.com/file/d/'
+		)[1];
+		let visibleUrl = urlStart + urlEnd;
+		console.log(visibleUrl);
+		return (
+			<div className={classes.image}>
+				<img src={visibleUrl} />
+				<div className={classes.buttonContainer}>
+					<Button
+						onClick={() => handleUpdateProfilePhoto(animal.canvas_photo.id)}>
+						Make Profile Photo
+					</Button>
+				</div>
+			</div>
+		);
+	};
+
 	return (
 		<>
 			<TabPanel value={value} index={0}>
@@ -163,6 +203,12 @@ export default function TabsPanelContainer({ value }) {
 			<TabPanel value={value} index={3}>
 				<div>{renderGalleries()}</div>
 			</TabPanel>
+
+			{animal.canvas_photo && (
+				<TabPanel value={value} index={4}>
+					<div>{renderCanvasPhoto()}</div>
+				</TabPanel>
+			)}
 		</>
 	);
 }

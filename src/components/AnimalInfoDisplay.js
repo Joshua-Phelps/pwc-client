@@ -98,6 +98,7 @@ export default function AnimalInfoDisplay() {
 							<Tab label='Shelter' {...a11yProps(1)} />
 							<Tab label='Photos' {...a11yProps(2)} />
 							<Tab label='Galleries' {...a11yProps(3)} />
+							<Tab label='Canvas Photo' {...a11yProps(4)} />
 						</Tabs>
 					</Grid>
 
@@ -107,12 +108,13 @@ export default function AnimalInfoDisplay() {
 							variant='scrollable'
 							value={value}
 							onChange={handleChange}
-							aria-label='Vertical tabs example'
+							aria-label='Vertical tabs'
 							className={classes.verticalTabs}>
 							<Tab label='Details' {...a11yProps(0)} />
 							<Tab label='Shelter' {...a11yProps(1)} />
 							<Tab label='Photos' {...a11yProps(2)} />
 							<Tab label='Galleries' {...a11yProps(3)} />
+							<Tab label='Canvas Photo' {...a11yProps(4)} />
 						</Tabs>
 					</Grid>
 

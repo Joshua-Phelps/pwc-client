@@ -93,7 +93,7 @@ export default function VenueHeader({
 						<Button
 							variant='contained'
 							color='secondary'
-							onCLick={handleUpdate}>
+							onClick={handleUpdate}>
 							Update Gallery
 						</Button>
 					</div>

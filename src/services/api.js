@@ -85,6 +85,22 @@ const getAnimalByName = name => {
 	}).then(res => res.json());
 };
 
+const updateProfilePhoto = (profile_photo_id, animalId) => {
+	return fetch(`${API_ROOT}/animals/update_profile_photo/${animalId}`, {
+		headers: headers(),
+		method: 'POST',
+		body: JSON.stringify({ profile_photo_id }),
+	}).then(res => res.json());
+};
+
+const createCanvasPhoto = photo => {
+	return fetch(`${API_ROOT}/photos/create_canvas_photo/${photo.animal_id}`, {
+		headers: headers(),
+		method: 'POST',
+		body: JSON.stringify(photo),
+	}).then(res => res.json());
+};
+
 const getGalleries = () => {
 	return fetch(`${API_ROOT}/galleries`, {
 		headers: headers(),
@@ -201,6 +217,14 @@ const updatePhoto = photo => {
 	}).then(res => res.json());
 };
 
+const createPhoto = photo => {
+	return fetch(`${API_ROOT}/photos/`, {
+		method: 'POST',
+		headers: headers(),
+		body: JSON.stringify(photo),
+	}).then(res => res.json());
+};
+
 const getFiles = () => {
 	return fetch(`${API_ROOT}/google_drive`, {
 		headers: headers(),
@@ -257,6 +281,8 @@ export const api = {
 		getAnimalById,
 		getAnimalByName,
 		createAnimal,
+		updateProfilePhoto,
+		createCanvasPhoto,
 	},
 	galleries: {
 		getGalleries,
@@ -290,6 +316,7 @@ export const api = {
 	photos: {
 		getFullBgPhotos,
 		getPrintReadyPhotos,
+		createPhoto,
 		updatePhoto,
 	},
 };

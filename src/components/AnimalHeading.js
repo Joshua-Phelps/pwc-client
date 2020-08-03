@@ -37,7 +37,7 @@ const useStyles = makeStyles(theme => ({
 export default function Animalheading() {
 	const classes = useStyles();
 	const { animal } = useContext(StateContext);
-	const { name, photo_url, description } = animal;
+	const { name, profile_photo, description } = animal;
 
 	return (
 		<Grid container>
@@ -50,7 +50,9 @@ export default function Animalheading() {
 			<Grid className={classes.imageContainer} item xs={12} sm={12}>
 				<span className={classes.imageContainer2}>
 					<Box className={classes.box} borderRadius='borderRadius' border={2}>
-						<img className={classes.image} src={photo_url}></img>
+						<img
+							className={classes.image}
+							src={profile_photo ? profile_photo.url : ''}></img>
 					</Box>
 				</span>
 			</Grid>

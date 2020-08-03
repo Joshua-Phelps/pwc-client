@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
@@ -12,7 +12,10 @@ import {
 	IconButton,
 	Typography,
 	Button,
+	Box,
+	TextField,
 } from '@material-ui/core';
+import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
@@ -24,10 +27,12 @@ const useStyles = makeStyles(theme => ({
 		maxWidth: 345,
 	},
 	header: {
+		height: '10px',
 		textAlign: 'center',
+		background: theme.palette.secondary.grey.light,
 	},
 	media: {
-		height: 0,
+		height: '100%',
 		paddingTop: '56.25%', // 16:9
 	},
 	expand: {
@@ -40,25 +45,75 @@ const useStyles = makeStyles(theme => ({
 	expandOpen: {
 		transform: 'rotate(180deg)',
 	},
+	buttonContainer: {
+		padding: theme.spacing(1),
+	},
+	actionsContainer: {
+		background: theme.palette.secondary.grey.light,
+	},
+	prevPhotoButton: { transform: 'rotate(180deg)' },
+	moreInfo: {
+		overflowX: 'auto',
+		background: theme.palette.secondary.grey.light,
+	},
 }));
 
 export default function PhotoCard({ photo }) {
-	const { errorMessage } = useContext(MessageContext);
+	const [photoIdx, setPhotoIdx] = useState(0);
+	const [openAddCanvas, setOpenAddCanvas] = useState(false);
+	const [expanded, setExpanded] = React.useState(false);
+	const [canvasUrl, setCanvasUrl] = useState('');
+	const { errorMessage, successMessage } = useContext(MessageContext);
 	const { photosDispatch } = useContext(DispatchContext);
 	const classes = useStyles();
 	const history = useHistory();
-	const [expanded, setExpanded] = React.useState(false);
-	const { id, animal, bkgd_removed, google_drive_path, size, url } = photo;
+	const { name, photos, canvas_photo, animal_id } = photo;
+
+	const totalPhotos = () => photos.length;
+
+	const profilePhotoUrl = () => {
+		if (photos[photoIdx]) return photos[photoIdx].url;
+	};
+
+	const handleNextPhoto = () => {
+		photos.length <= photoIdx + 1 ? setPhotoIdx(0) : setPhotoIdx(photoIdx + 1);
+	};
+
+	const handlePrevPhoto = () => {
+		photoIdx === 0 ? setPhotoIdx(photos.length - 1) : setPhotoIdx(photoIdx - 1);
+	};
 
 	const handleExpandClick = () => setExpanded(!expanded);
 
-	const handleMarkComplete = () => {
-		let completedPhoto = { ...photo, complete: true };
-		api.photos.updatePhoto(photo).then(res => {
-			if (res.error) return errorMessage;
-			return photosDispatch({ type: 'REMOVE', payload: res });
-		});
+	const handleSubmitUrl = e => {
+		e.preventDefault();
+		let canvasPhoto = {
+			animal_id,
+			url: canvasUrl,
+			bkgd_removed: true,
+			size: 'Canvas',
+		};
+		api.animals
+			.createCanvasPhoto(canvasPhoto)
+			.then(res => {
+				if (res.error) return errorMessage;
+				console.log(res);
+				setCanvasUrl('');
+				setOpenAddCanvas(false);
+				setExpanded(false);
+				photosDispatch({
+					type: 'REMOVE_ANIMAL_PHOTOS',
+					payload: res.id,
+				});
+				return;
+			})
+			.then(() => successMessage('Canvas Photo has been added to the database'))
+			.catch(err => console.log(err));
 	};
+
+	const handleAddCanvas = () => setOpenAddCanvas(!openAddCanvas);
+
+	const handleChange = ({ target: { value } }) => setCanvasUrl(value);
 
 	const renderInfo = (key, value) => {
 		return (
@@ -71,14 +126,42 @@ export default function PhotoCard({ photo }) {
 
 	return (
 		<Card className={classes.root}>
-			<CardHeader className={classes.header} title={animal.name} />
+			<CardHeader
+				className={classes.header}
+				title={
+					<Button>
+						{name} (ID: {animal_id})
+					</Button>
+				}
+				titleTypographyProps={{ variant: 'body1' }}
+			/>
 			<CardMedia
 				className={classes.media}
 				// image='https://drive.google.com/uc?export=view&id=13xmQNRWPiICreCTeWqLxfe_8meH5V82t'
-				image={url}
+				// image='https://drive.google.com/file/d/1a-0KMtSagc5ZbRYcNLsTrjKWpTwlhxAv/view?usp=sharing'
+				image={photos[photoIdx] ? photos[photoIdx].url : ''}
 				title={'animal-photo'}
 			/>
-			<CardActions disableSpacing>
+			<CardActions className={classes.actionsContainer} disableSpacing>
+				{photos.length > 1 && (
+					<>
+						{' '}
+						<IconButton
+							className={classes.prevPhotoButton}
+							onClick={handlePrevPhoto}
+							aria-expanded={expanded}
+							aria-label='previous photo'>
+							<NavigateNextIcon />
+						</IconButton>
+						<IconButton
+							className={classes.nextPhotoButton}
+							onClick={handleNextPhoto}
+							aria-expanded={expanded}
+							aria-label='next photo'>
+							<NavigateNextIcon />
+						</IconButton>{' '}
+					</>
+				)}
 				<IconButton
 					className={clsx(classes.expand, {
 						[classes.expandOpen]: expanded,
@@ -90,21 +173,44 @@ export default function PhotoCard({ photo }) {
 				</IconButton>
 			</CardActions>
 			<Collapse in={expanded} timeout='auto' unmountOnExit>
-				<CardContent>
-					<Typography>
+				<CardContent className={classes.moreInfo}>
+					<div className={classes.buttonContainer}>
 						<Button
 							color='secondary'
-							onClick={handleMarkComplete}
+							onClick={handleAddCanvas}
 							aria-label='mark complete'
 							variant='contained'>
-							Mark Complete
+							Add Canvas Photo
 						</Button>
-						Photo Path:
-						{/* {renderInfo('ID', id)}
+					</div>
+					{openAddCanvas && (
+						<form onSubmit={handleSubmitUrl}>
+							<div className={classes.buttonContainer}>
+								<TextField
+									onChange={handleChange}
+									value={canvasUrl}
+									id='add-canvas-field'
+									variant='outlined'
+									label='Google Drive URL'
+								/>
+							</div>
+							<div className={classes.buttonContainer}>
+								<Button type='submit' color='primary' variant='contained'>
+									Submit
+								</Button>
+							</div>
+						</form>
+					)}
+					<div className={classes.buttonContainer}>
+						<Typography variant='caption'>
+							Google Drive Path:{' '}
+							{photos[photoIdx] && photos[photoIdx].google_drive_path}
+							{/* {renderInfo('ID', id)}
 						{renderInfo('Shelter', shelter_name)}
 						{renderInfo('Total Paintings', total_paintings)}
 						{renderInfo('Photo Status', photo_status)} */}
-					</Typography>
+						</Typography>
+					</div>
 				</CardContent>
 			</Collapse>
 		</Card>

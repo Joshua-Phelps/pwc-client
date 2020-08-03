@@ -1,10 +1,18 @@
 import React, { useContext, useEffect } from 'react';
+import clsx from 'clsx';
 import { StateContext, MessageContext, DispatchContext } from '../App';
 import { api } from '../services/api';
 import PhotoCard from '../components/PhotoCard';
-import { Grid } from '@material-ui/core';
+import { Grid, makeStyles } from '@material-ui/core';
+
+const useStyles = makeStyles(theme => ({
+	container: {
+		padding: theme.spacing(4),
+	},
+}));
 
 function PhotosContainer({ location: { pathname } }) {
+	const classes = useStyles();
 	const { photos } = useContext(StateContext);
 	const { photosDispatch } = useContext(DispatchContext);
 	const { errorMessage } = useContext(MessageContext);
@@ -25,10 +33,10 @@ function PhotosContainer({ location: { pathname } }) {
 		}
 	}, [pathname]);
 
-	const renderPhotoCards = () => {
+	const renderCards = () => {
 		return photos.map(p => {
 			return (
-				<Grid key={p.id} item xs={12} sm={3}>
+				<Grid key={p.id} item xs={12} sm={4}>
 					<PhotoCard photo={p} />
 				</Grid>
 			);
@@ -36,9 +44,17 @@ function PhotosContainer({ location: { pathname } }) {
 	};
 
 	return (
-		<Grid spacing={3} container>
-			{renderPhotoCards()}
-		</Grid>
+		<>
+			<Grid
+				className={clsx(classes.container, 'large-view')}
+				container
+				spacing={3}>
+				{renderCards()}
+			</Grid>
+			<Grid className='small-view' container spacing={3}>
+				{renderCards()}
+			</Grid>
+		</>
 	);
 }
 

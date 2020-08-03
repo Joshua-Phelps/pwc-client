@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { StateContext } from '../App';
+import { StateContext, MessageContext, DispatchContext } from '../App';
 import { makeStyles } from '@material-ui/core/styles';
 import {
 	Grid,
@@ -42,7 +42,9 @@ const useStyles = makeStyles(theme => ({
 export default function SearchAnimal() {
 	const history = useHistory();
 	const classes = useStyles();
-	const { galleries, shelters, paintLocs } = useContext(StateContext);
+	const { galleries, shelters, paintLocs, photos } = useContext(StateContext);
+	const { errorMessage } = useContext(MessageContext);
+	const { photosDispatch } = useContext(DispatchContext);
 	const [select1, setSelect1] = useState('');
 	const [select2, setSelect2] = useState('');
 	const [textField, setTextField] = useState('');
@@ -55,7 +57,7 @@ export default function SearchAnimal() {
 		other: ['Galleries', 'Shelters', 'Paint Locations'],
 	};
 	const secondOptions = {
-		tasks: ['Photos need background removed', 'Photos ready for print'],
+		tasks: ['Get Photos - Full Background', 'Get Photos - print ready'],
 		animals: ['ID', 'Name'],
 	};
 	const allFirstOptions = firstOptions.tasks
@@ -74,10 +76,10 @@ export default function SearchAnimal() {
 		e.preventDefault();
 		// for TASKS
 		if (hasValues(select1, firstOptions.tasks)) {
-			if (hasValues(select2, secondOptions.tasks[0])) {
-				api.photos.getIncompletePhotos();
+			if (select2 === secondOptions.tasks[0]) {
+				return history.push('/photos/full-background');
 			} else {
-				api.photos.getPrintReadyPhotos();
+				return history.push('/photos/print-ready');
 			}
 
 			// for ANIMALS
