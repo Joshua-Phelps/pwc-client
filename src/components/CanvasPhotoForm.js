@@ -30,13 +30,6 @@ function CanvasPhotoForm({ photoId }) {
 
 	const handleChange = ({ target: { value } }) => setCanvasUrl(value);
 
-	const updateCanvasPhoto = () => {
-		api.animals.updateProfilePhoto(photoId, animal.id).then(res => {
-			if (res.error) return errorMessage;
-			animalDispatch({ type: 'UPDATE', payload: res });
-		});
-	};
-
 	const handleSubmitUrl = e => {
 		e.preventDefault();
 		photoId ? updatePhoto() : createPhoto();
@@ -53,41 +46,42 @@ function CanvasPhotoForm({ photoId }) {
 		api.animals
 			.createCanvasPhoto(canvasPhoto)
 			.then(res => {
-				if (res.error) return errorMessage;
-				console.log(res);
-				setCanvasUrl('');
-				setOpenForm(false);
-				animalDispatch({
-					type: 'UPDATE',
-					payload: res,
-				});
-				return;
+				if (res.error) {
+					return errorMessage;
+				} else {
+					console.log(res);
+					setCanvasUrl('');
+					setOpenForm(false);
+					animalDispatch({
+						type: 'UPDATE',
+						payload: res,
+					});
+					successMessage('Canvas Photo has been added to the database');
+				}
 			})
-			.then(() => successMessage('Canvas Photo has been added to the database'))
 			.catch(err => console.log(err));
 	};
 
 	const updatePhoto = () => {
-		let canvasPhoto = {
-			animal_id: animal.id,
+		let updatedPhoto = {
+			id: photoId,
 			google_drive_url: canvasUrl,
-			bkgd_removed: true,
-			size: 'Canvas',
 		};
 		api.animals
-			.updateCanvasPhoto(canvasPhoto)
+			.updateCanvasPhoto(updatedPhoto)
 			.then(res => {
-				if (res.error) return errorMessage;
-				console.log(res);
-				setCanvasUrl('');
-				setOpenForm(false);
-				animalDispatch({
-					type: 'UPDATE',
-					payload: res,
-				});
-				return;
+				if (res.error) {
+					return errorMessage;
+				} else {
+					setCanvasUrl('');
+					setOpenForm(false);
+					animalDispatch({
+						type: 'UPDATE',
+						payload: res,
+					});
+					successMessage('Canvas Photo has been added to the database');
+				}
 			})
-			.then(() => successMessage('Canvas Photo has been added to the database'))
 			.catch(err => console.log(err));
 	};
 	return (

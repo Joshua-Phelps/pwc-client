@@ -88,29 +88,35 @@ const toTitleCase = phrase => {
 
 const getAnimalByName = name => {
 	let titleizedName = toTitleCase(name);
-	return fetch(`${API_ROOT}/animals_by_name/${titleizedName}`, {
+	return fetch(`${API_ROOT}/animals/name/${titleizedName}`, {
 		headers: headers(),
 	}).then(res => res.json());
 };
 
-const updateProfilePhoto = (profile_photo_id, animalId) => {
-	return fetch(`${API_ROOT}/animals/update_profile_photo/${animalId}`, {
-		headers: headers(),
-		method: 'POST',
-		body: JSON.stringify({ profile_photo_id }),
-	}).then(res => res.json());
+const updateProfilePhoto = profile_photo_id => {
+	return fetch(
+		`${API_ROOT}/animal_photos/update_profile_photo/${profile_photo_id}`,
+		{
+			headers: headers(),
+			method: 'POST',
+			body: JSON.stringify({ animal_photo: { profile_photo_id } }),
+		}
+	).then(res => res.json());
 };
 
-const createCanvasPhoto = photo => {
-	return fetch(`${API_ROOT}/photos/create_canvas_photo/${photo.animal_id}`, {
-		headers: headers(),
-		method: 'POST',
-		body: JSON.stringify(photo),
-	}).then(res => res.json());
+const createCanvasPhoto = animal_photo => {
+	return fetch(
+		`${API_ROOT}/animal_photos/create_canvas_photo/${animal_photo.animal_id}`,
+		{
+			headers: headers(),
+			method: 'POST',
+			body: JSON.stringify({ animal_photo }),
+		}
+	).then(res => res.json());
 };
 
 const updateCanvasPhoto = photo => {
-	return fetch(`${API_ROOT}/photos/update_canvas_photo/${photo.animal_id}`, {
+	return fetch(`${API_ROOT}/animal_photos/update_canvas_photo/${photo.id}`, {
 		headers: headers(),
 		method: 'PATCH',
 		body: JSON.stringify(photo),

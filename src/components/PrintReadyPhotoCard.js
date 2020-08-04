@@ -30,39 +30,24 @@ const useStyles = makeStyles(theme => ({
 	header: {
 		height: '10px',
 		textAlign: 'center',
-		background: theme.palette.secondary.grey.light,
+		background: theme.palette.primary.dark,
+	},
+	headerButton: {
+		color: 'white',
 	},
 	media: {
 		height: '100%',
 		paddingTop: '56.25%', // 16:9
 	},
-	expand: {
-		transform: 'rotate(0deg)',
-		marginLeft: 'auto',
-		transition: theme.transitions.create('transform', {
-			duration: theme.transitions.duration.shortest,
-		}),
-	},
-	expandOpen: {
-		transform: 'rotate(180deg)',
-	},
-	buttonContainer: {
-		padding: theme.spacing(1),
-	},
 	actionsContainer: {
-		background: theme.palette.secondary.grey.light,
-	},
-	prevPhotoButton: { transform: 'rotate(180deg)' },
-	moreInfo: {
-		overflowX: 'auto',
-		background: theme.palette.secondary.grey.light,
+		background: theme.palette.secondary.grey.main,
+		display: 'grid',
 	},
 }));
 
 export default function PhotoCard({ animalInfo }) {
 	const [photoIdx, setPhotoIdx] = useState(0);
 	const [openAddCanvas, setOpenAddCanvas] = useState(false);
-	const [expanded, setExpanded] = React.useState(false);
 	const [canvasUrl, setCanvasUrl] = useState('');
 	const { errorMessage, successMessage, confirmMessage } = useContext(
 		MessageContext
@@ -71,8 +56,6 @@ export default function PhotoCard({ animalInfo }) {
 	const classes = useStyles();
 	const history = useHistory();
 	const { canvas_photo, animal, url } = animalInfo;
-
-	const handleExpandClick = () => setExpanded(!expanded);
 
 	const handleContinue = () => {
 		let updatedAnimal = { id: animal.id, canvas_printed: true };
@@ -94,6 +77,10 @@ export default function PhotoCard({ animalInfo }) {
 
 	const handleupdateCanvas = () => setOpenAddCanvas(!openAddCanvas);
 
+	const handleVisitPage = () => {
+		history.push(`/animals/${animal.id}`);
+	};
+
 	const handleChange = ({ target: { value } }) => setCanvasUrl(value);
 
 	const renderInfo = (key, value) => {
@@ -110,7 +97,7 @@ export default function PhotoCard({ animalInfo }) {
 			<CardHeader
 				className={classes.header}
 				title={
-					<Button>
+					<Button className={classes.headerButton} onClick={handleVisitPage}>
 						{animal.name} (ID: {animal.id})
 					</Button>
 				}
@@ -118,37 +105,17 @@ export default function PhotoCard({ animalInfo }) {
 			/>
 			<CardMedia
 				className={classes.media}
-				// image='https://drive.google.com/uc?export=view&id=13xmQNRWPiICreCTeWqLxfe_8meH5V82t'
-				// image='https://drive.google.com/file/d/1a-0KMtSagc5ZbRYcNLsTrjKWpTwlhxAv/view?usp=sharing'
 				image={url || ''}
 				title={'animal-photo'}
 			/>
 			<CardActions className={classes.actionsContainer} disableSpacing>
-				<IconButton
-					className={clsx(classes.expand, {
-						[classes.expandOpen]: expanded,
-					})}
-					onClick={handleExpandClick}
-					aria-expanded={expanded}
-					aria-label='show more'>
-					<ExpandMoreIcon />
-				</IconButton>
+				<Button
+					variant='contained'
+					color='secondary'
+					onClick={handleMarkPrinted}>
+					Mark As Printed
+				</Button>
 			</CardActions>
-			<Collapse in={expanded} timeout='auto' unmountOnExit>
-				<CardContent className={classes.moreInfo}>
-					{/* <div className={classes.buttonContainer}>
-						<CanvasPhotoForm photoId={canvas_photo.id} />
-					</div> */}
-					<div className={classes.buttonContainer}>
-						<Button
-							variant='contained'
-							color='secondary'
-							onClick={handleMarkPrinted}>
-							Mark As Printed
-						</Button>
-					</div>
-				</CardContent>
-			</Collapse>
 		</Card>
 	);
 }

@@ -12,6 +12,7 @@ function NavBarContainer({ history, loggedIn }) {
 		value === 1 && history.push('/shelters');
 		value === 2 && history.push('/paint-locations');
 		value === 3 && history.push('/search-page');
+		value === 4 && history.push('/admin');
 	};
 
 	return (

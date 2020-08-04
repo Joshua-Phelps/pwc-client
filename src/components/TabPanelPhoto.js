@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
 	},
 }));
 
-function TabPanelPhotos({ photo, isCanvas }) {
+function TabPanelPhoto({ photo, isCanvas }) {
 	const classes = useStyles();
 	const [openForm, setOpenForm] = useState(false);
 	const [canvasUrl, setCanvasUrl] = useState('');
@@ -45,9 +45,12 @@ function TabPanelPhotos({ photo, isCanvas }) {
 	const handleChange = ({ target: { value } }) => setCanvasUrl(value);
 
 	const handleUpdateProfilePhoto = () => {
-		api.animals.updateProfilePhoto(photo.id, animal.id).then(res => {
-			if (res.error) return errorMessage;
-			animalDispatch({ type: 'UPDATE', payload: res });
+		api.animals.updateProfilePhoto(photo.id).then(res => {
+			if (res.error) {
+				return errorMessage;
+			} else {
+				animalDispatch({ type: 'UPDATE', payload: res });
+			}
 		});
 	};
 
@@ -71,7 +74,7 @@ function TabPanelPhotos({ photo, isCanvas }) {
 			</div>
 			{openForm && (
 				<>
-					<CanvasPhotoForm />
+					<CanvasPhotoForm photoId={photo.id} />
 					{/* <div>
 						<form onSubmit={handleSubmit}>
 							<TextField
@@ -94,4 +97,4 @@ function TabPanelPhotos({ photo, isCanvas }) {
 	);
 }
 
-export default TabPanelPhotos;
+export default TabPanelPhoto;

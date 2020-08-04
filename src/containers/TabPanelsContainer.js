@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Tabs, Tab, Typography, Box, Grid, Button } from '@material-ui/core';
 import TabPanelDetails from '../components/TabPanelDetails';
 import TabPanelShelter from '../components/TabPanelShelter';
-import TabPanelPhotos from '../components/TabPanelPhotos';
+import TabPanelPhoto from '../components/TabPanelPhoto';
 import PhoneIcon from '@material-ui/icons/Phone';
 import HomeIcon from '@material-ui/icons/Home';
 import EmailIcon from '@material-ui/icons/Email';
@@ -115,7 +115,7 @@ export default function TabsPanelContainer({ value }) {
 
 	const renderPhotos = () => {
 		return animal.photos.map((p, idx) => {
-			return <TabPanelPhotos key={p.id} photo={p} />;
+			return <TabPanelPhoto key={p.id} photo={p} />;
 		});
 	};
 
@@ -168,7 +168,7 @@ export default function TabsPanelContainer({ value }) {
 	};
 
 	const renderCanvasPhoto = () => {
-		return <TabPanelPhotos isCanvas={true} photo={canvasPhoto()} />;
+		return <TabPanelPhoto isCanvas={true} photo={canvasPhoto()} />;
 	};
 
 	return (

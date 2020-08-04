@@ -102,24 +102,29 @@ export default function PhotoCard({ animalInfo }) {
 		api.animals
 			.createCanvasPhoto(canvasPhoto)
 			.then(res => {
-				if (res.error) return errorMessage;
-				console.log(res);
-				setCanvasUrl('');
-				setOpenAddCanvas(false);
-				setExpanded(false);
-				photosDispatch({
-					type: 'REMOVE_ANIMAL_PHOTOS',
-					payload: res.id,
-				});
-				return;
+				if (res.error) {
+					return errorMessage();
+				} else {
+					setCanvasUrl('');
+					setOpenAddCanvas(false);
+					setExpanded(false);
+					photosDispatch({
+						type: 'REMOVE_ANIMAL_PHOTOS',
+						payload: res.id,
+					});
+					successMessage('Canvas Photo has been added to the database');
+				}
 			})
-			.then(() => successMessage('Canvas Photo has been added to the database'))
 			.catch(err => console.log(err));
 	};
 
 	const handleAddCanvas = () => setOpenAddCanvas(!openAddCanvas);
 
 	const handleChange = ({ target: { value } }) => setCanvasUrl(value);
+
+	const handleVisitPage = () => {
+		history.push(`/animals/${animal.id}`);
+	};
 
 	const getPhotoUrl = () => {
 		if (photos[photoIdx]) {
@@ -141,7 +146,7 @@ export default function PhotoCard({ animalInfo }) {
 			<CardHeader
 				className={classes.header}
 				title={
-					<Button>
+					<Button color='primary' onClick={handleVisitPage}>
 						{animal.name} (ID: {animal.id})
 					</Button>
 				}

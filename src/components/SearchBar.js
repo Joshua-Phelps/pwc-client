@@ -1,6 +1,12 @@
 import React, { useState, useContext, useEffect } from 'react';
+import clsx from 'clsx';
 import { useHistory } from 'react-router-dom';
-import { StateContext, MessageContext, DispatchContext } from '../App';
+import {
+	StateContext,
+	MessageContext,
+	DispatchContext,
+	AuthContext,
+} from '../App';
 import { makeStyles } from '@material-ui/core/styles';
 import {
 	Grid,
@@ -16,13 +22,17 @@ import { api } from '../services/api';
 import { render } from '@testing-library/react';
 
 const useStyles = makeStyles(theme => ({
-	root: {
-		// backgroundColor: theme.palette.secondary.light,
+	largeContainer: {
+		padding: theme.spacing(1),
+	},
+	smallContainer: {
+		padding: theme.spacing(5),
 	},
 	formControl: {
 		margin: theme.spacing(1),
 		width: '100%',
 		textAlign: 'left',
+		spacing: theme.spacing(2),
 	},
 	gridSpacing: {
 		padding: theme.spacing(1),
@@ -155,9 +165,9 @@ export default function SearchAnimal() {
 		return false;
 	};
 
-	return (
-		<form className={classes.root} onSubmit={handleSubmit}>
-			<Grid container spacing={1}>
+	const renderGrid = () => {
+		return (
+			<>
 				<Grid item xs={10} sm={3}>
 					<FormControl
 						color='primary'
@@ -233,12 +243,29 @@ export default function SearchAnimal() {
 				{select1 && select2 && (
 					<Grid item xs={10} sm={3}>
 						<div className={classes.buttonContainer}>
-							<Button type='submit' color='primary' variant='contained'>
+							<Button type='submit' color='secondary' variant='contained'>
 								Submit
 							</Button>
 						</div>
 					</Grid>
 				)}
+			</>
+		);
+	};
+
+	return (
+		<form onSubmit={handleSubmit}>
+			<Grid
+				className={clsx(classes.largeContainer, 'large-view')}
+				container
+				spacing={3}>
+				{renderGrid()}
+			</Grid>
+			<Grid
+				className={clsx(classes.smallContainer, 'small-view')}
+				container
+				spacing={3}>
+				{renderGrid()}
 			</Grid>
 		</form>
 	);

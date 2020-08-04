@@ -9,6 +9,9 @@ const useStyles = makeStyles(theme => ({
 	container: {
 		padding: theme.spacing(4),
 	},
+	smallContainer: {
+		padding: theme.spacing(1),
+	},
 }));
 
 function GalleryCardsContainer({ history }) {
@@ -39,7 +42,10 @@ function GalleryCardsContainer({ history }) {
 				spacing={3}>
 				{renderCards()}
 			</Grid>
-			<Grid className='small-view' container spacing={3}>
+			<Grid
+				className={clsx(classes.smallContainer, 'small-view')}
+				container
+				spacing={3}>
 				{renderCards()}
 			</Grid>
 		</>
