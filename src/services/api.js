@@ -50,6 +50,17 @@ const generateCard = id => {
 	}).then(res => res.json());
 };
 
+const addFileToDB = formData => {
+	return fetch(`${API_ROOT}/uploads`, {
+		method: 'POST',
+		headers: {
+			Accept: 'application/json',
+			Authorization: token(),
+		},
+		body: formData,
+	}).then(res => res.json());
+};
+
 const getAnimals = () => {
 	return fetch(`${API_ROOT}/animals`, {
 		headers: headers(),
@@ -342,5 +353,8 @@ export const api = {
 		getPrintReadyPhotos,
 		createPhoto,
 		updatePhoto,
+	},
+	fileUpload: {
+		addFileToDB,
 	},
 };

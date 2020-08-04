@@ -1,9 +1,12 @@
 import React, { useContext, useState } from 'react';
+import { api } from '../services/api';
 import VenueForm from './VenueForm';
 import AnimalForm from './AnimalForm';
 import PermissionsForm from './PermissionsForm';
+import FileForm from './FileForm';
+import FileFormSubmit from './FileFormSubmit';
 import { Typography, Grid, Button, makeStyles } from '@material-ui/core';
-import { AuthContext } from '../App';
+import { AuthContext, MessageContext } from '../App';
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -26,37 +29,75 @@ export default function AdminPage() {
 	const [venueType, setVenueType] = useState('');
 	const [openAnimalForm, setOpenAnimalForm] = useState('');
 	const [openAddPermissionsForm, setOpenAddPermissionsForm] = useState('');
-	const [openRemovePermissionsForm, setOpenRemovePermissionsForm] = useState(
-		''
-	);
+	const [showSubmitFileButton, setsShowSubmitFileButton] = useState(false);
+	const [file, setFile] = useState(null);
 	const { user } = useContext(AuthContext);
+	const { errorMessage, successMessage } = useContext(MessageContext);
 
 	const handleVenueClick = type => {
 		setVenueType(type);
 		setOpenAnimalForm('');
 		setOpenAddPermissionsForm(false);
-		setOpenRemovePermissionsForm(false);
 	};
 
 	const handleAnimalClick = () => {
 		setOpenAnimalForm(!openAnimalForm);
 		setVenueType('');
 		setOpenAddPermissionsForm(false);
-		setOpenRemovePermissionsForm(false);
 	};
 
 	const handleAddPermissionsClick = () => {
 		setOpenAddPermissionsForm(!openAddPermissionsForm);
-		setOpenRemovePermissionsForm(false);
 		setOpenAnimalForm('');
 		setVenueType('');
 	};
 
-	const handleRemovePermissionsClick = () => {
-		setOpenRemovePermissionsForm(!openRemovePermissionsForm);
-		setOpenAddPermissionsForm(false);
+	const handleUploadFileClick = () => {
+		setsShowSubmitFileButton(!showSubmitFileButton);
 		setOpenAnimalForm('');
 		setVenueType('');
+		setOpenAddPermissionsForm(false);
+	};
+
+	const handleSubmitFile = () => {
+		let formData = new FormData();
+		formData.append('data', file);
+		successMessage(
+			`Adding files to database. Please stay on this page until complete`
+		);
+
+		api.fileUpload
+			.addFileToDB(formData)
+			.then(res => {
+				if (res.error) {
+					return errorMessage();
+				} else {
+					successMessage(
+						`You have added ${res.animal_count} animals to the database`
+					);
+				}
+				setsShowSubmitFileButton(false);
+				setOpenAnimalForm('');
+				setVenueType('');
+				setOpenAddPermissionsForm(false);
+			})
+			.catch(err => console.log(err));
+
+		// api.google
+		// 	.createFile(formData)
+		// 	.then(res => console.log(res))
+		// 	.catch(err => console.log(err));
+
+		// api.google
+		// 	.getFiles()
+		// 	.then(res => console.log(res))
+		// 	.catch(err => console.log(err));
+	};
+
+	const handleFileChange = e => {
+		setFile(e.target.files[0]);
+		setsShowSubmitFileButton(!showSubmitFileButton);
+		console.log(e.target.files);
 	};
 
 	return (
@@ -101,14 +142,23 @@ export default function AdminPage() {
 							</div>
 
 							{user.permission_level > 2 && (
-								<div className={classes.buttonContainer}>
-									<Button
-										variant='contained'
-										color='secondary'
-										onClick={handleAddPermissionsClick}>
-										Update Permissions
-									</Button>
-								</div>
+								<>
+									<div className={classes.buttonContainer}>
+										<Button
+											variant='contained'
+											color='secondary'
+											onClick={handleAddPermissionsClick}>
+											Update Permissions
+										</Button>
+									</div>
+									<div className={classes.buttonContainer}>
+										<FileForm
+											// showButton={showSubmitFileButton}
+											// setShowButton={handleUploadFileClick}
+											handleFileChange={handleFileChange}
+										/>
+									</div>
+								</>
 							)}
 						</Grid>
 					</Grid>
@@ -118,7 +168,12 @@ export default function AdminPage() {
 						{openAnimalForm && <AnimalForm />}
 
 						{user.permission_level > 2 && (
-							<>{openAddPermissionsForm && <PermissionsForm />}</>
+							<>
+								{openAddPermissionsForm && <PermissionsForm />}
+								{showSubmitFileButton && (
+									<FileFormSubmit handleSubmit={handleSubmitFile} />
+								)}
+							</>
 						)}
 					</div>
 				</div>
