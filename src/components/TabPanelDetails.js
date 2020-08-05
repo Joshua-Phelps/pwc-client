@@ -13,23 +13,12 @@ const useStyles = makeStyles(theme => ({
 export default function TabPanelDetails() {
 	const classes = useStyles();
 	const { animal } = useContext(StateContext);
-	const {
-		id,
-		name,
-		description,
-		gender,
-		animal_type,
-		external_id,
-		paintings,
-		photo_status,
-	} = animal;
+	const { id, name, description, external_id, paintings } = animal;
 
 	const details = [
 		{ key: 'ID:', value: id },
 		{ key: 'External ID:', value: external_id },
 		{ key: 'Name:', value: name },
-		{ key: 'Type:', value: animal_type },
-		{ key: 'Photo Status:', value: photo_status },
 		{ key: 'Total Paintings:', value: paintings.length },
 		{ key: 'Description:', value: description },
 	];

@@ -45,7 +45,7 @@ const getCurrentUser = () => {
 };
 
 const generateCard = id => {
-	return fetch(`${API_ROOT}/card_generator/${id}`, {
+	return fetch(`${API_ROOT}/animals/card_generator/${id}`, {
 		headers: headers(),
 	}).then(res => res.json());
 };
@@ -104,35 +104,31 @@ const getAnimalByName = name => {
 	}).then(res => res.json());
 };
 
-const updateProfilePhoto = profile_photo_id => {
-	return fetch(
-		`${API_ROOT}/animal_photos/update_profile_photo/${profile_photo_id}`,
-		{
-			headers: headers(),
-			method: 'POST',
-			body: JSON.stringify({ animal_photo: { profile_photo_id } }),
-		}
-	).then(res => res.json());
-};
-
-const createCanvasPhoto = animal_photo => {
-	return fetch(
-		`${API_ROOT}/animal_photos/create_canvas_photo/${animal_photo.animal_id}`,
-		{
-			headers: headers(),
-			method: 'POST',
-			body: JSON.stringify({ animal_photo }),
-		}
-	).then(res => res.json());
-};
-
-const updateCanvasPhoto = photo => {
-	return fetch(`${API_ROOT}/animal_photos/update_canvas_photo/${photo.id}`, {
+const updateProfilePhoto = photo_id => {
+	return fetch(`${API_ROOT}/animals/profile_photo/${photo_id}`, {
 		headers: headers(),
-		method: 'PATCH',
-		body: JSON.stringify(photo),
+		method: 'POST',
+		body: JSON.stringify({ photo_id }),
 	}).then(res => res.json());
 };
+
+const createCanvasPhoto = (photo, animalId) => {
+	return fetch(`${API_ROOT}/animals/canvas_photo/${animalId}`, {
+		headers: headers(),
+		method: 'POST',
+		body: JSON.stringify({
+			animal: { photo },
+		}),
+	}).then(res => res.json());
+};
+
+// const updateCanvasPhoto = photo => {
+// 	return fetch(`${API_ROOT}/photo/${photo.id}`, {
+// 		headers: headers(),
+// 		method: 'PATCH',
+// 		body: JSON.stringify({ photo }),
+// 	}).then(res => res.json());
+// };
 
 const getGalleries = () => {
 	return fetch(`${API_ROOT}/galleries`, {
@@ -231,13 +227,13 @@ const createShelter = shelter => {
 };
 
 const getFullBgPhotos = () => {
-	return fetch(`${API_ROOT}/photos/full_background`, {
+	return fetch(`${API_ROOT}/animals/no_canvas_photo`, {
 		headers: headers(),
 	}).then(res => res.json());
 };
 
 const getPrintReadyPhotos = () => {
-	return fetch(`${API_ROOT}/photos/print_ready`, {
+	return fetch(`${API_ROOT}/animals/print_ready`, {
 		headers: headers(),
 	}).then(res => res.json());
 };
@@ -317,7 +313,6 @@ export const api = {
 		updateAnimal,
 		updateProfilePhoto,
 		createCanvasPhoto,
-		updateCanvasPhoto,
 	},
 	galleries: {
 		getGalleries,

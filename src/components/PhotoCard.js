@@ -94,13 +94,11 @@ export default function PhotoCard({ animalInfo }) {
 	const handleSubmitUrl = e => {
 		e.preventDefault();
 		let canvasPhoto = {
-			animal_id: animal.id,
 			google_drive_url: canvasUrl,
-			bkgd_removed: true,
 			size: 'Canvas',
 		};
 		api.animals
-			.createCanvasPhoto(canvasPhoto)
+			.createCanvasPhoto(canvasPhoto, animal.id)
 			.then(res => {
 				if (res.error) {
 					return errorMessage();

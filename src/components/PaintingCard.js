@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import React, { useContext } from 'react';
 import {
 	Card,
 	CardActionArea,
@@ -9,8 +8,10 @@ import {
 	Button,
 	Typography,
 	Grid,
+	makeStyles,
 } from '@material-ui/core';
 import PaintingForm from './PaintingForm';
+import { DispatchContext } from '../App';
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -30,13 +31,21 @@ const useStyles = makeStyles(theme => ({
 
 export default function PaintingCard({ painting, galleryName }) {
 	const classes = useStyles();
-	const [open, setOpen] = useState(false);
+	const { paintFormPropsDispatch } = useContext(DispatchContext);
 
 	const handleClick = () => {
-		setOpen(true);
+		paintFormPropsDispatch({
+			type: 'SET',
+			payload: {
+				updateGallery: true,
+				updateAnimal: false,
+				animalId: painting.animal.id,
+				animalName: painting.animal.name,
+				open: true,
+				paintingId: painting.id,
+			},
+		});
 	};
-
-	const handleOpen = () => setOpen(!open);
 
 	return (
 		<Card className={classes.root}>
@@ -75,7 +84,7 @@ export default function PaintingCard({ painting, galleryName }) {
 					</Grid>
 				</Grid>
 
-				{open && (
+				{/* {open && (
 					<PaintingForm
 						paintingId={painting.id}
 						animalId={painting.animal.id}
@@ -85,7 +94,7 @@ export default function PaintingCard({ painting, galleryName }) {
 						open={open}
 						setOpen={handleOpen}
 					/>
-				)}
+				)} */}
 			</CardActions>
 		</Card>
 	);

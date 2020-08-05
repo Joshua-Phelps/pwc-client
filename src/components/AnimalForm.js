@@ -41,14 +41,11 @@ const useStyles = makeStyles(theme => ({
 
 const intialState = {
 	id: null,
-	animal_type: '',
 	name: '',
-	gender: '',
-	shelter: '',
+	shelter_id: '',
 	description: '',
-	age: '',
 	photo_status: '',
-	photo_local_path: '',
+	file_path: '',
 	shelter_id: '',
 };
 
@@ -121,23 +118,6 @@ export default function AnimalForm({ animal }) {
 						xs={12}
 						sm={10}>
 						<div className={classes.input}>
-							<FormHelperText
-								className={classes.helperText}
-								id='my-helper-text'>
-								ex: Dog, Cat, etc.
-							</FormHelperText>
-							<TextField
-								aria-label='animal type field'
-								variant='outlined'
-								label='Type'
-								id='type-field'
-								name='animal_type'
-								value={form.animal_type}
-								onChange={handleChange}
-							/>
-						</div>
-
-						<div className={classes.input}>
 							<TextField
 								aria-label='name text field'
 								variant='outlined'
@@ -145,29 +125,6 @@ export default function AnimalForm({ animal }) {
 								id='name-field'
 								name='name'
 								value={form.name}
-								onChange={handleChange}
-							/>
-						</div>
-
-						<div className={classes.input}>
-							<TextField
-								aria-label='gender field'
-								variant='outlined'
-								label='Gender'
-								id='gender-field'
-								name='gender'
-								value={form.gender}
-								onChange={handleChange}
-							/>
-						</div>
-						<div className={classes.input}>
-							<TextField
-								aria-label='age field'
-								variant='outlined'
-								label='Age'
-								id='age-field'
-								name='age'
-								value={form.age}
 								onChange={handleChange}
 							/>
 						</div>
@@ -189,7 +146,7 @@ export default function AnimalForm({ animal }) {
 								label='Photo Local Path'
 								id='photo-local-path-field'
 								name='photo_local_path'
-								value={form.photo_local_path}
+								value={form.file_path}
 								onChange={handleChange}
 							/>
 						</div>

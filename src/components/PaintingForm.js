@@ -125,6 +125,7 @@ export default function PaintingForm() {
 			api.paintings
 				.updatePainting(painting)
 				.then(painting => {
+					console.log(painting);
 					if (updateAnimal) updateAnimalPaintings(painting);
 					if (updateGallery) updateGalleryPaintings(painting);
 				})

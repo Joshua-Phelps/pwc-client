@@ -42,7 +42,9 @@ const initialState = {
 export default function GalleryShowPage({ history, location }) {
 	const classes = useStyles();
 	const { gallery } = useContext(StateContext);
-	const { galleryDispatch } = useContext(DispatchContext);
+	const { galleryDispatch, paintingFormPropsDispatch } = useContext(
+		DispatchContext
+	);
 	const [loaded, setLoaded] = useState(false);
 	const id = parseInt(location.pathname.split('/animals/')[1]);
 	const {
@@ -71,7 +73,9 @@ export default function GalleryShowPage({ history, location }) {
 			.catch(err => console.log(err));
 	};
 
-	const handleAddPainting = () => {};
+	const handleAddPainting = () => {
+		// paintingFormPropsDispatch({type:})
+	};
 
 	const renderPaintings = () => {
 		return paintings.map(painting => {

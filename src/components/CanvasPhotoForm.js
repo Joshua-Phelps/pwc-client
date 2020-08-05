@@ -37,14 +37,11 @@ function CanvasPhotoForm({ photoId }) {
 
 	const createPhoto = () => {
 		let canvasPhoto = {
-			animal_id: animal.id,
 			google_drive_url: canvasUrl,
-			bkgd_removed: true,
 			size: 'Canvas',
-			id: photoId,
 		};
 		api.animals
-			.createCanvasPhoto(canvasPhoto)
+			.createCanvasPhoto(canvasPhoto, animal.id)
 			.then(res => {
 				if (res.error) {
 					return errorMessage;
@@ -67,8 +64,8 @@ function CanvasPhotoForm({ photoId }) {
 			id: photoId,
 			google_drive_url: canvasUrl,
 		};
-		api.animals
-			.updateCanvasPhoto(updatedPhoto)
+		api.photos
+			.updatePhoto(updatedPhoto)
 			.then(res => {
 				if (res.error) {
 					return errorMessage;
@@ -76,7 +73,7 @@ function CanvasPhotoForm({ photoId }) {
 					setCanvasUrl('');
 					setOpenForm(false);
 					animalDispatch({
-						type: 'UPDATE',
+						type: 'UPDATE_PHOTO',
 						payload: res,
 					});
 					successMessage('Canvas Photo has been added to the database');

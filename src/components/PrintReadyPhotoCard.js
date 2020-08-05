@@ -63,7 +63,7 @@ export default function PhotoCard({ animalInfo }) {
 			.updateAnimal(updatedAnimal)
 			.then(res => {
 				if (res.error) return errorMessage;
-				photosDispatch({ type: 'REMOVE_ANIMAL_PHOTOS', payload: res.id });
+				photosDispatch({ type: 'REMOVE_ANIMAL', payload: res.id });
 				console.log(res);
 			})
 			.catch(err => console.log(err));

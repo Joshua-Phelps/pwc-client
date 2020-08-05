@@ -6,13 +6,14 @@ const CLEAR = 'CLEAR';
 const UPDATE = 'UPDATE';
 const ADD = 'ADD';
 const REMOVE = 'REMOVE';
+const UPDATE_PHOTO = 'UPDATE_PHOTO';
 const UPDATE_FORM = 'UPDATE_FORM';
 const CLEAR_FORM = 'CLEAR_FORM';
 const SET_ANIMAL = 'SET_ANIMAL';
 const ADD_PAINTING = 'ADD_PAINTING';
 const UPDATE_PAINTING = 'UPDATE_PAINTING';
 const DELETE_PAINTING = 'DELETE_PAINTING';
-const REMOVE_ANIMAL_PHOTOS = 'REMOVE_ANIMAL_PHOTOS';
+const REMOVE_ANIMAL = 'REMOVE_ANIMAL';
 
 const userReducer = (state, action) => {
 	switch (action.type) {
@@ -38,6 +39,7 @@ const animalsReducer = (state, action) => {
 
 const animalReducer = (state, action) => {
 	let paintings;
+	let photos;
 	switch (action.type) {
 		case SET:
 			return { ...action.payload };
@@ -53,6 +55,11 @@ const animalReducer = (state, action) => {
 		case DELETE_PAINTING:
 			paintings = state.paintings.filter(p => p.id !== action.payload);
 			return { ...state, paintings: paintings };
+		case UPDATE_PHOTO:
+			photos = state.photos.map(p => {
+				return p.id === action.payload.id ? action.payload : p;
+			});
+			return { ...state, photos };
 		default:
 			return state;
 	}
@@ -158,7 +165,7 @@ const photosReducer = (state, action) => {
 			return [...action.payload];
 		case ADD:
 			return [...state, action.payload];
-		case REMOVE_ANIMAL_PHOTOS:
+		case REMOVE_ANIMAL:
 			const newPhotos = state.filter(p => p.animal.id !== action.payload);
 			return newPhotos;
 		default:
