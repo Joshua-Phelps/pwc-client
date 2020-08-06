@@ -49,19 +49,16 @@ const intialState = {
 export default function VenueForm({ max_paintings, venueType, venue }) {
 	const classes = useStyles();
 	const [form, setForm] = useState(intialState);
-	const {
-		galleriesDispatch,
-		sheltersDispatch,
-		paintLocsDispatch,
-		dialogDispatch,
-	} = useContext(DispatchContext);
+	const { galleriesDispatch, sheltersDispatch, paintLocsDispatch } = useContext(
+		DispatchContext
+	);
 	const { errorMessage } = useContext(MessageContext);
 
 	useEffect(() => {
 		if (venue) {
 			setForm(venue);
 		}
-	}, []);
+	}, [venue]);
 
 	const handleSubmit = e => {
 		e.preventDefault();

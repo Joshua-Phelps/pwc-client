@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { api } from '../services/api';
-import { makeStyles } from '@material-ui/core/styles';
-import { Button } from '@material-ui/core';
+import React from 'react';
+// import { api } from '../services/api';
+// import { makeStyles } from '@material-ui/core/styles';
+// import { Button } from '@material-ui/core';
 
-const useStyles = makeStyles(theme => ({}));
+// const useStyles = makeStyles(theme => ({}));
 
 export default function HomePage() {
-	const classes = useStyles();
+	// const classes = useStyles();
 	// const [imageFile, setImageFile] = useState(null);
 
 	// const handleClick = () => {

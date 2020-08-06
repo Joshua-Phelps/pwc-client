@@ -1,11 +1,7 @@
-import React, { useState, useEffect, useContext, useReducer } from 'react';
-import clsx from 'clsx';
+import React, { useState, useEffect, useContext } from 'react';
 import { api } from '../services/api';
-import { makeStyles } from '@material-ui/core/styles';
-import { Grid, Box, Button, Typography, Divider } from '@material-ui/core';
-import PaintingForm from './PaintingForm';
+import { Grid, makeStyles, Button } from '@material-ui/core';
 import PaintingsTable from './PaintingsTable';
-import AddPaintingButton from './AddPaintingButton';
 import AnimalInfoDisplay from './AnimalInfoDisplay';
 import AnimalHeading from './AnimalHeading';
 import { StateContext, DispatchContext } from '../App';
@@ -41,16 +37,14 @@ export default function AnimalShowPage({ history, location }) {
 	const { animalDispatch, paintFormPropsDispatch } = useContext(
 		DispatchContext
 	);
-	// const [paintingId, setPaintingId] = useState(null);
-	// const [openForm, setOpenForm] = useState(false);
 	const [loaded, setLoaded] = useState(false);
 	const id = parseInt(location.pathname.split('/animals/')[1]);
 
 	useEffect(() => {
+		console.log('using Effect in Aninal show');
 		api.animals
 			.getAnimalById(id)
 			.then(ani => {
-				console.log(ani);
 				if (ani.error) {
 					return history.push('/not-found');
 				} else {
@@ -64,14 +58,7 @@ export default function AnimalShowPage({ history, location }) {
 				setLoaded(true);
 			})
 			.catch(err => console.log(err));
-	}, [loaded, location.pathname]);
-
-	const handleGenerateCard = () => {
-		api.cards
-			.generateCard(id)
-			.then(card => console.log(card))
-			.catch(err => console.log(err));
-	};
+	}, [loaded, id, history, animalDispatch]);
 
 	const handleOpenForm = () => {
 		paintFormPropsDispatch({
@@ -85,69 +72,39 @@ export default function AnimalShowPage({ history, location }) {
 		});
 	};
 
-	const renderPaintingsList = () => {
-		return animal.paintings.map(paint => {
-			return (
-				<ul>
-					{paint.id} - {paint.painter} - {paint.painting_status}
-				</ul>
-			);
-		});
-	};
-
-	const renderPhotos = () => {
-		return animal.photos.map(photo => {
-			return (
-				<div key={photo.url}>
-					<img src={photo.url}></img>
-				</div>
-			);
-		});
-	};
-
 	return (
 		<>
 			{loaded && (
-				<div>
-					{/* <div className={classes.button}>
-						<Button
-							onClick={handleGenerateCard}
-							variant='contained'
-							color='secondary'>
-							Generate Card
-						</Button>
-					</div> */}
-					<div className={classes.root}>
-						<AnimalHeading />
+				<div className={classes.root}>
+					<AnimalHeading />
 
-						<Grid container className={classes.gridContainer}>
-							<Grid item xs={false} sm={1} className='large-view'></Grid>
-							<Grid item xs={12} sm={10}>
-								<AnimalInfoDisplay />
-							</Grid>
+					<Grid container className={classes.gridContainer}>
+						<Grid item xs={false} sm={1} className='large-view'></Grid>
+						<Grid item xs={12} sm={10}>
+							<AnimalInfoDisplay />
 						</Grid>
+					</Grid>
 
-						<Grid container className={classes.gridContainer}>
-							<Grid item xs={false} sm={1} className='large-view'></Grid>
-							<Grid item xs={12} sm={10}>
-								<PaintingsTable />
-							</Grid>
+					<Grid container className={classes.gridContainer}>
+						<Grid item xs={false} sm={1} className='large-view'></Grid>
+						<Grid item xs={12} sm={10}>
+							<PaintingsTable />
 						</Grid>
+					</Grid>
 
-						<Grid container>
-							<Grid item xs={false} sm={9} className='large-view'></Grid>
-							<div className={classes.addButtonContainer}>
-								<Button
-									color='secondary'
-									variant='contained'
-									type='button'
-									onClick={handleOpenForm}>
-									Add Painting
-								</Button>
-							</div>
-							<Grid item xs={12} sm={3}></Grid>
-						</Grid>
-					</div>
+					<Grid container>
+						<Grid item xs={false} sm={9} className='large-view'></Grid>
+						<div className={classes.addButtonContainer}>
+							<Button
+								color='secondary'
+								variant='contained'
+								type='button'
+								onClick={handleOpenForm}>
+								Add Painting
+							</Button>
+						</div>
+						<Grid item xs={12} sm={3}></Grid>
+					</Grid>
 				</div>
 			)}
 		</>

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, Component } from 'react';
+import React, { useContext, useEffect } from 'react';
 import clsx from 'clsx';
 import { StateContext, MessageContext, DispatchContext } from '../App';
 import { api } from '../services/api';
@@ -17,9 +17,10 @@ function PhotosContainer({ location: { pathname } }) {
 	const { photos } = useContext(StateContext);
 	const { photosDispatch } = useContext(DispatchContext);
 	const { errorMessage } = useContext(MessageContext);
+	let path = pathname.split('/photos/')[1];
 
 	useEffect(() => {
-		let path = pathname.split('/photos/')[1];
+		console.log('running');
 		if (path === 'full-background') {
 			api.photos.getFullBgPhotos().then(res => {
 				if (res.error) return errorMessage();
@@ -31,19 +32,19 @@ function PhotosContainer({ location: { pathname } }) {
 				photosDispatch({ type: 'SET', payload: res });
 			});
 		}
-	}, [pathname]);
+	}, [path, errorMessage, photosDispatch]);
 
 	const renderCards = () => {
 		let path = pathname.split('/photos/')[1];
 		return path === 'full-background'
-			? renderCardshelper(PhotoCard)
-			: renderCardshelper(PrintReadyPhotoCard);
+			? renderCardsHelper(PhotoCard)
+			: renderCardsHelper(PrintReadyPhotoCard);
 	};
 
-	const renderCardshelper = Component => {
+	const renderCardsHelper = Component => {
 		return photos.map(p => {
 			return (
-				<Grid key={p.id} item xs={12} sm={4}>
+				<Grid key={p.animal.id} item xs={12} sm={4}>
 					<Component animalInfo={p} />
 				</Grid>
 			);

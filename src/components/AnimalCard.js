@@ -1,6 +1,5 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import {
 	Card,
@@ -12,10 +11,9 @@ import {
 	IconButton,
 	Typography,
 	Button,
+	makeStyles,
 } from '@material-ui/core';
-
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -50,23 +48,28 @@ export default function AnimalCard({ shelter_name, animal }) {
 
 	const handleVisitAnimalShowPage = () => history.push(`/animals/${id}`);
 
-	const renderInfo = (key, value) => {
-		return (
-			<>
-				<b>{key}:</b> {value}
-				<br></br>
-			</>
-		);
+	const info = [
+		{ key: 'ID', value: id },
+		{ key: 'Shelter', value: shelter_name },
+		{ key: 'Total Paintings', value: total_paintings },
+	];
+
+	const renderInfo = () => {
+		return info.map((i, index) => {
+			return (
+				<span key={index}>
+					<b>{i.key}:</b> {i.value}
+					<br></br>
+				</span>
+			);
+		});
 	};
-	console.log(animal);
 
 	return (
 		<Card className={classes.root}>
 			<CardHeader className={classes.header} title={name} />
 			<CardMedia
 				className={classes.media}
-				// image='https://drive.google.com/uc?export=view&id=13xmQNRWPiICreCTeWqLxfe_8meH5V82t'
-				// image='https://drive.google.com/file/d/1a-0KMtSagc5ZbRYcNLsTrjKWpTwlhxAv/view?usp=sharing'
 				image={photo_url}
 				title={'animal-photo'}
 			/>
@@ -90,12 +93,7 @@ export default function AnimalCard({ shelter_name, animal }) {
 			</CardActions>
 			<Collapse in={expanded} timeout='auto' unmountOnExit>
 				<CardContent>
-					<Typography>
-						{renderInfo('ID', id)}
-						{renderInfo('Shelter', shelter_name)}
-						{renderInfo('Total Paintings', total_paintings)}
-						{/* {renderInfo('Photo Status', photo_status)} */}
-					</Typography>
+					<Typography>{renderInfo()}</Typography>
 				</CardContent>
 			</Collapse>
 		</Card>

@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import { api } from '../services/api';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Box, Typography } from '@material-ui/core';
 import { StateContext } from '../App';
@@ -29,7 +28,6 @@ const useStyles = makeStyles(theme => ({
 		width: '100%',
 		height: '100%',
 		maxWidth: '350px',
-		// maxHeight: '275px',
 		display: 'block',
 	},
 }));
@@ -37,7 +35,8 @@ const useStyles = makeStyles(theme => ({
 export default function Animalheading() {
 	const classes = useStyles();
 	const { animal } = useContext(StateContext);
-	const { name, photos, description, profile_photo_id } = animal;
+	const { name, photos, profile_photo_id } = animal;
+
 	const profilePhoto = () => photos.filter(p => p.id === profile_photo_id)[0];
 
 	return (
@@ -52,6 +51,7 @@ export default function Animalheading() {
 				<span className={classes.imageContainer2}>
 					<Box className={classes.box} borderRadius='borderRadius' border={2}>
 						<img
+							alt='profile'
 							className={classes.image}
 							src={profilePhoto() ? profilePhoto().url : ''}></img>
 					</Box>

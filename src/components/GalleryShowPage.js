@@ -1,13 +1,10 @@
-import React, { useState, useEffect, useContext, useReducer } from 'react';
-import { StateContext, DispatchContext } from '../App';
+import React, { useState, useEffect, useContext } from 'react';
+import { StateContext, DispatchContext, MessageContext } from '../App';
 import { api } from '../services/api';
 import PaintingCard from './PaintingCard';
 import VenueHeader from './VenueHeader';
 import { Grid, Typography, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import PhoneIcon from '@material-ui/icons/Phone';
-import HomeIcon from '@material-ui/icons/Home';
-import EmailIcon from '@material-ui/icons/Email';
 
 const useStyles = makeStyles(theme => ({
 	container: {
@@ -31,22 +28,13 @@ const useStyles = makeStyles(theme => ({
 	},
 }));
 
-const initialState = {
-	id: null,
-	address: '',
-	name: '',
-	max_paintings: null,
-	current_paintings: [],
-};
-
-export default function GalleryShowPage({ history, location }) {
+export default function GalleryShowPage({ location }) {
 	const classes = useStyles();
 	const { gallery } = useContext(StateContext);
-	const { galleryDispatch, paintingFormPropsDispatch } = useContext(
-		DispatchContext
-	);
+	const { galleryDispatch } = useContext(DispatchContext);
+	const { errorMessage } = useContext(MessageContext);
 	const [loaded, setLoaded] = useState(false);
-	const id = parseInt(location.pathname.split('/animals/')[1]);
+	const id = parseInt(location.pathname.split('/galleries/')[1]);
 	const {
 		name,
 		address,
@@ -57,21 +45,23 @@ export default function GalleryShowPage({ history, location }) {
 	} = gallery;
 
 	useEffect(() => {
-		fetchGallery().then(() => setLoaded(true));
-	}, [loaded, location.pathname]);
-
-	const fetchGallery = () => {
-		let id = parseInt(location.pathname.split('/galleries/')[1]);
-		return api.galleries
+		console.log('using effect in gallery show');
+		api.galleries
 			.getGalleryById(id)
-			.then(gallery => {
-				return galleryDispatch({
-					type: 'SET',
-					payload: { ...gallery },
-				});
+			.then(res => {
+				if (res.error) {
+					return errorMessage();
+				} else {
+					galleryDispatch({
+						type: 'SET',
+						payload: { ...res },
+					});
+					return true;
+				}
 			})
+			.then(cont => cont && setLoaded(true))
 			.catch(err => console.log(err));
-	};
+	}, [id, galleryDispatch, errorMessage]);
 
 	const handleAddPainting = () => {
 		// paintingFormPropsDispatch({type:})

@@ -1,24 +1,10 @@
 import React, { useState, useContext } from 'react';
 import { AuthContext } from '../App';
-import clsx from 'clsx';
 import SearchBar from './SearchBar';
-import {
-	AppBar,
-	Tabs,
-	Tab,
-	Menu,
-	MenuItem,
-	Grid,
-	Button,
-	TextField,
-	Paper,
-} from '@material-ui/core/';
+import { Tabs, Tab, Menu, MenuItem, Grid, Paper } from '@material-ui/core/';
 import SearchIcon from '@material-ui/icons/Search';
 import MenuIcon from '@material-ui/icons/Menu';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import NavBarSmall from '../components/NavBarSmall';
 
 const useStyles = makeStyles(theme => ({
 	mainColor: {
@@ -46,7 +32,6 @@ export default function NavBarLarge({ handleNavigate, history }) {
 	const classes = useStyles();
 	const { logout, user } = useContext(AuthContext);
 	const [openSearch, setOpenSearch] = useState(false);
-	const [openMenu, setOpenMenu] = useState(false);
 	const [tabEl, setTabEl] = useState(false);
 	const [anchorEl, setAnchorEl] = useState(null);
 

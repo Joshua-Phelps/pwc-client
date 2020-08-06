@@ -1,9 +1,6 @@
 import React, { useContext } from 'react';
 import { StateContext, DispatchContext, MessageContext } from '../App';
 import { api } from '../services/api';
-import { makeStyles } from '@material-ui/core/styles';
-import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
 import {
 	Table,
 	TableBody,
@@ -12,19 +9,12 @@ import {
 	TableHead,
 	TableRow,
 	Paper,
-	Container,
-	ThemeProvider,
 	Typography,
 } from '@material-ui/core';
-
-const useStyles = makeStyles(theme => ({
-	container: {
-		width: '100%',
-	},
-}));
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 export default function PaintingsTable() {
-	const classes = useStyles();
 	const { galleries, paintLocs, animal } = useContext(StateContext);
 	const { animalDispatch, paintFormPropsDispatch, dialogDispatch } = useContext(
 		DispatchContext

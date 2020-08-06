@@ -1,17 +1,15 @@
 import React, { useContext } from 'react';
+import { DispatchContext } from '../App';
 import {
 	Card,
 	CardActionArea,
 	CardActions,
 	CardContent,
-	CardMedia,
 	Button,
 	Typography,
 	Grid,
 	makeStyles,
 } from '@material-ui/core';
-import PaintingForm from './PaintingForm';
-import { DispatchContext } from '../App';
 
 const useStyles = makeStyles(theme => ({
 	root: {

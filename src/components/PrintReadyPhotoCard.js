@@ -1,27 +1,15 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
+import { MessageContext, DispatchContext } from '../App';
+import { api } from '../services/api';
 import { useHistory } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
-import clsx from 'clsx';
 import {
 	Card,
 	CardHeader,
 	CardMedia,
-	CardContent,
 	CardActions,
-	Collapse,
-	IconButton,
-	Typography,
 	Button,
-	Box,
-	TextField,
+	makeStyles,
 } from '@material-ui/core';
-import NavigateNextIcon from '@material-ui/icons/NavigateNext';
-
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import { api } from '../services/api';
-import { MessageContext, DispatchContext } from '../App';
-import CanvasPhotoForm from './CanvasPhotoForm';
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -46,14 +34,11 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function PhotoCard({ animalInfo }) {
-	const [photoIdx, setPhotoIdx] = useState(0);
-	const [openAddCanvas, setOpenAddCanvas] = useState(false);
-	const [canvasUrl, setCanvasUrl] = useState('');
 	const { errorMessage, message } = useContext(MessageContext);
 	const { photosDispatch } = useContext(DispatchContext);
 	const classes = useStyles();
 	const history = useHistory();
-	const { canvas_photo, animal, url } = animalInfo;
+	const { animal, url } = animalInfo;
 
 	const handleContinue = () => {
 		let updatedAnimal = { id: animal.id, canvas_printed: true };
@@ -72,25 +57,12 @@ export default function PhotoCard({ animalInfo }) {
 			'Are You Sure?',
 			'This will mark this photo as Printed',
 			'Continue',
-			() => handleContinue()
+			handleContinue
 		);
 	};
-
-	const handleupdateCanvas = () => setOpenAddCanvas(!openAddCanvas);
 
 	const handleVisitPage = () => {
 		history.push(`/animals/${animal.id}`);
-	};
-
-	const handleChange = ({ target: { value } }) => setCanvasUrl(value);
-
-	const renderInfo = (key, value) => {
-		return (
-			<>
-				<b>{key}:</b> {value}
-				<br></br>
-			</>
-		);
 	};
 
 	return (
@@ -104,11 +76,13 @@ export default function PhotoCard({ animalInfo }) {
 				}
 				titleTypographyProps={{ variant: 'body1' }}
 			/>
-			<CardMedia
-				className={classes.media}
-				image={url || ''}
-				title={'animal-photo'}
-			/>
+			{url && (
+				<CardMedia
+					className={classes.media}
+					image={url || ''}
+					title={'animal-photo'}
+				/>
+			)}
 			<CardActions className={classes.actionsContainer} disableSpacing>
 				<Button
 					variant='contained'

@@ -5,7 +5,7 @@ import AnimalForm from './AnimalForm';
 import PermissionsForm from './PermissionsForm';
 import FileForm from './FileForm';
 import FileFormSubmit from './FileFormSubmit';
-import { Typography, Grid, Button, makeStyles } from '@material-ui/core';
+import { Grid, Button, makeStyles } from '@material-ui/core';
 import { AuthContext, MessageContext } from '../App';
 
 const useStyles = makeStyles(theme => ({
@@ -42,18 +42,6 @@ export default function AdminPage() {
 	const { user } = useContext(AuthContext);
 	const { message, errorMessage } = useContext(MessageContext);
 
-	// const clearState = ( ...args) => {
-	// 	let setState = {
-	// 		venueType: setVenueType(initSt.venueType),
-	// 		openAnimalForm: setOpenAnimalForm(initSt.openAnimalForm),
-	// 		openPermsForm: setOpenPermsForm(intiSt.openPermsForm),
-	// 		showFileSubmit: setShowFileSubmit(intiSt.showFileSubmit),
-	// 		file: setFile(initSt.file)
-	// 	};
-	// 	if (!args) return obj.forEach(func => func);
-	// 	args.forEach(() => setState[state])
-	// };
-
 	const handleVenueClick = type => {
 		setVenueType(type);
 		setOpenAnimalForm(initSt.openAnimalForm);
@@ -72,13 +60,6 @@ export default function AdminPage() {
 		setVenueType(initSt.venueType);
 	};
 
-	const handleUploadFileClick = () => {
-		setShowFileSubmit(!showFileSubmit);
-		setOpenAnimalForm(initSt.openAnimalForm);
-		setVenueType(initSt.venueType);
-		setOpenPermsForm(initSt.openPermsForm);
-	};
-
 	const handleSubmitFile = () => {
 		let formData = new FormData();
 		formData.append('data', file);
@@ -94,7 +75,6 @@ export default function AdminPage() {
 				if (res.error) {
 					return errorMessage();
 				} else {
-					let aniCount = res.animals.length;
 					message(
 						'Success!',
 						`You have added ${res.animals.length} animals to the database`
@@ -107,16 +87,6 @@ export default function AdminPage() {
 				setFile(initSt.file);
 			})
 			.catch(err => console.log(err));
-
-		// api.google
-		// 	.createFile(formData)
-		// 	.then(res => console.log(res))
-		// 	.catch(err => console.log(err));
-
-		// api.google
-		// 	.getFiles()
-		// 	.then(res => console.log(res))
-		// 	.catch(err => console.log(err));
 	};
 
 	const handleFileChange = e => {

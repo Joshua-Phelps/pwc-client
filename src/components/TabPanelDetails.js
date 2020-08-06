@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Typography } from '@material-ui/core';
 import { StateContext } from '../App';
-import { render } from 'react-dom';
 
 const useStyles = makeStyles(theme => ({
 	detailsList: {
@@ -24,17 +23,14 @@ export default function TabPanelDetails() {
 	];
 
 	const renderDetails = () => {
-		return details.map(info => {
+		return details.map((info, idx) => {
 			return (
-				<>
+				<span key={idx}>
 					<Typography display='inline' variant='body2'>
-						{info.key}
-					</Typography>{' '}
-					<Typography display='inline' variant='body2'>
-						{info.value}
+						<b>{info.key}</b> {info.value}
 					</Typography>
 					<br></br>
-				</>
+				</span>
 			);
 		});
 	};

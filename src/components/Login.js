@@ -1,15 +1,10 @@
 import React, { useState, useContext } from 'react';
 import { AuthContext } from '../App';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import { api } from '../services/api';
-
 import {
 	Avatar,
 	Button,
 	CssBaseline,
 	TextField,
-	FormControlLabel,
-	Checkbox,
 	Link,
 	Paper,
 	Box,
@@ -17,6 +12,7 @@ import {
 	Typography,
 	makeStyles,
 } from '@material-ui/core';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
 function Copyright() {
 	return (

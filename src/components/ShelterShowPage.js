@@ -20,10 +20,6 @@ export default function ShelterShowPage({ location }) {
 	const { name, email, phone_number, address, animals } = shelter;
 
 	useEffect(() => {
-		fetchShelter();
-	}, [location.pathname]);
-
-	const fetchShelter = () => {
 		api.shelters
 			.getShelterById(id)
 			.then(shelter => {
@@ -34,11 +30,24 @@ export default function ShelterShowPage({ location }) {
 			})
 			.then(() => setLoaded(true))
 			.catch(err => console.log(err));
-	};
+	}, [id, shelterDispatch]);
+
+	// const fetchShelter = () => {
+	// 	api.shelters
+	// 		.getShelterById(id)
+	// 		.then(shelter => {
+	// 			return shelterDispatch({
+	// 				type: 'SET',
+	// 				payload: shelter,
+	// 			});
+	// 		})
+	// 		.then(() => setLoaded(true))
+	// 		.catch(err => console.log(err));
+	// };
 
 	const renderAnimals = () => {
 		if (shelter) {
-			return shelter.animals.map(animal => {
+			return animals.map(animal => {
 				return (
 					<Grid key={animal.id} item xs={12} sm={4}>
 						<AnimalCard shelter_name={name} animal={animal} />

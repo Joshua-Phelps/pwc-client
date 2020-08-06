@@ -1,10 +1,11 @@
-import React, { useReducer, useEffect, createContext, useState } from 'react';
-import {
-	BrowserRouter as Router,
-	Route,
-	Redirect,
-	useHistory,
-} from 'react-router-dom';
+import React, {
+	useReducer,
+	useEffect,
+	createContext,
+	useState,
+	useCallback,
+} from 'react';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { initialState } from './reducers/initialState';
 import PrivateRoute from './helpers/PrivateRoute';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -44,7 +45,6 @@ import {
 	dialogReducer,
 	paintFormPropsReducer,
 } from './reducers/Reducers';
-import AnimalCard from './components/AnimalCard';
 
 export const StateContext = createContext();
 export const DispatchContext = createContext();
@@ -122,7 +122,6 @@ function App() {
 	const [photos, photosDispatch] = useReducer(photosReducer, []);
 	const [loggedIn, setLoggedIn] = useState(false);
 	const token = localStorage.getItem('token');
-	const history = useHistory();
 
 	const state = {
 		animals,
@@ -189,7 +188,7 @@ function App() {
 				.then(() => setLoggedIn(true))
 				.catch(error => console.log(error));
 		}
-	}, []);
+	}, [token]);
 
 	const setUser = user => {
 		userDispatch({
@@ -238,8 +237,8 @@ function App() {
 			.catch(err => console.log(err));
 	};
 
-	const errorMessage = () => {
-		return dialogDispatch({
+	const errorMessage = useCallback(() => {
+		dialogDispatch({
 			type: 'SET',
 			payload: {
 				title: 'Something went wrong!',
@@ -247,7 +246,7 @@ function App() {
 				open: true,
 			},
 		});
-	};
+	}, [dialogDispatch]);
 
 	const message = (title, message, ...btnArgs) => {
 		return dialogDispatch({
@@ -256,21 +255,8 @@ function App() {
 				title,
 				message,
 				open: true,
-				buttonText: btnArgs[1],
-				handleButton: btnArgs[2],
-			},
-		});
-	};
-
-	const confirmMessage = (message, buttonText, handleButton) => {
-		return dialogDispatch({
-			type: 'SET',
-			payload: {
-				title: 'Are You Sure?',
-				open: true,
-				message,
-				buttonText,
-				handleButton,
+				buttonText: btnArgs[0],
+				handleButton: btnArgs[1],
 			},
 		});
 	};

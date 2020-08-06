@@ -1,13 +1,9 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import clsx from 'clsx';
 import { useHistory } from 'react-router-dom';
-import {
-	StateContext,
-	MessageContext,
-	DispatchContext,
-	AuthContext,
-} from '../App';
+import { StateContext } from '../App';
 import { makeStyles } from '@material-ui/core/styles';
+import { api } from '../services/api';
 import {
 	Grid,
 	TextField,
@@ -17,13 +13,9 @@ import {
 	MenuItem,
 	Button,
 } from '@material-ui/core/';
-import SearchIcon from '@material-ui/icons/Search';
-import { api } from '../services/api';
-import { render } from '@testing-library/react';
 
 const useStyles = makeStyles(theme => ({
 	largeContainer: {
-		// padding: theme.spacing(1),
 		margin: '-17px',
 	},
 	smallContainer: {
@@ -53,13 +45,10 @@ const useStyles = makeStyles(theme => ({
 export default function SearchAnimal() {
 	const history = useHistory();
 	const classes = useStyles();
-	const { galleries, shelters, paintLocs, photos } = useContext(StateContext);
-	const { photosDispatch } = useContext(DispatchContext);
+	const { galleries, shelters, paintLocs } = useContext(StateContext);
 	const [select1, setSelect1] = useState('');
 	const [select2, setSelect2] = useState('');
 	const [textField, setTextField] = useState('');
-
-	const getId = (arr, name) => arr.filter(el => el.name === name && el.id)[0];
 
 	const firstOptions = {
 		tasks: ['Tasks'],
@@ -131,12 +120,6 @@ export default function SearchAnimal() {
 				history.push(`/paint-locations/${select2}`);
 			}
 		}
-	};
-
-	const clearState = () => {
-		setSelect1('');
-		setSelect2('');
-		setTextField('');
 	};
 
 	const renderMenuItems = arr => {

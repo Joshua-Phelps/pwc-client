@@ -1,15 +1,11 @@
-import React, { useContext, useState } from 'react';
-import { StateContext, MessageContext, DispatchContext } from '../App';
+import React, { useContext } from 'react';
+import { StateContext } from '../App';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import { Tabs, Tab, Typography, Box, Grid, Button } from '@material-ui/core';
 import TabPanelDetails from '../components/TabPanelDetails';
 import TabPanelShelter from '../components/TabPanelShelter';
+import TabPanelDisplayedPaintings from '../components/TabPanelDisplayedPaintings';
 import TabPanelPhoto from '../components/TabPanelPhoto';
-import PhoneIcon from '@material-ui/icons/Phone';
-import HomeIcon from '@material-ui/icons/Home';
-import EmailIcon from '@material-ui/icons/Email';
-import { api } from '../services/api';
+import { Typography, Box, makeStyles } from '@material-ui/core';
 import CanvasPhotoForm from '../components/CanvasPhotoForm';
 
 function TabPanel(props) {
@@ -22,11 +18,7 @@ function TabPanel(props) {
 			id={`vertical-tabpanel-${index}`}
 			aria-labelledby={`vertical-tab-${index}`}
 			{...other}>
-			{value === index && (
-				<Box p={3}>
-					<Typography>{children}</Typography>
-				</Box>
-			)}
+			{value === index && <Box p={3}>{children}</Box>}
 		</div>
 	);
 }
@@ -37,75 +29,9 @@ TabPanel.propTypes = {
 	value: PropTypes.any.isRequired,
 };
 
-function a11yProps(index) {
-	return {
-		id: `vertical-tab-${index}`,
-		'aria-controls': `vertical-tabpanel-${index}`,
-	};
-}
-
 const useStyles = makeStyles(theme => ({
-	root: {
-		flexGrow: 1,
-		backgroundColor: theme.palette.background.paper,
-		display: 'flex',
-		height: '370px',
-		backgroundColor: theme.palette.secondary.grey.main,
-		// overflowX: 'auto',
-	},
-	verticalTabs: {
-		borderRight: `1px solid`,
-		height: '100%',
-	},
-	horizontalTabs: {
-		height: '100%',
-		overflowX: 'auto',
-	},
-	tabPanel: {
-		overflowX: 'auto',
-		maxHeight: '320px',
-		width: '100%',
-		backgroundColor: theme.palette.secondary.grey.light,
-	},
-	heading: {
-		textAlign: 'center',
-		marginTop: '-20px',
-	},
-	icon: {
-		textAlign: 'center',
-	},
 	imageContainer: {
 		display: 'flex',
-		// height: '100%',
-	},
-	image: {
-		textAlign: 'center',
-		padding: theme.spacing(1),
-		alignSelf: 'center',
-		height: '100%',
-	},
-	galleries: {
-		borderRight: `1px solid`,
-	},
-	galleriesContainer: {
-		padding: theme.spacing(1),
-	},
-	button: {
-		padding: theme.spacing(1),
-	},
-	buttonContainer: {
-		alignItems: 'center',
-		display: 'flex',
-		justifyContent: 'center',
-	},
-	buttonContainer2: {
-		alignItems: 'center',
-		display: 'inline-block',
-		justifyContent: 'center',
-		padding: theme.spacing(1),
-	},
-	canvasImage: {
-		maxWidth: '350px',
 	},
 }));
 
@@ -138,24 +64,9 @@ export default function TabsPanelContainer({ value }) {
 		return result;
 	};
 
-	const renderGalleries = () => {
+	const renderDisplayedPaintings = () => {
 		return currentGalleries().map((g, idx) => {
-			return (
-				<div key={idx}>
-					<Box borderRadius='borderRadius' border={1}>
-						<Typography className={classes.galleriesContainer}>
-							<span className={classes.galleries}>{g.name} </span>
-							<span className={classes.galleriesContainer}>
-								Card Stock:{` `} {g.card_stock}
-							</span>
-						</Typography>
-						<div className={classes.button}>
-							<Button variant='contained'>Update</Button>
-						</div>
-					</Box>
-					<br></br>
-				</div>
-			);
+			return <TabPanelDisplayedPaintings key={idx} gallery={g} />;
 		});
 	};
 
@@ -182,16 +93,16 @@ export default function TabsPanelContainer({ value }) {
 			</TabPanel>
 
 			<TabPanel className={classes.imageContainer} value={value} index={2}>
-				<div>{renderPhotos()}</div>
+				{renderPhotos()}
 			</TabPanel>
 
 			<TabPanel value={value} index={3}>
-				<div>{renderGalleries()}</div>
+				{renderDisplayedPaintings()}
 			</TabPanel>
 
 			<TabPanel value={value} index={4}>
 				{animal.canvas_photo_id ? (
-					<div>{renderCanvasPhoto()}</div>
+					renderCanvasPhoto()
 				) : (
 					<>
 						<Typography variant='h6'>Add Canvas Photo</Typography>

@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
-import clsx from 'clsx';
 import { StateContext, DispatchContext } from '../App';
-import VenueFormHeader from './VenueFormHeader';
+import { api } from '../services/api';
+import clsx from 'clsx';
 import { photoStatusList } from '../utils/index';
+import VenueFormHeader from './VenueFormHeader';
 import {
 	TextField,
 	Grid,
@@ -11,10 +12,8 @@ import {
 	MenuItem,
 	Select,
 	Button,
-	FormHelperText,
+	makeStyles,
 } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import { api } from '../services/api';
 
 const useStyles = makeStyles(theme => ({
 	container: {
@@ -22,7 +21,6 @@ const useStyles = makeStyles(theme => ({
 	},
 	item: {
 		width: '100%',
-		// textAlign: 'left',
 	},
 	input: {
 		display: 'inline-block',
@@ -46,7 +44,6 @@ const intialState = {
 	description: '',
 	photo_status: '',
 	file_path: '',
-	shelter_id: '',
 };
 
 export default function AnimalForm({ animal }) {
@@ -59,7 +56,7 @@ export default function AnimalForm({ animal }) {
 		if (animal) {
 			setForm(animal);
 		}
-	}, []);
+	}, [animal]);
 
 	const handlSubmit = e => {
 		e.preventDefault();

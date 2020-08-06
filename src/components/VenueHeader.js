@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { StateContext, DispatchContext } from '../App';
-import { api } from '../services/api';
-import PaintingForm from './PaintingForm';
-
-import { makeStyles } from '@material-ui/core/styles';
-import { Grid, Typography, Divider, Button } from '@material-ui/core';
+import React from 'react';
+import {
+	Grid,
+	Typography,
+	Divider,
+	Button,
+	makeStyles,
+} from '@material-ui/core';
 import PhoneIcon from '@material-ui/icons/Phone';
 import HomeIcon from '@material-ui/icons/Home';
 import EmailIcon from '@material-ui/icons/Email';
@@ -16,14 +17,12 @@ const useStyles = makeStyles(theme => ({
 	},
 	detailsDisplay: {
 		padding: theme.spacing(1),
-		// textAlign: 'center',
 	},
 	icon: {
 		color: theme.palette.info.main,
 	},
 	iconSpacing: {
 		paddingRight: theme.spacing(1),
-		// textAlign: 'center',
 	},
 	buttons: {
 		padding: theme.spacing(1),

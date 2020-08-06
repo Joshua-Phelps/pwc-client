@@ -1,20 +1,16 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { api } from '../services/api';
 import VenueFormHeader from './VenueFormHeader';
-import { states } from '../utils/index';
 import {
-	TextField,
 	Grid,
 	Button,
 	FormControl,
 	MenuItem,
 	Select,
 	InputLabel,
-	FormHelperText,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { userReducer } from '../reducers/Reducers';
-import { DispatchContext, MessageContext } from '../App';
+import { MessageContext } from '../App';
 
 const useStyles = makeStyles(theme => ({
 	container: {
@@ -37,7 +33,6 @@ const useStyles = makeStyles(theme => ({
 
 export default function PermissionsForm() {
 	const classes = useStyles();
-	const { dialogDispatch } = useContext(DispatchContext);
 	const { errorMessage, message } = useContext(MessageContext);
 	const [userId, setUserId] = useState(null);
 	const [users, setUsers] = useState([]);
@@ -47,43 +42,27 @@ export default function PermissionsForm() {
 		api.auth
 			.getUsers()
 			.then(res => {
-				console.log(res);
-				if (res.error) return; // error handle
+				if (res.error) return errorMessage();
 				return setUsers(res);
 			})
 			.catch(err => console.log(err));
-	}, []);
+	}, [errorMessage]);
 
 	const clearState = () => {
 		setUserId(null);
 		setPermissionLevel(null);
 	};
 
-	const handleChange = ({ target: { name, value } }) => {
-		name(value);
-	};
+	const handleChange = ({ target: { value } }, cb) => cb(value);
 
 	const handleSubmit = e => {
 		e.preventDefault();
 		message(
 			'Are You Sure?',
-			'This user will have level ${permissionLevel} access',
+			`This user will have level ${permissionLevel} access`,
 			'Continue',
 			updateUserPermissions
 		);
-	};
-
-	const confirmMessage = () => {
-		return dialogDispatch({
-			type: 'SET',
-			payload: {
-				title: 'Are You Sure?',
-				message: `This user will have level ${permissionLevel} access`,
-				buttonText: 'Continue',
-				handleButton: updateUserPermissions,
-				open: true,
-			},
-		});
 	};
 
 	const updateUserPermissions = () => {
@@ -144,9 +123,8 @@ export default function PermissionsForm() {
 								<Select
 									labelId='email-label'
 									id='email-select'
-									value={userId}
-									onChange={handleChange}
-									name={setUserId}
+									value={userId || ''}
+									onChange={e => handleChange(e, setUserId)}
 									label='Email'>
 									{renderUsers()}
 								</Select>
@@ -159,9 +137,8 @@ export default function PermissionsForm() {
 								<Select
 									labelId='permission-label'
 									id='permission-select'
-									value={permissionLevel}
-									onChange={handleChange}
-									name={setPermissionLevel}
+									value={permissionLevel || ''}
+									onChange={e => handleChange(e, setPermissionLevel)}
 									label='Permission Level'>
 									{renderPermissionLevels()}
 								</Select>

@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { api } from '../services/api';
-import { DispatchContext } from '../App';
+import { MessageContext } from '../App';
 import {
 	TextField,
 	Grid,
@@ -16,7 +16,6 @@ const useStyles = makeStyles(theme => ({
 	},
 	item: {
 		textAlign: 'center',
-		// paddingTop: theme.spacing(6),
 	},
 	formSpacing: {
 		padding: theme.spacing(1),
@@ -30,8 +29,8 @@ const initialState = {
 
 function PasswordReset({ location, history }) {
 	const classes = useStyles();
-	const [state, setState] = useState({});
-	const { dialogDispatch } = useContext(DispatchContext);
+	const [state, setState] = useState(initialState);
+	const { message, errorMessage } = useContext(MessageContext);
 	const resetToken = location.pathname.split('/password-reset/')[1];
 
 	const visitLogin = () => history.push('/login');
@@ -48,17 +47,14 @@ function PasswordReset({ location, history }) {
 			.updatePassword(state, resetToken)
 			.then(res => {
 				if (res.error) {
+					return errorMessage();
 				} else {
-					dialogDispatch({
-						type: 'SET',
-						payload: {
-							title: 'Password Successfully Changed!',
-							message: 'Please login again',
-							buttonText: 'Login Page',
-							handleButton: visitLogin,
-							open: true,
-						},
-					});
+					message(
+						'Password Successfully Changed!',
+						'Please login again',
+						'Login Page',
+						visitLogin
+					);
 				}
 			})
 			.catch(err => console.log(err));

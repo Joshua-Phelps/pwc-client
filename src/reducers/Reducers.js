@@ -7,9 +7,6 @@ const UPDATE = 'UPDATE';
 const ADD = 'ADD';
 const REMOVE = 'REMOVE';
 const UPDATE_PHOTO = 'UPDATE_PHOTO';
-const UPDATE_FORM = 'UPDATE_FORM';
-const CLEAR_FORM = 'CLEAR_FORM';
-const SET_ANIMAL = 'SET_ANIMAL';
 const ADD_PAINTING = 'ADD_PAINTING';
 const UPDATE_PAINTING = 'UPDATE_PAINTING';
 const DELETE_PAINTING = 'DELETE_PAINTING';
@@ -159,14 +156,13 @@ const paintFormPropsReducer = (state, action) => {
 };
 
 const photosReducer = (state, action) => {
-	let newPhotos;
 	switch (action.type) {
 		case SET:
 			return [...action.payload];
 		case ADD:
 			return [...state, action.payload];
 		case REMOVE_ANIMAL:
-			const newPhotos = state.filter(p => p.animal.id !== action.payload);
+			let newPhotos = state.filter(p => p.animal.id !== action.payload);
 			return newPhotos;
 		default:
 			return state;

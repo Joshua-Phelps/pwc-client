@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
-import { StateContext, DispatchContext, MessageContext } from '../App';
-import { makeStyles, Button, TextField } from '@material-ui/core';
+import { DispatchContext, MessageContext } from '../App';
+import { makeStyles, Button } from '@material-ui/core';
 import { api } from '../services/api';
 import CanvasPhotoForm from './CanvasPhotoForm';
 const useStyles = makeStyles(theme => ({
@@ -26,11 +26,9 @@ const useStyles = makeStyles(theme => ({
 	},
 }));
 
-function TabPanelPhoto({ photo, isCanvas }) {
+function TabPanelPhoto({ photo }) {
 	const classes = useStyles();
 	const [openForm, setOpenForm] = useState(false);
-	const [canvasUrl, setCanvasUrl] = useState('');
-	const { animal } = useContext(StateContext);
 	const { animalDispatch } = useContext(DispatchContext);
 	const { errorMessage } = useContext(MessageContext);
 
@@ -38,16 +36,10 @@ function TabPanelPhoto({ photo, isCanvas }) {
 		setOpenForm(!openForm);
 	};
 
-	const handleSubmit = e => {
-		e.preventDefault();
-	};
-
-	const handleChange = ({ target: { value } }) => setCanvasUrl(value);
-
 	const handleUpdateProfilePhoto = () => {
 		api.animals.updateProfilePhoto(photo.id).then(res => {
 			if (res.error) {
-				return errorMessage;
+				return errorMessage();
 			} else {
 				animalDispatch({ type: 'UPDATE', payload: res });
 			}
@@ -55,9 +47,9 @@ function TabPanelPhoto({ photo, isCanvas }) {
 	};
 
 	return (
-		<div className={classes.image}>
+		<div>
 			<div className={classes.image}>
-				<img className={classes.canvasImage} src={photo.url} />
+				<img className={classes.canvasImage} alt='canvas' src={photo.url} />
 			</div>
 			<div className={classes.buttonContainer2}>
 				<Button
@@ -75,22 +67,6 @@ function TabPanelPhoto({ photo, isCanvas }) {
 			{openForm && (
 				<>
 					<CanvasPhotoForm photoId={photo.id} />
-					{/* <div>
-						<form onSubmit={handleSubmit}>
-							<TextField
-								onChange={handleChange}
-								value={canvasUrl}
-								id='add-canvas-field'
-								variant='outlined'
-								label='Google Drive URL'
-							/>
-							<div className={classes.buttonContainer2}>
-								<Button variant='contained' color='secondary' type='submit'>
-									Submit
-								</Button>
-							</div>
-						</form>
-					</div> */}
 				</>
 			)}
 		</div>

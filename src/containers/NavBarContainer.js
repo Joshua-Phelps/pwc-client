@@ -1,12 +1,8 @@
-import React, { useContext } from 'react';
-import { StateContext } from '../App';
-import { makeStyles } from '@material-ui/core/styles';
+import React from 'react';
 import NavBarSmall from '../components/NavBarSmall';
 import NavBarLarge from '../components/NavBarLarge';
 
 function NavBarContainer({ history, loggedIn }) {
-	// const { loggedIn } = useContext(StateContext);
-	const token = localStorage.getItem('token');
 	const handleNavigate = value => {
 		value === 0 && history.push('/galleries');
 		value === 1 && history.push('/shelters');

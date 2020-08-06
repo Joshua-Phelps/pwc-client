@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { DispatchContext } from '../App';
+import { MessageContext } from '../App';
 import { useHistory } from 'react-router-dom';
 import { api } from '../services/api';
 import {
@@ -31,10 +31,8 @@ const useStyles = makeStyles(theme => ({
 function PasswordSendEmail() {
 	const classes = useStyles();
 	const [email, setEmail] = useState('');
-	const { dialogDispatch } = useContext(DispatchContext);
+	const { message, errorMessage } = useContext(MessageContext);
 	const history = useHistory();
-
-	const visitLogin = () => history.push('/login');
 
 	const handleSubmit = e => {
 		console.log(email);
@@ -43,18 +41,12 @@ function PasswordSendEmail() {
 			.sendPasswordResetEmail(email)
 			.then(res => {
 				if (res.error) {
-					// error handle
+					errorMessage();
 				} else {
-					return dialogDispatch({
-						type: 'SET',
-						payload: {
-							title: 'Password reset link was sent!',
-							message: 'Please check your email inbox',
-							// buttonText: 'Login Page',
-							// handleButton: visitLogin,
-							open: true,
-						},
-					});
+					return message(
+						'Password reset link was sent!',
+						'Please check your email inbox'
+					);
 				}
 			})
 			.then(() => history.push('/login'))

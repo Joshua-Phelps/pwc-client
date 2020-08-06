@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { SetStateContext, DispatchContext } from '../App';
+import { MessageContext } from '../App';
 import { api } from '../services/api';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import {
@@ -22,9 +22,9 @@ const initialState = {
 };
 
 export default function SignUp(props) {
-	const { dialogDispatch } = useContext(DispatchContext);
-	const [state, setState] = useState(initialState);
 	const classes = useStyles();
+	const [state, setState] = useState(initialState);
+	const { message, errorMessage } = useContext(MessageContext);
 
 	const handleChange = ({ target: { name, value } }) => {
 		setState(prevState => {
@@ -36,14 +36,20 @@ export default function SignUp(props) {
 		e.preventDefault();
 		if (state.password !== state.retypePassword)
 			return alert('Your passwords do not match');
-		api.auth.signup(state).then(res => {
-			if (res.error) {
-				// set Dialog failure message
-			} else {
-				// set Dialod success message
-				props.history.push('/login');
-			}
-		});
+		api.auth
+			.signup(state)
+			.then(res => {
+				if (res.error) {
+					errorMessage();
+				} else {
+					return message(
+						'Success!',
+						'Your account has been created, please login.'
+					);
+				}
+			})
+			.then(() => props.history.push('/login'))
+			.catch(err => console.log(err));
 	};
 
 	return (

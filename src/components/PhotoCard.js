@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
+import { MessageContext, DispatchContext } from '../App';
+import { api } from '../services/api';
 import { useHistory } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import {
 	Card,
@@ -12,20 +13,13 @@ import {
 	IconButton,
 	Typography,
 	Button,
-	Box,
 	TextField,
+	makeStyles,
 } from '@material-ui/core';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
-
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import { api } from '../services/api';
-import { MessageContext, DispatchContext } from '../App';
 
 const useStyles = makeStyles(theme => ({
-	root: {
-		// height: '45vh',
-	},
 	header: {
 		height: '30px',
 		textAlign: 'center',
@@ -123,23 +117,8 @@ export default function PhotoCard({ animalInfo }) {
 		history.push(`/animals/${animal.id}`);
 	};
 
-	const getPhotoUrl = () => {
-		if (photos[photoIdx]) {
-			return photos[photoIdx].google_drive_url;
-		}
-	};
-
-	const renderInfo = (key, value) => {
-		return (
-			<>
-				<b>{key}:</b> {value}
-				<br></br>
-			</>
-		);
-	};
-
 	return (
-		<Card className={classes.root}>
+		<Card>
 			<CardHeader
 				className={classes.header}
 				title={
@@ -152,8 +131,6 @@ export default function PhotoCard({ animalInfo }) {
 			<CardMedia
 				className={classes.media}
 				component='img'
-				// image='https://drive.google.com/uc?export=view&id=13xmQNRWPiICreCTeWqLxfe_8meH5V82t'
-				// image='https://drive.google.com/file/d/1a-0KMtSagc5ZbRYcNLsTrjKWpTwlhxAv/view?usp=sharing'
 				image={profilePhotoUrl()}
 				title={'animal-photo'}
 			/>

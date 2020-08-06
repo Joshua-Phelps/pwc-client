@@ -1,15 +1,9 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import clsx from 'clsx';
-import { StateContext } from '../App';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
-import { Tabs, Tab, Typography, Box, Grid, Button } from '@material-ui/core';
+import { Tabs, Tab, Typography, Box, Grid } from '@material-ui/core';
 import TabPanelsContainer from '../containers/TabPanelsContainer';
-import TabPanelDetails from './TabPanelDetails';
-import TabPanelShelter from './TabPanelShelter';
-import PhoneIcon from '@material-ui/icons/Phone';
-import HomeIcon from '@material-ui/icons/Home';
-import EmailIcon from '@material-ui/icons/Email';
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
@@ -46,7 +40,7 @@ function a11yProps(index) {
 const useStyles = makeStyles(theme => ({
 	root: {
 		flexGrow: 1,
-		backgroundColor: theme.palette.background.paper,
+		// backgroundColor: theme.palette.background.paper,
 		display: 'flex',
 		height: '370px',
 		backgroundColor: theme.palette.secondary.grey.main,
@@ -75,7 +69,6 @@ const useStyles = makeStyles(theme => ({
 
 export default function AnimalInfoDisplay() {
 	const classes = useStyles();
-	const { galleries, animal } = useContext(StateContext);
 	const [value, setValue] = React.useState(0);
 
 	const handleChange = (event, newValue) => {

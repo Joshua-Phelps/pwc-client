@@ -13,15 +13,10 @@ const useStyles = makeStyles(theme => ({
 
 function CanvasPhotoForm({ photoId }) {
 	const classes = useStyles();
-	const [openForm, setOpenForm] = useState(false);
 	const [canvasUrl, setCanvasUrl] = useState('');
 	const { animal } = useContext(StateContext);
 	const { animalDispatch } = useContext(DispatchContext);
 	const { errorMessage, message } = useContext(MessageContext);
-
-	const handleOpenForm = () => {
-		setOpenForm(!openForm);
-	};
 
 	const handleSubmit = e => {
 		e.preventDefault();
@@ -29,11 +24,6 @@ function CanvasPhotoForm({ photoId }) {
 	};
 
 	const handleChange = ({ target: { value } }) => setCanvasUrl(value);
-
-	const handleSubmitUrl = e => {
-		e.preventDefault();
-		photoId ? updatePhoto() : createPhoto();
-	};
 
 	const createPhoto = () => {
 		let canvasPhoto = {
@@ -48,7 +38,6 @@ function CanvasPhotoForm({ photoId }) {
 				} else {
 					console.log(res);
 					setCanvasUrl('');
-					setOpenForm(false);
 					animalDispatch({
 						type: 'UPDATE',
 						payload: res,
@@ -71,12 +60,11 @@ function CanvasPhotoForm({ photoId }) {
 					return errorMessage();
 				} else {
 					setCanvasUrl('');
-					setOpenForm(false);
 					animalDispatch({
 						type: 'UPDATE_PHOTO',
 						payload: res,
 					});
-					message('Canvas Photo has been added to the database');
+					message('Success!', 'Canvas Photo has been added to the database');
 				}
 			})
 			.catch(err => console.log(err));

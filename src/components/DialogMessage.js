@@ -9,7 +9,6 @@ import {
 	DialogTitle,
 	makeStyles,
 } from '@material-ui/core';
-import { initialState } from '../reducers/initialState';
 
 const useStyles = makeStyles(theme => ({
 	border: {

@@ -70,7 +70,8 @@ export default function PaintingForm() {
 
 	useEffect(() => {
 		if (paintingId) {
-			fetchPainting()
+			api.paintings
+				.getPaintingById(paintingId)
 				.then(res => {
 					if (res.error) return errorMessage();
 					return setForm(res);
@@ -81,11 +82,7 @@ export default function PaintingForm() {
 			setForm(initialState);
 			setLoaded(true);
 		}
-	}, [paintingId]);
-
-	const fetchPainting = () => {
-		return api.paintings.getPaintingById(paintingId);
-	};
+	}, [paintingId, errorMessage, setForm, setLoaded]);
 
 	const addPainting = painting => {
 		animalDispatch({

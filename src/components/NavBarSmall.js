@@ -1,6 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { api } from '../services/api';
-import { makeStyles } from '@material-ui/core/styles';
+import { AuthContext } from '../App';
 import {
 	SwipeableDrawer,
 	Button,
@@ -11,19 +10,14 @@ import {
 	ListItemText,
 	TextField,
 	Typography,
-	FormControl,
-	InputLabel,
-	Select,
-	MenuItem,
+	makeStyles,
 } from '@material-ui/core';
 import BrushIcon from '@material-ui/icons/Brush';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
-import HomeIcon from '@material-ui/icons/Home';
 import PetsIcon from '@material-ui/icons/Pets';
 import MenuIcon from '@material-ui/icons/Menu';
 import PhotoLibraryIcon from '@material-ui/icons/PhotoLibrary';
 import SearchIcon from '@material-ui/icons/Search';
-import { AuthContext } from '../App';
 
 const useStyles = makeStyles(theme => ({
 	list: {
@@ -50,7 +44,6 @@ export default function NavBarSmall({ handleNavigate, history }) {
 	const { user } = useContext(AuthContext);
 	const [open, setOpen] = useState(false);
 	const [search, setSearch] = useState('');
-	const [select, setSelect] = useState('');
 
 	const listItems = [
 		'Galleries',
@@ -73,10 +66,6 @@ export default function NavBarSmall({ handleNavigate, history }) {
 		setSearch(e.target.value);
 	};
 
-	const handleSelect = event => {
-		setSelect(event.target.value);
-	};
-
 	const handleClick = index => {
 		setOpen(false);
 		handleNavigate(index);
@@ -89,7 +78,7 @@ export default function NavBarSmall({ handleNavigate, history }) {
 					<ListItem onClick={() => handleClick(index)} button key={text}>
 						<ListItemIcon>
 							{index === 0 && <PhotoLibraryIcon />}
-							{index === 1 && <HomeIcon />}
+							{index === 1 && <PetsIcon />}
 							{index === 2 && <BrushIcon />}
 							{index === 3 && <SearchIcon />}
 							{user.permission_level > 1 && index === 4 && (
