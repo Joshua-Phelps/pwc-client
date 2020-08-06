@@ -24,7 +24,7 @@ import { MessageContext, DispatchContext } from '../App';
 
 const useStyles = makeStyles(theme => ({
 	root: {
-		maxWidth: 345,
+		// height: '45vh',
 	},
 	header: {
 		height: '10px',
@@ -32,8 +32,15 @@ const useStyles = makeStyles(theme => ({
 		background: theme.palette.secondary.grey.light,
 	},
 	media: {
-		height: '100%',
-		paddingTop: '56.25%', // 16:9
+		height: '400px',
+		objectFit: 'contain',
+		backgroundColor: theme.pallete.primary.gradient,
+		// overflowX: 'auto',
+		// paddingTop: '56.25%', // 16:9
+		// width: '100%',
+		// flexShrink: 0,
+		// minWidth: '100%',
+		// minHeight: '100%',
 	},
 	expand: {
 		transform: 'rotate(0deg)',
@@ -53,7 +60,7 @@ const useStyles = makeStyles(theme => ({
 	},
 	prevPhotoButton: { transform: 'rotate(180deg)' },
 	moreInfo: {
-		overflowX: 'auto',
+		// overflowX: 'auto',
 		background: theme.palette.secondary.grey.light,
 	},
 }));
@@ -63,13 +70,11 @@ export default function PhotoCard({ animalInfo }) {
 	const [openAddCanvas, setOpenAddCanvas] = useState(false);
 	const [expanded, setExpanded] = React.useState(false);
 	const [canvasUrl, setCanvasUrl] = useState('');
-	const { errorMessage, successMessage } = useContext(MessageContext);
+	const { errorMessage, message } = useContext(MessageContext);
 	const { photosDispatch } = useContext(DispatchContext);
 	const classes = useStyles();
 	const history = useHistory();
 	const { photos, canvas_photo_id, animal } = animalInfo;
-
-	const totalPhotos = () => photos.length;
 
 	const getCanvasPhoto = () => {
 		return photos.filter(p => p.id === canvas_photo_id)[0];
@@ -107,10 +112,10 @@ export default function PhotoCard({ animalInfo }) {
 					setOpenAddCanvas(false);
 					setExpanded(false);
 					photosDispatch({
-						type: 'REMOVE_ANIMAL_PHOTOS',
+						type: 'REMOVE_ANIMAL',
 						payload: res.id,
 					});
-					successMessage('Canvas Photo has been added to the database');
+					message('Success!', 'Canvas Photo has been added to the database');
 				}
 			})
 			.catch(err => console.log(err));
@@ -152,6 +157,7 @@ export default function PhotoCard({ animalInfo }) {
 			/>
 			<CardMedia
 				className={classes.media}
+				component='img'
 				// image='https://drive.google.com/uc?export=view&id=13xmQNRWPiICreCTeWqLxfe_8meH5V82t'
 				// image='https://drive.google.com/file/d/1a-0KMtSagc5ZbRYcNLsTrjKWpTwlhxAv/view?usp=sharing'
 				image={profilePhotoUrl()}

@@ -17,7 +17,7 @@ function CanvasPhotoForm({ photoId }) {
 	const [canvasUrl, setCanvasUrl] = useState('');
 	const { animal } = useContext(StateContext);
 	const { animalDispatch } = useContext(DispatchContext);
-	const { errorMessage, successMessage } = useContext(MessageContext);
+	const { errorMessage, message } = useContext(MessageContext);
 
 	const handleOpenForm = () => {
 		setOpenForm(!openForm);
@@ -44,7 +44,7 @@ function CanvasPhotoForm({ photoId }) {
 			.createCanvasPhoto(canvasPhoto, animal.id)
 			.then(res => {
 				if (res.error) {
-					return errorMessage;
+					return errorMessage();
 				} else {
 					console.log(res);
 					setCanvasUrl('');
@@ -53,7 +53,7 @@ function CanvasPhotoForm({ photoId }) {
 						type: 'UPDATE',
 						payload: res,
 					});
-					successMessage('Canvas Photo has been added to the database');
+					message('Success!', 'Canvas Photo has been added to the database');
 				}
 			})
 			.catch(err => console.log(err));
@@ -68,7 +68,7 @@ function CanvasPhotoForm({ photoId }) {
 			.updatePhoto(updatedPhoto)
 			.then(res => {
 				if (res.error) {
-					return errorMessage;
+					return errorMessage();
 				} else {
 					setCanvasUrl('');
 					setOpenForm(false);
@@ -76,7 +76,7 @@ function CanvasPhotoForm({ photoId }) {
 						type: 'UPDATE_PHOTO',
 						payload: res,
 					});
-					successMessage('Canvas Photo has been added to the database');
+					message('Canvas Photo has been added to the database');
 				}
 			})
 			.catch(err => console.log(err));

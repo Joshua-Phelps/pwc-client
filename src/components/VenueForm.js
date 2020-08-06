@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { api } from '../services/api';
-import { DispatchContext } from '../App';
+import { DispatchContext, MessageContext } from '../App';
 import VenueFormHeader from './VenueFormHeader';
 import { states } from '../utils/index';
 import {
@@ -55,6 +55,7 @@ export default function VenueForm({ max_paintings, venueType, venue }) {
 		paintLocsDispatch,
 		dialogDispatch,
 	} = useContext(DispatchContext);
+	const { errorMessage } = useContext(MessageContext);
 
 	useEffect(() => {
 		if (venue) {
@@ -66,34 +67,21 @@ export default function VenueForm({ max_paintings, venueType, venue }) {
 		e.preventDefault();
 		if (venueType === 'Gallery') {
 			api.galleries.createGallery(form).then(res => {
-				if (res.error) return displayDialogMessage();
+				if (res.error) return errorMessage();
 				console.log(res);
 				return galleriesDispatch({ type: 'ADD', payload: res });
 			});
 		} else if (venueType === 'Shelter') {
 			api.shelters.createShelter(form).then(res => {
-				if (res.error) return displayDialogMessage();
+				if (res.error) return errorMessage();
 				sheltersDispatch({ type: 'ADD', payload: res });
 			});
 		} else if (venueType === 'Paint Location') {
 			api.paintLocs.createPaintLoc(form).then(res => {
-				if (res.error) return displayDialogMessage();
+				if (res.error) return errorMessage();
 				paintLocsDispatch({ type: 'ADD', payload: res });
 			});
 		}
-	};
-
-	const displayDialogMessage = () => {
-		return dialogDispatch({
-			type: 'SET',
-			payload: {
-				title: 'Unable to create!',
-				message: 'Please try again',
-				// buttonText: 'Login Page',
-				// handleButton: visitLogin,
-				open: true,
-			},
-		});
 	};
 
 	const handleChange = ({ target: { name, value } }) => {

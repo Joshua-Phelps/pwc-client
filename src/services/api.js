@@ -55,6 +55,7 @@ const addFileToDB = formData => {
 		method: 'POST',
 		headers: {
 			Accept: 'application/json',
+			// 'Content-Type': 'text/html; charset=UTF-8',
 			Authorization: token(),
 		},
 		body: formData,

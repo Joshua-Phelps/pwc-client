@@ -72,7 +72,7 @@ export default function PaintingForm() {
 		if (paintingId) {
 			fetchPainting()
 				.then(res => {
-					if (res.error) return errorMessage;
+					if (res.error) return errorMessage();
 					return setForm(res);
 				})
 				.then(() => setLoaded(true))
@@ -127,7 +127,9 @@ export default function PaintingForm() {
 				.then(painting => {
 					console.log(painting);
 					if (updateAnimal) updateAnimalPaintings(painting);
-					if (updateGallery) updateGalleryPaintings(painting);
+					if (updateGallery) {
+						updateGalleryPaintings(painting);
+					}
 				})
 				.catch(err => console.log(err));
 		} else {

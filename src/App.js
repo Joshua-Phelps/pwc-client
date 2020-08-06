@@ -249,13 +249,15 @@ function App() {
 		});
 	};
 
-	const successMessage = message => {
+	const message = (title, message, ...btnArgs) => {
 		return dialogDispatch({
 			type: 'SET',
 			payload: {
-				title: 'Success!',
-				open: true,
+				title,
 				message,
+				open: true,
+				buttonText: btnArgs[1],
+				handleButton: btnArgs[2],
 			},
 		});
 	};
@@ -274,7 +276,7 @@ function App() {
 	};
 
 	const auth = { login, logout, user };
-	const messages = { errorMessage, successMessage, confirmMessage };
+	const messages = { message, errorMessage };
 
 	return (
 		<MuiThemeProvider theme={theme}>

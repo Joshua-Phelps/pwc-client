@@ -24,62 +24,87 @@ const useStyles = makeStyles(theme => ({
 	},
 }));
 
+const initSt = {
+	venueType: '',
+	openAnimalForm: false,
+	openPermsForm: false,
+	showFileSubmit: false,
+	file: null,
+};
+
 export default function AdminPage() {
 	const classes = useStyles();
-	const [venueType, setVenueType] = useState('');
-	const [openAnimalForm, setOpenAnimalForm] = useState('');
-	const [openAddPermissionsForm, setOpenAddPermissionsForm] = useState('');
-	const [showSubmitFileButton, setsShowSubmitFileButton] = useState(false);
-	const [file, setFile] = useState(null);
+	const [venueType, setVenueType] = useState(initSt.venueType);
+	const [openAnimalForm, setOpenAnimalForm] = useState(initSt.openAnimalForm);
+	const [openPermsForm, setOpenPermsForm] = useState(initSt.openPermsForm);
+	const [showFileSubmit, setShowFileSubmit] = useState(initSt.showFileSubmit);
+	const [file, setFile] = useState(initSt.file);
 	const { user } = useContext(AuthContext);
-	const { errorMessage, successMessage } = useContext(MessageContext);
+	const { message, errorMessage } = useContext(MessageContext);
+
+	// const clearState = ( ...args) => {
+	// 	let setState = {
+	// 		venueType: setVenueType(initSt.venueType),
+	// 		openAnimalForm: setOpenAnimalForm(initSt.openAnimalForm),
+	// 		openPermsForm: setOpenPermsForm(intiSt.openPermsForm),
+	// 		showFileSubmit: setShowFileSubmit(intiSt.showFileSubmit),
+	// 		file: setFile(initSt.file)
+	// 	};
+	// 	if (!args) return obj.forEach(func => func);
+	// 	args.forEach(() => setState[state])
+	// };
 
 	const handleVenueClick = type => {
 		setVenueType(type);
-		setOpenAnimalForm('');
-		setOpenAddPermissionsForm(false);
+		setOpenAnimalForm(initSt.openAnimalForm);
+		setOpenPermsForm(initSt.openPermsForm);
 	};
 
 	const handleAnimalClick = () => {
 		setOpenAnimalForm(!openAnimalForm);
-		setVenueType('');
-		setOpenAddPermissionsForm(false);
+		setVenueType(initSt.venueType);
+		setOpenPermsForm(initSt.openPermsForm);
 	};
 
 	const handleAddPermissionsClick = () => {
-		setOpenAddPermissionsForm(!openAddPermissionsForm);
-		setOpenAnimalForm('');
-		setVenueType('');
+		setOpenPermsForm(!openPermsForm);
+		setOpenAnimalForm(initSt.openAnimalForm);
+		setVenueType(initSt.venueType);
 	};
 
 	const handleUploadFileClick = () => {
-		setsShowSubmitFileButton(!showSubmitFileButton);
-		setOpenAnimalForm('');
-		setVenueType('');
-		setOpenAddPermissionsForm(false);
+		setShowFileSubmit(!showFileSubmit);
+		setOpenAnimalForm(initSt.openAnimalForm);
+		setVenueType(initSt.venueType);
+		setOpenPermsForm(initSt.openPermsForm);
 	};
 
 	const handleSubmitFile = () => {
 		let formData = new FormData();
 		formData.append('data', file);
-		successMessage(
+		message(
+			'Please Wait...',
 			`Adding files to database. Please stay on this page until complete`
 		);
 
 		api.fileUpload
 			.addFileToDB(formData)
 			.then(res => {
+				console.log(res);
 				if (res.error) {
 					return errorMessage();
 				} else {
-					successMessage(
-						`You have added ${res.animal_count} animals to the database`
+					let aniCount = res.animals.length;
+					message(
+						'Success!',
+						`You have added ${res.animals.length} animals to the database`
 					);
 				}
-				setsShowSubmitFileButton(false);
-				setOpenAnimalForm('');
-				setVenueType('');
-				setOpenAddPermissionsForm(false);
+				setShowFileSubmit(initSt.showFileSubmit);
+				setOpenAnimalForm(initSt.setOpenAnimalForm);
+				setVenueType(initSt.venueType);
+				setOpenPermsForm(initSt.openPermsForm);
+				setFile(initSt.file);
 			})
 			.catch(err => console.log(err));
 
@@ -96,8 +121,13 @@ export default function AdminPage() {
 
 	const handleFileChange = e => {
 		setFile(e.target.files[0]);
-		setsShowSubmitFileButton(!showSubmitFileButton);
-		console.log(e.target.files);
+		setShowFileSubmit(!showFileSubmit);
+	};
+
+	const handleFileClick = () => {
+		setOpenAnimalForm(initSt.setOpenAnimalForm);
+		setVenueType(initSt.venueType);
+		setOpenPermsForm(initSt.openPermsForm);
 	};
 
 	return (
@@ -153,9 +183,8 @@ export default function AdminPage() {
 									</div>
 									<div className={classes.buttonContainer}>
 										<FileForm
-											// showButton={showSubmitFileButton}
-											// setShowButton={handleUploadFileClick}
-											handleFileChange={handleFileChange}
+											handleClick={handleFileClick}
+											handleChange={handleFileChange}
 										/>
 									</div>
 								</>
@@ -169,8 +198,8 @@ export default function AdminPage() {
 
 						{user.permission_level > 2 && (
 							<>
-								{openAddPermissionsForm && <PermissionsForm />}
-								{showSubmitFileButton && (
+								{openPermsForm && <PermissionsForm />}
+								{showFileSubmit && (
 									<FileFormSubmit handleSubmit={handleSubmitFile} />
 								)}
 							</>

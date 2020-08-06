@@ -22,14 +22,12 @@ function PhotosContainer({ location: { pathname } }) {
 		let path = pathname.split('/photos/')[1];
 		if (path === 'full-background') {
 			api.photos.getFullBgPhotos().then(res => {
-				if (res.error) return errorMessage;
-				console.log(res);
+				if (res.error) return errorMessage();
 				photosDispatch({ type: 'SET', payload: res });
 			});
 		} else if (path === 'print-ready') {
 			api.photos.getPrintReadyPhotos().then(res => {
-				if (res.error) return errorMessage;
-				console.log(res);
+				if (res.error) return errorMessage();
 				photosDispatch({ type: 'SET', payload: res });
 			});
 		}

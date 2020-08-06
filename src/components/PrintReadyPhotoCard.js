@@ -49,9 +49,7 @@ export default function PhotoCard({ animalInfo }) {
 	const [photoIdx, setPhotoIdx] = useState(0);
 	const [openAddCanvas, setOpenAddCanvas] = useState(false);
 	const [canvasUrl, setCanvasUrl] = useState('');
-	const { errorMessage, successMessage, confirmMessage } = useContext(
-		MessageContext
-	);
+	const { errorMessage, message } = useContext(MessageContext);
 	const { photosDispatch } = useContext(DispatchContext);
 	const classes = useStyles();
 	const history = useHistory();
@@ -62,7 +60,7 @@ export default function PhotoCard({ animalInfo }) {
 		api.animals
 			.updateAnimal(updatedAnimal)
 			.then(res => {
-				if (res.error) return errorMessage;
+				if (res.error) return errorMessage();
 				photosDispatch({ type: 'REMOVE_ANIMAL', payload: res.id });
 				console.log(res);
 			})
@@ -70,8 +68,11 @@ export default function PhotoCard({ animalInfo }) {
 	};
 
 	const handleMarkPrinted = () => {
-		confirmMessage('This will mark this photo as Printed', 'Continue', () =>
-			handleContinue()
+		message(
+			'Are You Sure?',
+			'This will mark this photo as Printed',
+			'Continue',
+			() => handleContinue()
 		);
 	};
 

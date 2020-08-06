@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { Box, Button, Typography, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import PhoneIcon from '@material-ui/icons/Phone';
@@ -35,12 +36,12 @@ const useStyles = makeStyles(theme => ({
 
 export default function VenueCard({
 	venue: { name, phone_number, email, address },
-	history,
 	pushPath,
 	buttonText,
 	totalPaintings,
 }) {
 	const classes = useStyles();
+	const history = useHistory();
 
 	const handleClick = () => {
 		history.push(pushPath);

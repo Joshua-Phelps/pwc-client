@@ -65,6 +65,7 @@ export default function NavBarLarge({ handleNavigate, history }) {
 		setAnchorEl(null);
 		cb && cb();
 		history.push(path);
+		// setSearchBarClosed
 	};
 
 	return (

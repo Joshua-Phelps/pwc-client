@@ -13,15 +13,20 @@ const useStyles = makeStyles(theme => ({
 	},
 }));
 
-function FileFormSubmit({ handleSubmit }) {
-	const classes = useStyles();
+function FileFormSubmit({ handleSubmit, file }) {
+  const classes = useStyles();
+  
+  const handleClick = () => {
+    handleSubmit(file)
+  }
+
 	return (
 		<Grid container className={classes.container}>
 			<Grid item xs={2} sm={4}></Grid>
 			<Grid className={classes.item} item xs={8} sm={4}>
 				<Button
 					className={classes.button}
-					onClick={handleSubmit}
+					onClick={handleClick}
 					color='primary'
 					variant='contained'>
 					Submit to Database

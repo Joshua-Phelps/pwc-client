@@ -14,7 +14,7 @@ const useStyles = makeStyles(theme => ({
 	},
 }));
 
-function GalleryCardsContainer({ history }) {
+function GalleryCardsContainer() {
 	const classes = useStyles();
 	const { galleries } = useContext(StateContext);
 
@@ -26,7 +26,6 @@ function GalleryCardsContainer({ history }) {
 						venue={gallery}
 						buttonText='Visit Gallery'
 						pushPath={`/galleries/${gallery.id}`}
-						history={history}
 						totalPaintings={gallery.paintings.length}
 					/>
 				</Grid>

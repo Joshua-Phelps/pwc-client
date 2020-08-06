@@ -29,7 +29,7 @@ export default function PaintingsTable() {
 	const { animalDispatch, paintFormPropsDispatch, dialogDispatch } = useContext(
 		DispatchContext
 	);
-	const { confirmMessage } = useContext(MessageContext);
+	const { message } = useContext(MessageContext);
 	const { paintings } = animal;
 
 	const handleEdit = id => {
@@ -60,7 +60,8 @@ export default function PaintingsTable() {
 	};
 
 	const handleDelete = id => {
-		confirmMessage(
+		message(
+			'Are you Sure',
 			'There is no going back. This will permenently delete this painting',
 			'Continue',
 			() => handleContinue(id)

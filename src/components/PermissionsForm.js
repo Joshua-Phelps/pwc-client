@@ -38,7 +38,7 @@ const useStyles = makeStyles(theme => ({
 export default function PermissionsForm() {
 	const classes = useStyles();
 	const { dialogDispatch } = useContext(DispatchContext);
-	const { errorMessage, successMessage } = useContext(MessageContext);
+	const { errorMessage, message } = useContext(MessageContext);
 	const [userId, setUserId] = useState(null);
 	const [users, setUsers] = useState([]);
 	const [permissionLevel, setPermissionLevel] = useState(null);
@@ -65,7 +65,12 @@ export default function PermissionsForm() {
 
 	const handleSubmit = e => {
 		e.preventDefault();
-		confirmMessage();
+		message(
+			'Are You Sure?',
+			'This user will have level ${permissionLevel} access',
+			'Continue',
+			updateUserPermissions
+		);
 	};
 
 	const confirmMessage = () => {
@@ -86,7 +91,7 @@ export default function PermissionsForm() {
 			.updatePermissions(userId, permissionLevel)
 			.then(res => {
 				if (res.error) return errorMessage();
-				return successMessage('User permissions have been updated!');
+				return message('User permissions have been updated!');
 			})
 			.then(() => clearState())
 			.catch(err => console.log(err));

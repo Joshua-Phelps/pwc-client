@@ -23,7 +23,8 @@ import { render } from '@testing-library/react';
 
 const useStyles = makeStyles(theme => ({
 	largeContainer: {
-		padding: theme.spacing(1),
+		// padding: theme.spacing(1),
+		margin: '-17px',
 	},
 	smallContainer: {
 		padding: theme.spacing(5),
@@ -53,7 +54,6 @@ export default function SearchAnimal() {
 	const history = useHistory();
 	const classes = useStyles();
 	const { galleries, shelters, paintLocs, photos } = useContext(StateContext);
-	const { errorMessage } = useContext(MessageContext);
 	const { photosDispatch } = useContext(DispatchContext);
 	const [select1, setSelect1] = useState('');
 	const [select2, setSelect2] = useState('');
@@ -62,17 +62,18 @@ export default function SearchAnimal() {
 	const getId = (arr, name) => arr.filter(el => el.name === name && el.id)[0];
 
 	const firstOptions = {
-		tasks: ['Photos'],
+		tasks: ['Tasks'],
 		animals: ['Animals'],
 		other: ['Galleries', 'Shelters', 'Paint Locations'],
 	};
 	const secondOptions = {
-		tasks: ['Full Background', 'Print Ready'],
+		tasks: ['Photos That Need Background Removed', 'Print Ready'],
 		animals: ['ID', 'Name'],
 	};
-	const allFirstOptions = firstOptions.tasks
-		.concat(firstOptions.animals)
-		.concat(firstOptions.other);
+	const allFirstOptions = firstOptions.tasks.concat(
+		firstOptions.animals,
+		firstOptions.other
+	);
 
 	const handleChange = (e, setState, inputNum) => {
 		if (inputNum === 1) {
@@ -85,7 +86,7 @@ export default function SearchAnimal() {
 	const handleSubmit = e => {
 		e.preventDefault();
 		// for Photos
-		if (hasValues(select1, firstOptions.tasks)) {
+		if (firstOptions.tasks.includes(select1)) {
 			if (select2 === secondOptions.tasks[0]) {
 				return history.push('/photos/full-background');
 			} else {
@@ -93,7 +94,7 @@ export default function SearchAnimal() {
 			}
 
 			// for ANIMALS
-		} else if (hasValues(select1, firstOptions.animals)) {
+		} else if (firstOptions.animals.includes(select1)) {
 			if (!textField)
 				return alert(`Please enter animal ${select2.toLowerCase()}`);
 			if (select2 === secondOptions.animals[0]) {
@@ -158,13 +159,6 @@ export default function SearchAnimal() {
 		});
 	};
 
-	const hasValues = (state, values) => {
-		for (let i = 0; i < values.length; i++) {
-			if (values[i] === state) return true;
-		}
-		return false;
-	};
-
 	const renderGrid = () => {
 		return (
 			<>
@@ -187,16 +181,16 @@ export default function SearchAnimal() {
 					</FormControl>
 				</Grid>
 
-				{hasValues(select1, allFirstOptions) && (
+				{allFirstOptions.includes(select1) && (
 					<Grid item xs={10} sm={3}>
 						<FormControl
 							color='primary'
 							variant='outlined'
 							className={classes.formControl}>
 							<InputLabel className={classes.label} id='select-attribute-label'>
-								{hasValues(select1, firstOptions.tasks) && 'Filter'}
-								{hasValues(select1, firstOptions.animals) && 'By'}
-								{hasValues(select1, firstOptions.other) && 'Name'}
+								{firstOptions.tasks.includes(select1) && 'Task'}
+								{firstOptions.animals.includes(select1) && 'By'}
+								{firstOptions.other.includes(select1) && 'Name'}
 							</InputLabel>
 							<Select
 								labelId='select-attribute-label'
@@ -204,26 +198,22 @@ export default function SearchAnimal() {
 								value={select2}
 								name='input-two'
 								onChange={e => handleChange(e, setSelect2, 2)}>
-								{hasValues(select1, firstOptions.tasks) &&
+								{firstOptions.tasks.includes(select1) &&
 									renderMenuItems(secondOptions.tasks)}
-
-								{hasValues(select1, firstOptions.animals) &&
+								{firstOptions.animals.includes(select1) &&
 									renderMenuItems(secondOptions.animals)}
-
-								{hasValues(select1, [firstOptions.other[0]]) &&
+								{firstOptions.other[0] === select1 &&
 									renderOtherMenuItems(galleries)}
-
-								{hasValues(select1, [firstOptions.other[1]]) &&
+								{firstOptions.other[1] === select1 &&
 									renderOtherMenuItems(shelters)}
-
-								{hasValues(select1, [firstOptions.other[2]]) &&
+								{firstOptions.other[2] === select1 &&
 									renderOtherMenuItems(paintLocs)}
 							</Select>
 						</FormControl>
 					</Grid>
 				)}
 
-				{hasValues(select1, firstOptions.animals) && (
+				{firstOptions.animals.includes(select1) && (
 					<Grid item xs={10} sm={3}>
 						<div className={classes.formControl}>
 							<TextField
