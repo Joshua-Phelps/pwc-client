@@ -27,20 +27,14 @@ const useStyles = makeStyles(theme => ({
 		// height: '45vh',
 	},
 	header: {
-		height: '10px',
+		height: '30px',
 		textAlign: 'center',
 		background: theme.palette.secondary.grey.light,
 	},
 	media: {
 		height: '400px',
 		objectFit: 'contain',
-		backgroundColor: theme.pallete.primary.gradient,
-		// overflowX: 'auto',
-		// paddingTop: '56.25%', // 16:9
-		// width: '100%',
-		// flexShrink: 0,
-		// minWidth: '100%',
-		// minHeight: '100%',
+		background: theme.palette.secondary.grey.light,
 	},
 	expand: {
 		transform: 'rotate(0deg)',
@@ -56,12 +50,12 @@ const useStyles = makeStyles(theme => ({
 		padding: theme.spacing(1),
 	},
 	actionsContainer: {
-		background: theme.palette.secondary.grey.light,
+		background: theme.palette.secondary.grey.main,
 	},
 	prevPhotoButton: { transform: 'rotate(180deg)' },
 	moreInfo: {
 		// overflowX: 'auto',
-		background: theme.palette.secondary.grey.light,
+		background: theme.palette.secondary.grey.main,
 	},
 }));
 
