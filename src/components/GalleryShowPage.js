@@ -89,12 +89,12 @@ export default function GalleryShowPage({ location }) {
 					/>
 					<div className={classes.paintingsDisplay}>
 						<div className={classes.buttonContainer}>
-							<Button
+							{/* <Button
 								variant='contained'
 								color='secondary'
 								onClick={handleAddPainting}>
 								Add Painting
-							</Button>
+							</Button> */}
 						</div>
 						{paintings.length > 0 ? (
 							<>

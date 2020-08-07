@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
 		background: theme.palette.secondary.grey.light,
 	},
 	media: {
-		height: '400px',
+		// height: '400px',
 		objectFit: 'contain',
 		background: theme.palette.secondary.grey.light,
 	},
@@ -132,6 +132,7 @@ export default function PhotoCard({ animalInfo }) {
 				className={classes.media}
 				component='img'
 				image={profilePhotoUrl()}
+				height='200'
 				title={'animal-photo'}
 			/>
 			<CardActions className={classes.actionsContainer} disableSpacing>

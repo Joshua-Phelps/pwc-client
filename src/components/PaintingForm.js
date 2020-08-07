@@ -102,7 +102,7 @@ export default function PaintingForm() {
 
 	const updateGalleryPaintings = painting => {
 		galleryDispatch({
-			type: 'UPDATE_PAINTING',
+			type: 'REMOVE_PAINTING',
 			payload: painting,
 		});
 	};
@@ -125,8 +125,8 @@ export default function PaintingForm() {
 				.updatePainting(painting)
 				.then(res => {
 					if (res.error) return errorMessage();
-					return updateAnimal && updateAnimalPaintings(res);
-					return updateGallery && updateGalleryPaintings(res);
+					updateAnimal && updateAnimalPaintings(res);
+					updateGallery && updateGalleryPaintings(res);
 				})
 				.catch(err => console.log(err));
 		} else {

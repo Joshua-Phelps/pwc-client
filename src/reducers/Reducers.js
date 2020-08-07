@@ -6,6 +6,7 @@ const CLEAR = 'CLEAR';
 const UPDATE = 'UPDATE';
 const ADD = 'ADD';
 const REMOVE = 'REMOVE';
+const REMOVE_PAINTING = 'REMOVE_PAINTING';
 const UPDATE_PHOTO = 'UPDATE_PHOTO';
 const ADD_PAINTING = 'ADD_PAINTING';
 const UPDATE_PAINTING = 'UPDATE_PAINTING';
@@ -83,11 +84,14 @@ const galleryReducer = (state, action) => {
 	switch (action.type) {
 		case SET:
 			return { ...action.payload };
+		case REMOVE_PAINTING:
+			paintings = state.paintings.filter(p => p.id !== action.payload.id);
+			return { ...state, paintings };
 		case UPDATE_PAINTING:
 			paintings = state.paintings.map(p => {
 				return p.id === action.payload.id ? action.payload : p;
 			});
-			return { ...state, paintings: paintings };
+			return { ...state, paintings };
 		default:
 			return state;
 	}

@@ -45,7 +45,7 @@ export default function TabsPanelContainer({ value }) {
 		});
 	};
 
-	const currentGalleries = () => {
+	const currentDisplayedPaintings = () => {
 		let result = [];
 		for (let i = 0; i < animal.paintings.length; i++) {
 			if (animal.paintings[i].gallery_id) {
@@ -54,9 +54,8 @@ export default function TabsPanelContainer({ value }) {
 				);
 				if (foundGallery) {
 					result.push({
-						paintingId: animal.paintings[i].id,
-						name: foundGallery.name,
-						card_stock: '#',
+						painting: animal.paintings[i],
+						galleryName: foundGallery.name,
 					});
 				}
 			}
@@ -65,8 +64,14 @@ export default function TabsPanelContainer({ value }) {
 	};
 
 	const renderDisplayedPaintings = () => {
-		return currentGalleries().map((g, idx) => {
-			return <TabPanelDisplayedPaintings key={idx} gallery={g} />;
+		return currentDisplayedPaintings().map((dp, idx) => {
+			return (
+				<TabPanelDisplayedPaintings
+					key={idx}
+					painting={dp.painting}
+					galleryName={dp.galleryName}
+				/>
+			);
 		});
 	};
 

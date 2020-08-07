@@ -9,6 +9,7 @@ import {
 	Typography,
 	Grid,
 	makeStyles,
+	CardMedia,
 } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
@@ -61,13 +62,12 @@ export default function PaintingCard({ painting, galleryName }) {
 							: painting.painting_status}
 					</Typography>
 				</CardContent>
-				{/* <CardMedia
+				<CardMedia
 					component='img'
-					alt='Contemplative Reptile'
+					alt='Painting'
 					height='140'
-					image={painting.url}
-					title='Contemplative Reptile'
-				/> */}
+					image={painting.visible_url || ''}
+				/>
 			</CardActionArea>
 			<CardActions>
 				<Grid className={classes.center} container>
