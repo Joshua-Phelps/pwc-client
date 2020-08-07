@@ -1,4 +1,5 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
+import clsx from 'clsx';
 import { StateContext, DispatchContext, MessageContext } from '../App';
 import { api } from '../services/api';
 import {
@@ -10,11 +11,33 @@ import {
 	TableRow,
 	Paper,
 	Typography,
+	makeStyles,
 } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 
+const useStyles = makeStyles(theme => ({
+	imageContainer: {
+		height: '70px',
+		width: '70px',
+	},
+	image2Container: {
+		height: '700px',
+		width: '700px',
+	},
+	image: {
+		height: '70px',
+		width: '70px',
+	},
+	image2: {
+		height: '700px',
+		width: '700px',
+	},
+}));
+
 export default function PaintingsTable() {
+	const classes = useStyles();
+	const [mouseOver, setMouseOver] = useState(false);
 	const { galleries, paintLocs, animal } = useContext(StateContext);
 	const { animalDispatch, paintFormPropsDispatch, dialogDispatch } = useContext(
 		DispatchContext
@@ -79,6 +102,23 @@ export default function PaintingsTable() {
 					<TableCell align='center'>
 						<Typography variant='body2'>{p.id}</Typography>
 					</TableCell>
+					<TableCell>
+						{p.google_drive_url && (
+							<div className={classes.imageContainer}>
+								<a href={p.google_drive_url || ''} target='_blank'>
+									<span>
+										{console.log(p)}
+										<img
+											className={classes.image}
+											onMouseOut={() => setMouseOver(false)}
+											onMouseOver={() => setMouseOver(true)}
+											src={p.visible_url || ''}
+										/>
+									</span>
+								</a>
+							</div>
+						)}
+					</TableCell>
 					<TableCell align='center'>
 						<Typography variant='body2'>{p.painting_status}</Typography>
 					</TableCell>
@@ -112,6 +152,11 @@ export default function PaintingsTable() {
 						<TableCell align='center'>
 							<Typography variant='overline'>
 								<b>Painting ID</b>
+							</Typography>
+						</TableCell>
+						<TableCell align='center'>
+							<Typography variant='overline'>
+								<b>Image</b>
 							</Typography>
 						</TableCell>
 						<TableCell align='center'>

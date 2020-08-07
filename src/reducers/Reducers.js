@@ -48,7 +48,7 @@ const animalReducer = (state, action) => {
 			paintings = state.paintings.map(p => {
 				return p.id === action.payload.id ? action.payload : p;
 			});
-			return { ...state, paintings: paintings };
+			return { ...state, paintings };
 		case DELETE_PAINTING:
 			paintings = state.paintings.filter(p => p.id !== action.payload);
 			return { ...state, paintings: paintings };

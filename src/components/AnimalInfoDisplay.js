@@ -90,8 +90,9 @@ export default function AnimalInfoDisplay() {
 							<Tab label='Details' {...a11yProps(0)} />
 							<Tab label='Shelter' {...a11yProps(1)} />
 							<Tab label='Photos' {...a11yProps(2)} />
-							<Tab label='Galleries' {...a11yProps(3)} />
+							<Tab label='Displayed Paintings' {...a11yProps(3)} />
 							<Tab label='Canvas Photo' {...a11yProps(4)} />
+							{/* <Tab label='All Paintings' {...a11yProps(4)} /> */}
 						</Tabs>
 					</Grid>
 
@@ -106,7 +107,7 @@ export default function AnimalInfoDisplay() {
 							<Tab label='Details' {...a11yProps(0)} />
 							<Tab label='Shelter' {...a11yProps(1)} />
 							<Tab label='Photos' {...a11yProps(2)} />
-							<Tab label='Galleries' {...a11yProps(3)} />
+							<Tab label='Displayed Paintings' {...a11yProps(3)} />
 							<Tab label='Canvas Photo' {...a11yProps(4)} />
 						</Tabs>
 					</Grid>

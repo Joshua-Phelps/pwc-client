@@ -7,6 +7,7 @@ const paintFormProps = {
 	animalId: null,
 	animalName: '',
 	open: false,
+	googleDriveUrl: '',
 };
 
 export const initialState = { dialog, paintFormProps };

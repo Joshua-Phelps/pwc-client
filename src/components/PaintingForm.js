@@ -46,6 +46,8 @@ const initialState = {
 	paint_location_id: null,
 	card_stock: 0,
 	gallery_id: null,
+	google_drive_url: '',
+	visible_url: '',
 };
 
 export default function PaintingForm() {
@@ -121,21 +123,20 @@ export default function PaintingForm() {
 		if (form.id) {
 			api.paintings
 				.updatePainting(painting)
-				.then(painting => {
-					console.log(painting);
-					if (updateAnimal) updateAnimalPaintings(painting);
-					if (updateGallery) {
-						updateGalleryPaintings(painting);
-					}
+				.then(res => {
+					if (res.error) return errorMessage();
+					return updateAnimal && updateAnimalPaintings(res);
+					return updateGallery && updateGalleryPaintings(res);
 				})
 				.catch(err => console.log(err));
 		} else {
 			api.paintings
 				.createPainting(painting)
-				.then(painting => {
-					if (updateAnimal) addPainting(painting);
+				.then(res => {
+					if (res.error) return errorMessage();
+					updateAnimal && addPainting(res);
+					setForm(initialState);
 				})
-				.then(() => setForm(initialState))
 				.catch(err => console.log(err));
 		}
 	};
@@ -224,7 +225,7 @@ export default function PaintingForm() {
 									<Select
 										labelId='select-paint-location-label'
 										id='select-paint-location'
-										value={form.paint_location_id}
+										value={form.paint_location_id || ''}
 										name='paint_location_id'
 										onChange={handleChange}>
 										{renderPaintLocationValues()}
@@ -236,11 +237,10 @@ export default function PaintingForm() {
 								<FormControl className={classes.formControl}>
 									<TextField
 										InputLabelProps={{ shrink: true }}
-										label='Card Stock'
-										id='card-stock'
-										type='number'
-										value={form.card_stock}
-										name='card_stock'
+										label='Google Drive URL'
+										id='url-field'
+										value={form.google_drive_url}
+										name='google_drive_url'
 										onChange={handleChange}></TextField>
 								</FormControl>
 
@@ -263,19 +263,33 @@ export default function PaintingForm() {
 								<br></br>
 
 								{form.painting_status === 'Displayed' && (
-									<FormControl className={classes.formControl}>
-										<InputLabel shrink={true} id='select-gallery-label'>
-											Gallery
-										</InputLabel>
-										<Select
-											labelId='select-gallery-label'
-											id='simple-select-status'
-											value={form.gallery_id}
-											name='gallery_id'
-											onChange={handleChange}>
-											{renderGalleryValues()}
-										</Select>
-									</FormControl>
+									<>
+										<FormControl className={classes.formControl}>
+											<InputLabel shrink={true} id='select-gallery-label'>
+												Gallery
+											</InputLabel>
+											<Select
+												labelId='select-gallery-label'
+												id='simple-select-status'
+												value={form.gallery_id}
+												name='gallery_id'
+												onChange={handleChange}>
+												{renderGalleryValues()}
+											</Select>
+
+											<br></br>
+										</FormControl>
+										<FormControl className={classes.formControl}>
+											<TextField
+												InputLabelProps={{ shrink: true }}
+												label='Card Stock'
+												id='card-stock'
+												type='number'
+												value={form.card_stock}
+												name='card_stock'
+												onChange={handleChange}></TextField>
+										</FormControl>
+									</>
 								)}
 
 								<br></br>
