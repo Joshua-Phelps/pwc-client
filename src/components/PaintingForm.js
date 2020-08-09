@@ -53,7 +53,9 @@ const initialState = {
 export default function PaintingForm() {
 	const classes = useStyles();
 	const [loaded, setLoaded] = useState(false);
-	const { galleries, paintLocs, paintFormProps } = useContext(StateContext);
+	const { galleries, paintLocs, paintFormProps, gallery } = useContext(
+		StateContext
+	);
 	const {
 		animalDispatch,
 		galleryDispatch,
@@ -101,10 +103,17 @@ export default function PaintingForm() {
 	};
 
 	const updateGalleryPaintings = painting => {
-		galleryDispatch({
-			type: 'REMOVE_PAINTING',
-			payload: painting,
-		});
+		if (painting.gallery_id !== gallery.id) {
+			galleryDispatch({
+				type: 'REMOVE_PAINTING',
+				payload: painting,
+			});
+		} else {
+			galleryDispatch({
+				type: 'UPDATE_PAINTING',
+				payload: painting,
+			});
+		}
 	};
 
 	const handleChange = ({ target: { name, value } }) => {
@@ -146,9 +155,8 @@ export default function PaintingForm() {
 
 	const renderStatusValues = () => {
 		const statusValues = [
-			'Photo',
 			'Outline',
-			'Touch up',
+			'Needs Touch up',
 			'Painted',
 			'Displayed',
 			'Sold',

@@ -97,15 +97,11 @@ export default function TabsPanelContainer({ value }) {
 				<TabPanelShelter />
 			</TabPanel>
 
-			<TabPanel className={classes.imageContainer} value={value} index={2}>
-				{renderPhotos()}
-			</TabPanel>
-
-			<TabPanel value={value} index={3}>
+			<TabPanel value={value} index={2}>
 				{renderDisplayedPaintings()}
 			</TabPanel>
 
-			<TabPanel value={value} index={4}>
+			<TabPanel value={value} index={3}>
 				{animal.canvas_photo_id ? (
 					renderCanvasPhoto()
 				) : (

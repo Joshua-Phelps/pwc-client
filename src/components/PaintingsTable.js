@@ -107,7 +107,6 @@ export default function PaintingsTable() {
 							<div className={classes.imageContainer}>
 								<a href={p.google_drive_url || ''} target='_blank'>
 									<span>
-										{console.log(p)}
 										<img
 											className={classes.image}
 											onMouseOut={() => setMouseOver(false)}

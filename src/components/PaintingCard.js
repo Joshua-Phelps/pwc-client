@@ -1,10 +1,12 @@
 import React, { useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import { DispatchContext } from '../App';
 import {
 	Card,
 	CardActionArea,
 	CardActions,
 	CardContent,
+	CardHeader,
 	Button,
 	Typography,
 	Grid,
@@ -16,21 +18,34 @@ const useStyles = makeStyles(theme => ({
 	root: {
 		maxWidth: 345,
 	},
-	center: {
+	header: {
+		height: 'auto',
 		textAlign: 'center',
+		padding: '2px',
+		background: theme.palette.primary.dark,
 	},
-	buttonContainer: {
-		display: 'flex',
-		justifyContent: 'center',
-		alignItems: 'center',
-		height: '100%',
-		padding: theme.spacing(1),
+	headerButton: {
+		color: 'white',
+	},
+	media: {
+		objectFit: 'contain',
+		background: 'black',
+	},
+	actionsContainer: {
+		background: theme.palette.secondary.grey.main,
+		display: 'grid',
 	},
 }));
 
 export default function PaintingCard({ painting, galleryName }) {
 	const classes = useStyles();
+	const history = useHistory();
 	const { paintFormPropsDispatch } = useContext(DispatchContext);
+	const { animal, card_stock, visible_url, id } = painting;
+
+	const handleVisitPage = () => {
+		history.push(`/animals/${id}`);
+	};
 
 	const handleClick = () => {
 		paintFormPropsDispatch({
@@ -38,61 +53,42 @@ export default function PaintingCard({ painting, galleryName }) {
 			payload: {
 				updateGallery: true,
 				updateAnimal: false,
-				animalId: painting.animal.id,
-				animalName: painting.animal.name,
+				animalId: animal.id,
+				animalName: animal.name,
 				open: true,
-				paintingId: painting.id,
+				paintingId: id,
 			},
 		});
 	};
 
 	return (
 		<Card className={classes.root}>
-			<CardActionArea>
-				<CardContent>
-					<Typography align='center' gutterBottom variant='h5' component='h2'>
-						{painting.animal.name}
-					</Typography>
-					<Typography variant='body2' color='textSecondary' component='p'>
-						Card Stock: {painting.card_stock || 0}
-						<br></br>
-						Status:{' '}
-						{painting.painting_status === 'Displayed'
-							? `Displayed at ${galleryName}`
-							: painting.painting_status}
-					</Typography>
-				</CardContent>
-				<CardMedia
-					component='img'
-					alt='Painting'
-					height='140'
-					image={painting.visible_url || ''}
-				/>
-			</CardActionArea>
-			<CardActions>
-				<Grid className={classes.center} container>
-					<Grid item sm={12} xs={12}>
-						<Button
-							onClick={handleClick}
-							size='small'
-							variant='contained'
-							color='primary'>
-							Update Painting
+			<CardHeader
+				className={classes.header}
+				title={
+					<>
+						<Button className={classes.headerButton} onClick={handleVisitPage}>
+							{animal.name} (ID: {animal.id})
 						</Button>
-					</Grid>
-				</Grid>
-
-				{/* {open && (
-					<PaintingForm
-						paintingId={painting.id}
-						animalId={painting.animal.id}
-						updateSelectAnimal={false}
-						updateGallery={true}
-						animalName={painting.animal.name}
-						open={open}
-						setOpen={handleOpen}
-					/>
-				)} */}
+						<div className={classes.headerButton}>Card Stock: {card_stock}</div>
+					</>
+				}
+			/>
+			<CardMedia
+				className={classes.media}
+				image={visible_url || ''}
+				title={'animal-photo'}
+				height='350'
+				component='img'
+			/>
+			<CardActions className={classes.actionsContainer} disableSpacing>
+				<Button
+					onClick={handleClick}
+					size='small'
+					variant='contained'
+					color='primary'>
+					Update Painting
+				</Button>
 			</CardActions>
 		</Card>
 	);

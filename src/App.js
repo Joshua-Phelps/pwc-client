@@ -65,6 +65,7 @@ const theme = createMuiTheme({
 			light: '#e96f51',
 			dark: '#9f351a',
 			lightest: '#e79d8c',
+			gradient: 'linear-gradient(135deg, #e44c26 1%, #e79d8c 30%)',
 			grey: {
 				light: '#e3e1e5',
 				main: '#d4d4d4',

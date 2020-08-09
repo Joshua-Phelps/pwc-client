@@ -21,14 +21,14 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 const useStyles = makeStyles(theme => ({
 	header: {
-		height: '30px',
+		height: '40px',
 		textAlign: 'center',
-		background: theme.palette.secondary.grey.light,
+		padding: '2px',
+		background: theme.palette.primary.dark,
 	},
 	media: {
-		// height: '400px',
 		objectFit: 'contain',
-		background: theme.palette.secondary.grey.light,
+		background: 'black',
 	},
 	expand: {
 		transform: 'rotate(0deg)',
@@ -48,8 +48,11 @@ const useStyles = makeStyles(theme => ({
 	},
 	prevPhotoButton: { transform: 'rotate(180deg)' },
 	moreInfo: {
-		// overflowX: 'auto',
+		overflowX: 'auto',
 		background: theme.palette.secondary.grey.main,
+	},
+	headerButton: {
+		color: 'white',
 	},
 }));
 
@@ -122,17 +125,17 @@ export default function PhotoCard({ animalInfo }) {
 			<CardHeader
 				className={classes.header}
 				title={
-					<Button color='primary' onClick={handleVisitPage}>
+					<Button className={classes.headerButton} onClick={handleVisitPage}>
 						{animal.name} (ID: {animal.id})
 					</Button>
 				}
-				titleTypographyProps={{ variant: 'body1' }}
+				// titleTypographyProps={{ variant: 'body1' }}
 			/>
 			<CardMedia
 				className={classes.media}
 				component='img'
 				image={profilePhotoUrl()}
-				height='200'
+				height='350'
 				title={'animal-photo'}
 			/>
 			<CardActions className={classes.actionsContainer} disableSpacing>
@@ -196,7 +199,8 @@ export default function PhotoCard({ animalInfo }) {
 					)}
 					<div className={classes.buttonContainer}>
 						<Typography variant='caption'>
-							Google Drive Path:{' '}
+							<b>Google Drive Path</b>
+							<br></br>
 							{photos && photos[photoIdx] && photos[photoIdx].file_path}
 						</Typography>
 					</div>

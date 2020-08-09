@@ -56,7 +56,7 @@ export default function SearchAnimal() {
 		other: ['Galleries', 'Shelters', 'Paint Locations'],
 	};
 	const secondOptions = {
-		tasks: ['Photos That Need Background Removed', 'Print Ready'],
+		tasks: ['Photos Needing Background Removed', 'Print Ready Photos'],
 		animals: ['ID', 'Name'],
 	};
 	const allFirstOptions = firstOptions.tasks.concat(

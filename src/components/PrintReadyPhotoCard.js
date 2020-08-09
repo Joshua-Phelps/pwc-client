@@ -16,16 +16,21 @@ const useStyles = makeStyles(theme => ({
 		maxWidth: 345,
 	},
 	header: {
-		height: '10px',
+		// height: '10px',
+		// textAlign: 'center',
+		// background: theme.palette.primary.dark,
+		height: '40px',
 		textAlign: 'center',
+		padding: '2px',
 		background: theme.palette.primary.dark,
 	},
 	headerButton: {
 		color: 'white',
 	},
 	media: {
-		height: '100%',
-		paddingTop: '56.25%', // 16:9
+		// paddingTop: '56.25%', // 16:9
+		objectFit: 'contain',
+		background: 'black',
 	},
 	actionsContainer: {
 		background: theme.palette.secondary.grey.main,
@@ -74,15 +79,15 @@ export default function PhotoCard({ animalInfo }) {
 						{animal.name} (ID: {animal.id})
 					</Button>
 				}
-				titleTypographyProps={{ variant: 'body1' }}
+				// titleTypographyProps={{ variant: 'body1' }}
 			/>
-			{url && (
-				<CardMedia
-					className={classes.media}
-					image={url || ''}
-					title={'animal-photo'}
-				/>
-			)}
+			<CardMedia
+				className={classes.media}
+				image={url || ''}
+				title={'animal-photo'}
+				height='350'
+				component='img'
+			/>
 			<CardActions className={classes.actionsContainer} disableSpacing>
 				<Button
 					variant='contained'

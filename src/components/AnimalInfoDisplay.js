@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { Tabs, Tab, Typography, Box, Grid } from '@material-ui/core';
 import TabPanelsContainer from '../containers/TabPanelsContainer';
+import AnimalInfoHorizontal from './AnimalInfoHorizontal';
+import AnimalInfoVertical from './AnimalInfoVertical';
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
@@ -53,6 +55,9 @@ const useStyles = makeStyles(theme => ({
 		height: '100%',
 		overflowX: 'auto',
 	},
+	horizontalContainer: {
+		display: 'block',
+	},
 	tabPanelLarge: {
 		overflowX: 'auto',
 		maxHeight: '370px',
@@ -78,8 +83,11 @@ export default function AnimalInfoDisplay() {
 	return (
 		<Box borderRadius='borderRadius' border={2}>
 			<div className={classes.root}>
-				<Grid container>
-					<Grid className='small-view' item xs={12}>
+				<AnimalInfoHorizontal />
+
+				<AnimalInfoVertical />
+
+				{/* <Grid className='small-view' item xs={12}>
 						<Tabs
 							variant='scrollable'
 							scrollButtons='on'
@@ -89,10 +97,8 @@ export default function AnimalInfoDisplay() {
 							className={classes.horizontalTabs}>
 							<Tab label='Details' {...a11yProps(0)} />
 							<Tab label='Shelter' {...a11yProps(1)} />
-							<Tab label='Photos' {...a11yProps(2)} />
-							<Tab label='Displayed Paintings' {...a11yProps(3)} />
-							<Tab label='Canvas Photo' {...a11yProps(4)} />
-							{/* <Tab label='All Paintings' {...a11yProps(4)} /> */}
+							<Tab label='Displayed Paintings' {...a11yProps(2)} />
+							<Tab label='Canvas Photo' {...a11yProps(3)} />
 						</Tabs>
 					</Grid>
 
@@ -106,9 +112,8 @@ export default function AnimalInfoDisplay() {
 							className={classes.verticalTabs}>
 							<Tab label='Details' {...a11yProps(0)} />
 							<Tab label='Shelter' {...a11yProps(1)} />
-							<Tab label='Photos' {...a11yProps(2)} />
-							<Tab label='Displayed Paintings' {...a11yProps(3)} />
-							<Tab label='Canvas Photo' {...a11yProps(4)} />
+							<Tab label='Displayed Paintings' {...a11yProps(2)} />
+							<Tab label='Canvas Photo' {...a11yProps(3)} />
 						</Tabs>
 					</Grid>
 
@@ -126,8 +131,7 @@ export default function AnimalInfoDisplay() {
 						xs={12}
 						sm={9}>
 						<TabPanelsContainer value={value} />
-					</Grid>
-				</Grid>
+					</Grid> */}
 			</div>
 		</Box>
 	);
