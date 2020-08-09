@@ -11,7 +11,6 @@ export default function PaintLocationShowPage({ history, location }) {
 	const { name, email, phone_number, address } = paintLoc;
 
 	useEffect(() => {
-		console.log('using effect');
 		api.paintLocs
 			.getPaintLocById(id)
 			.then(paintLoc => {
@@ -24,6 +23,8 @@ export default function PaintLocationShowPage({ history, location }) {
 			.catch(err => console.log(err));
 	}, [paintLocDispatch, id]);
 
+	const handleUpdatePaintLocation = () => {};
+
 	return (
 		<>
 			{loaded && (
@@ -33,6 +34,8 @@ export default function PaintLocationShowPage({ history, location }) {
 						name={name}
 						email={email}
 						phone_number={phone_number}
+						btnText={'Update Paint Location'}
+						handleButton={handleUpdatePaintLocation}
 					/>
 				</>
 			)}

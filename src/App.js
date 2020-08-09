@@ -31,6 +31,7 @@ import DialogMessage from './components/DialogMessage';
 import PasswordSendEmail from './components/PasswordSendEmail';
 import PaintingForm from './components/PaintingForm';
 import PhotosContainer from './containers/PhotosContainer';
+import VenueForm from './components/VenueForm';
 import {
 	userReducer,
 	animalsReducer,
@@ -295,80 +296,78 @@ function App() {
 									render={props => <Login login={login} {...props} />}></Route>
 
 								<PrivateRoute path='/admin' component={AdminPage} />
+
+								<Route path='/home' render={props => <HomePage {...props} />} />
+
+								<Route
+									path='/password-reset/:token'
+									exact
+									component={PasswordReset}
+								/>
+
+								<PrivateRoute
+									exact
+									path='/photos/full-background'
+									component={PhotosContainer}
+								/>
+
+								<PrivateRoute
+									exact
+									path='/photos/print-ready'
+									component={PhotosContainer}
+								/>
+
+								<PrivateRoute
+									exact
+									path='/search-page'
+									component={SearchContainer}
+								/>
+
+								<PrivateRoute
+									path='/galleries'
+									exact
+									component={GalleryCardsContainer}
+								/>
+								<PrivateRoute
+									path='/animals'
+									exact
+									component={AnimalCardsContainer}
+								/>
+
+								<PrivateRoute
+									path='/galleries/:id'
+									exact
+									component={GalleryShowPage}
+								/>
+								<PrivateRoute
+									path='/animals/:id'
+									exact
+									component={AnimalShowPage}
+								/>
+
+								<PrivateRoute
+									path='/paint-locations'
+									exact
+									component={PaintLocContainer}
+								/>
+
+								<Route
+									path='/paint-locations/:id'
+									exact
+									component={PaintLocationShowPage}
+								/>
+
+								<PrivateRoute
+									path='/shelters'
+									exact
+									component={SheltersContainer}
+								/>
+								<PrivateRoute
+									path='/shelters/:id'
+									exact
+									component={ShelterShowPage}
+								/>
 							</AuthContext.Provider>
-
-							<Route path='/home' render={props => <HomePage {...props} />} />
-
-							<Route
-								path='/password-reset/:token'
-								exact
-								component={PasswordReset}
-							/>
-
-							<PrivateRoute
-								exact
-								path='/photos/full-background'
-								component={PhotosContainer}
-							/>
-
-							<PrivateRoute
-								exact
-								path='/photos/print-ready'
-								component={PhotosContainer}
-							/>
-
-							<PrivateRoute
-								exact
-								path='/search-page'
-								component={SearchContainer}
-							/>
-
-							<PrivateRoute
-								path='/galleries'
-								exact
-								// cards={galleries}
-								component={GalleryCardsContainer}
-							/>
-
-							<PrivateRoute
-								path='/animals'
-								exact
-								component={AnimalCardsContainer}
-							/>
-
-							<PrivateRoute
-								path='/galleries/:id'
-								exact
-								component={GalleryShowPage}
-							/>
-							<PrivateRoute
-								path='/animals/:id'
-								exact
-								component={AnimalShowPage}
-							/>
-
-							<PrivateRoute
-								path='/paint-locations'
-								exact
-								component={PaintLocContainer}
-							/>
-
-							<Route
-								path='/paint-locations/:id'
-								exact
-								component={PaintLocationShowPage}
-							/>
-
-							<PrivateRoute
-								path='/shelters'
-								exact
-								component={SheltersContainer}
-							/>
-							<PrivateRoute
-								path='/shelters/:id'
-								exact
-								component={ShelterShowPage}
-							/>
 						</MessageContext.Provider>
 					</DispatchContext.Provider>
 				</StateContext.Provider>

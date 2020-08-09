@@ -69,7 +69,7 @@ const galleriesReducer = (state, action) => {
 			return [...action.payload];
 		case ADD:
 			return [...state, action.payload];
-		case REMOVE:
+		case UPDATE:
 			const updatedGalleries = state.map(g => {
 				return g.id === action.payload.id ? action.payload : g;
 			});
@@ -101,6 +101,13 @@ const paintLocsReducer = (state, action) => {
 	switch (action.type) {
 		case SET:
 			return [...action.payload];
+		case ADD:
+			return [...state, action.payload];
+		case UPDATE:
+			const updatedPaintLocs = state.map(g => {
+				return g.id === action.payload.id ? action.payload : g;
+			});
+			return updatedPaintLocs;
 		default:
 			return state;
 	}
@@ -119,6 +126,13 @@ const sheltersReducer = (state, action) => {
 	switch (action.type) {
 		case SET:
 			return [...action.payload];
+		case ADD:
+			return [...state, action.payload];
+		case UPDATE:
+			const updatedShelters = state.map(g => {
+				return g.id === action.payload.id ? action.payload : g;
+			});
+			return updatedShelters;
 		default:
 			return state;
 	}

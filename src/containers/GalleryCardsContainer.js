@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import clsx from 'clsx';
+import { useHistory } from 'react-router-dom';
 import VenueCard from '../components/VenueCard';
 import { Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -16,6 +17,7 @@ const useStyles = makeStyles(theme => ({
 
 function GalleryCardsContainer() {
 	const classes = useStyles();
+	const history = useHistory();
 	const { galleries } = useContext(StateContext);
 
 	const renderCards = () => {
@@ -24,14 +26,21 @@ function GalleryCardsContainer() {
 				<Grid key={gallery.id} item sm={4} xs={12}>
 					<VenueCard
 						venue={gallery}
-						buttonText='Visit Gallery'
-						pushPath={`/galleries/${gallery.id}`}
+						buttonText2='Visit Gallery'
+						handleButton2={() => visitGallery(gallery.id)}
+						buttonText='Update'
+						handleButton={() => visitEditGalleryForm(gallery.id)}
 						totalPaintings={gallery.paintings.length}
 					/>
 				</Grid>
 			);
 		});
 	};
+
+	const visitEditGalleryForm = id =>
+		history.push(`/admin/update-venue/galleries/${id}`);
+
+	const visitGallery = id => history.push(`/galleries/${id}`);
 
 	return (
 		<>

@@ -63,9 +63,7 @@ export default function GalleryShowPage({ location }) {
 			.catch(err => console.log(err));
 	}, [id, galleryDispatch, errorMessage]);
 
-	const handleAddPainting = () => {
-		// paintingFormPropsDispatch({type:})
-	};
+	const handleUpdateGallery = () => {};
 
 	const renderPaintings = () => {
 		return paintings.map(painting => {
@@ -86,16 +84,10 @@ export default function GalleryShowPage({ location }) {
 						name={name}
 						email={email}
 						phone_number={phone_number}
+						btnText={'Update Gallery'}
+						handleButton={handleUpdateGallery}
 					/>
 					<div className={classes.paintingsDisplay}>
-						<div className={classes.buttonContainer}>
-							{/* <Button
-								variant='contained'
-								color='secondary'
-								onClick={handleAddPainting}>
-								Add Painting
-							</Button> */}
-						</div>
 						{paintings.length > 0 ? (
 							<>
 								<Typography align='center' variant='h6'>

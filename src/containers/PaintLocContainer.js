@@ -24,14 +24,16 @@ function PaintLocContainer({ history }) {
 				<Grid key={pl.id} item sm={4} xs={12}>
 					<VenueCard
 						venue={pl}
-						buttonText='Visit Paint Location'
-						pushPath={`/paint-locations/${pl.id}`}
-						history={history}
+						buttonText='Update'
+						handleButton={() => handleUpdatePaintLoc(pl.id)}
 					/>
 				</Grid>
 			);
 		});
 	};
+
+	const handleUpdatePaintLoc = id =>
+		history.push(`/admin/update-venue/paint-locations/${id}`);
 
 	return (
 		<>

@@ -86,7 +86,7 @@ export default function PaintingCard({ painting, galleryName }) {
 					onClick={handleClick}
 					size='small'
 					variant='contained'
-					color='primary'>
+					color='secondary'>
 					Update Painting
 				</Button>
 			</CardActions>

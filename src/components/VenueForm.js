@@ -46,7 +46,7 @@ const intialState = {
 	},
 };
 
-export default function VenueForm({ max_paintings, venueType, venue }) {
+export default function VenueForm({ headerText, venueType, venue }) {
 	const classes = useStyles();
 	const [form, setForm] = useState(intialState);
 	const { galleriesDispatch, sheltersDispatch, paintLocsDispatch } = useContext(
@@ -63,21 +63,41 @@ export default function VenueForm({ max_paintings, venueType, venue }) {
 	const handleSubmit = e => {
 		e.preventDefault();
 		if (venueType === 'Gallery') {
-			api.galleries.createGallery(form).then(res => {
-				if (res.error) return errorMessage();
-				console.log(res);
-				return galleriesDispatch({ type: 'ADD', payload: res });
-			});
+			if (form.id) {
+				api.galleries.updateGallery(form).then(res => {
+					if (res.error) return errorMessage();
+					return galleriesDispatch({ type: 'UPDATE', payload: res });
+				});
+			} else {
+				api.galleries.createGallery(form).then(res => {
+					if (res.error) return errorMessage();
+					return galleriesDispatch({ type: 'ADD', payload: res });
+				});
+			}
 		} else if (venueType === 'Shelter') {
-			api.shelters.createShelter(form).then(res => {
-				if (res.error) return errorMessage();
-				sheltersDispatch({ type: 'ADD', payload: res });
-			});
+			if (form.id) {
+				api.shelters.updateShelter(form).then(res => {
+					if (res.error) return errorMessage();
+					sheltersDispatch({ type: 'UPDATE', payload: res });
+				});
+			} else {
+				api.shelters.createShelter(form).then(res => {
+					if (res.error) return errorMessage();
+					sheltersDispatch({ type: 'ADD', payload: res });
+				});
+			}
 		} else if (venueType === 'Paint Location') {
-			api.paintLocs.createPaintLoc(form).then(res => {
-				if (res.error) return errorMessage();
-				paintLocsDispatch({ type: 'ADD', payload: res });
-			});
+			if (form.id) {
+				api.paintLocs.updatePaintLoc(form).then(res => {
+					if (res.error) return errorMessage();
+					paintLocsDispatch({ type: 'UPDATE', payload: res });
+				});
+			} else {
+				api.paintLocs.createPaintLoc(form).then(res => {
+					if (res.error) return errorMessage();
+					paintLocsDispatch({ type: 'ADD', payload: res });
+				});
+			}
 		}
 	};
 
@@ -111,7 +131,7 @@ export default function VenueForm({ max_paintings, venueType, venue }) {
 
 	return (
 		<>
-			<VenueFormHeader headerText={`Add ${venueType}`} />
+			<VenueFormHeader headerText={headerText} />
 			<form onSubmit={handleSubmit}>
 				<Grid className={classes.container} spacing={2} container>
 					<Grid item xs={false} sm={2}>

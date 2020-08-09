@@ -31,22 +31,14 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function VenueHeader({
-	history,
+	btnText,
+	handleButton,
 	name,
 	address,
 	email,
 	phone_number,
 }) {
 	const classes = useStyles();
-
-	const handleUpdate = id => {
-		// add edit form
-		// history.push(pushPath);
-	};
-
-	const handleDelete = () => {
-		// api.galleries.
-	};
 
 	return (
 		<>
@@ -92,16 +84,8 @@ export default function VenueHeader({
 						<Button
 							variant='contained'
 							color='secondary'
-							onClick={handleUpdate}>
-							Update Gallery
-						</Button>
-					</div>
-					<div className={classes.buttons}>
-						<Button
-							variant='contained'
-							color='secondary'
-							onClick={handleDelete}>
-							Delete Gallery
+							onClick={handleButton}>
+							{btnText}
 						</Button>
 					</div>
 				</Grid>

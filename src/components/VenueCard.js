@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Box, Button, Typography, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import PhoneIcon from '@material-ui/icons/Phone';
 import HomeIcon from '@material-ui/icons/Home';
 import EmailIcon from '@material-ui/icons/Email';
+import { AuthContext } from '../App';
 
 const useStyles = makeStyles(theme => ({
 	box: {
@@ -15,6 +16,9 @@ const useStyles = makeStyles(theme => ({
 	},
 	button: {
 		textAlign: 'center',
+	},
+	button2: {
+		padding: theme.spacing(1),
 	},
 	details: {
 		paddingLeft: theme.spacing(1),
@@ -36,16 +40,15 @@ const useStyles = makeStyles(theme => ({
 
 export default function VenueCard({
 	venue: { name, phone_number, email, address },
-	pushPath,
 	buttonText,
+	buttonText2,
+	handleButton,
+	handleButton2,
 	totalPaintings,
 }) {
 	const classes = useStyles();
 	const history = useHistory();
-
-	const handleClick = () => {
-		history.push(pushPath);
-	};
+	const { user } = useContext(AuthContext);
 
 	return (
 		<>
@@ -82,7 +85,22 @@ export default function VenueCard({
 					</Grid>
 
 					<Grid className={classes.button} item xs={12} sm={12}>
-						<Button onClick={handleClick} color='secondary' variant='contained'>
+						{user.permission_level > 1 && handleButton2 && (
+							<>
+								<div className={classes.button2}>
+									<Button
+										onClick={handleButton2}
+										color='primary'
+										variant='contained'>
+										{buttonText2}
+									</Button>
+								</div>
+							</>
+						)}
+						<Button
+							onClick={handleButton}
+							color='secondary'
+							variant='contained'>
 							{buttonText}
 						</Button>
 					</Grid>

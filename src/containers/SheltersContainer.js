@@ -24,14 +24,16 @@ function SheltersContainer({ history }) {
 				<Grid key={shelter.id} item sm={4} xs={12}>
 					<VenueCard
 						venue={shelter}
-						buttonText='Visit Shelter'
-						pushPath={`/shelters/${shelter.id}`}
-						history={history}
+						buttonText='Update'
+						handleButton={() => handleUpdateShelter(shelter.id)}
 					/>
 				</Grid>
 			);
 		});
 	};
+
+	const handleUpdateShelter = id =>
+		history.push(`/admin/update-venue/shelters/${id}`);
 
 	return (
 		<>

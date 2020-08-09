@@ -151,6 +151,14 @@ const createGallery = gallery => {
 	}).then(res => res.json());
 };
 
+const updateGallery = gallery => {
+	return fetch(`${API_ROOT}/galleries/${gallery.id}`, {
+		headers: headers(),
+		method: 'PATCH',
+		body: JSON.stringify(gallery),
+	}).then(res => res.json());
+};
+
 const deleteGallery = galleryId => {
 	return fetch(`${API_ROOT}/galleries/${galleryId}`, {
 		headers: headers(),
@@ -174,6 +182,14 @@ const createPaintLoc = paint_location => {
 	return fetch(`${API_ROOT}/paint_locations`, {
 		headers: headers(),
 		method: 'POST',
+		body: JSON.stringify(paint_location),
+	}).then(res => res.json());
+};
+
+const updatePaintLoc = paint_location => {
+	return fetch(`${API_ROOT}/paint_locations/${paint_location.id}`, {
+		headers: headers(),
+		method: 'PATCH',
 		body: JSON.stringify(paint_location),
 	}).then(res => res.json());
 };
@@ -223,6 +239,14 @@ const createShelter = shelter => {
 	return fetch(`${API_ROOT}/shelters`, {
 		headers: headers(),
 		method: 'POST',
+		body: JSON.stringify(shelter),
+	}).then(res => res.json());
+};
+
+const updateShelter = shelter => {
+	return fetch(`${API_ROOT}/shelters/${shelter.id}`, {
+		headers: headers(),
+		method: 'PATCH',
 		body: JSON.stringify(shelter),
 	}).then(res => res.json());
 };
@@ -320,11 +344,13 @@ export const api = {
 		getGalleryById,
 		createGallery,
 		deleteGallery,
+		updateGallery,
 	},
 	paintLocs: {
 		getPaintLocs,
 		getPaintLocById,
 		createPaintLoc,
+		updatePaintLoc,
 	},
 	paintings: {
 		getPaintingById,
@@ -336,6 +362,7 @@ export const api = {
 		getShelters,
 		getShelterById,
 		createShelter,
+		updateShelter,
 	},
 	cards: {
 		generateCard,

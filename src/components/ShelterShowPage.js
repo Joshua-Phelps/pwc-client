@@ -57,6 +57,8 @@ export default function ShelterShowPage({ location }) {
 		}
 	};
 
+	const handleUpdateShelter = () => {};
+
 	return (
 		<>
 			{loaded && (
@@ -66,6 +68,8 @@ export default function ShelterShowPage({ location }) {
 						name={name}
 						email={email}
 						phone_number={phone_number}
+						btnText={'Update Shelter'}
+						handleButton={handleUpdateShelter}
 					/>
 					<Grid className={classes.container} container spacing={4}>
 						{renderAnimals()}

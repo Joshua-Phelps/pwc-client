@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { api } from '../services/api';
 import VenueForm from './VenueForm';
 import AnimalForm from './AnimalForm';
@@ -26,15 +26,33 @@ const useStyles = makeStyles(theme => ({
 
 const initSt = {
 	venueType: '',
+	venue: null,
+	headerText: '',
 	openAnimalForm: false,
 	openPermsForm: false,
 	showFileSubmit: false,
 	file: null,
 };
 
-export default function AdminPage() {
+const venueInitst = {
+	id: null,
+	email: '',
+	phone_number: '',
+	max_paintings: '',
+	name: '',
+	address: {
+		street_address: '',
+		city: '',
+		zip: '',
+		state: '',
+	},
+};
+
+export default function AdminPage({ location: { pathname } }) {
 	const classes = useStyles();
 	const [venueType, setVenueType] = useState(initSt.venueType);
+	const [venue, setVenue] = useState(initSt.venue);
+	const [headerText, setHeaderText] = useState(initSt.headerText);
 	const [openAnimalForm, setOpenAnimalForm] = useState(initSt.openAnimalForm);
 	const [openPermsForm, setOpenPermsForm] = useState(initSt.openPermsForm);
 	const [showFileSubmit, setShowFileSubmit] = useState(initSt.showFileSubmit);
@@ -42,8 +60,52 @@ export default function AdminPage() {
 	const { user } = useContext(AuthContext);
 	const { message, errorMessage } = useContext(MessageContext);
 
+	useEffect(() => {
+		let path = pathname.split('/admin/update-venue/')[1];
+		if (path) {
+			let splitPath = path.split('/');
+			let venue = splitPath[0];
+			let venueId = splitPath[1];
+			console.log(venue, venueId);
+			if (venue === 'galleries') {
+				api.galleries
+					.getGalleryById(venueId)
+					.then(res => {
+						if (res.error) return errorMessage();
+						setVenueType('Gallery');
+						setVenue(res);
+						setHeaderText(`Edit ${res.name}`);
+					})
+					.catch(err => console.log(err));
+			} else if (venue === 'shelters') {
+				api.shelters
+					.getShelterById(venueId)
+					.then(res => {
+						if (res.error) return errorMessage();
+						setVenueType('Gallery');
+						setVenue(res);
+						setHeaderText(`Edit ${res.name}`);
+					})
+					.catch(err => console.log(err));
+			} else if (venue === 'paint-locations') {
+				api.paintLocs
+					.getPaintLocById(venueId)
+
+					.then(res => {
+						if (res.error) return errorMessage();
+						setVenueType('Gallery');
+						setVenue(res);
+						setHeaderText(`Edit ${res.name}`);
+					})
+					.catch(err => console.log(err));
+			}
+		}
+	}, [pathname]);
+
 	const handleVenueClick = type => {
 		setVenueType(type);
+		setHeaderText(`Add ${type}`);
+		setVenue(venueInitst);
 		setOpenAnimalForm(initSt.openAnimalForm);
 		setOpenPermsForm(initSt.openPermsForm);
 	};
@@ -163,7 +225,13 @@ export default function AdminPage() {
 					</Grid>
 
 					<div className={classes.formContainer}>
-						{venueType && <VenueForm venueType={venueType} />}
+						{venueType && (
+							<VenueForm
+								headerText={headerText}
+								venueType={venueType}
+								venue={venue}
+							/>
+						)}
 						{openAnimalForm && <AnimalForm />}
 
 						{user.permission_level > 2 && (
