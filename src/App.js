@@ -5,7 +5,7 @@ import React, {
 	useState,
 	useCallback,
 } from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import { initialState } from './reducers/initialState';
 import PrivateRoute from './helpers/PrivateRoute';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -144,7 +144,9 @@ function App() {
 		galleryDispatch,
 		galleriesDispatch,
 		paintLocDispatch,
+		paintLocsDispatch,
 		shelterDispatch,
+		sheltersDispatch,
 		paintFormPropsDispatch,
 		dialogDispatch,
 		photosDispatch,
@@ -180,12 +182,15 @@ function App() {
 			api.auth
 				.getCurrentUser()
 				.then(res => {
-					if (res.error) return localStorage.removeItem('token');
+					if (res.error) {
+						localStorage.removeItem('token');
+						return false;
+					}
 					setUser(res);
 					setPaintLocs();
 					setGalleries();
 					setShelters();
-					return;
+					return true;
 				})
 				.then(() => setLoggedIn(true))
 				.catch(error => console.log(error));
@@ -292,7 +297,7 @@ function App() {
 								/>
 
 								<Route
-									path='/login'
+									path={'/login'}
 									render={props => <Login login={login} {...props} />}></Route>
 
 								<PrivateRoute path='/admin' component={AdminPage} />

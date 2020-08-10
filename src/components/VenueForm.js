@@ -13,6 +13,7 @@ import {
 	Button,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
 	container: {
@@ -46,19 +47,31 @@ const intialState = {
 	},
 };
 
-export default function VenueForm({ headerText, venueType, venue }) {
+export default function VenueForm({ headerText, venueType, venue, setOpen }) {
 	const classes = useStyles();
 	const [form, setForm] = useState(intialState);
+	const [showMaxPaint, setShowMaxPaint] = useState(false);
 	const { galleriesDispatch, sheltersDispatch, paintLocsDispatch } = useContext(
 		DispatchContext
 	);
-	const { errorMessage } = useContext(MessageContext);
+	const { errorMessage, message } = useContext(MessageContext);
+	const history = useHistory();
 
 	useEffect(() => {
 		if (venue) {
+			// venue.max_paintings ? setShowMaxPaint(true) : setShowMaxPaint(false);
 			setForm(venue);
+		} else {
+			// venueType === 'Gallery' ? setShowMaxPaint(true) : setShowMaxPaint(false);
 		}
 	}, [venue]);
+
+	const successMessage = venTyp => {
+		setForm(intialState);
+		setOpen(false);
+		message('Success', venTyp);
+		history.push('/admin');
+	};
 
 	const handleSubmit = e => {
 		e.preventDefault();
@@ -66,12 +79,14 @@ export default function VenueForm({ headerText, venueType, venue }) {
 			if (form.id) {
 				api.galleries.updateGallery(form).then(res => {
 					if (res.error) return errorMessage();
-					return galleriesDispatch({ type: 'UPDATE', payload: res });
+					galleriesDispatch({ type: 'UPDATE', payload: res });
+					successMessage('Gallery updated!');
 				});
 			} else {
 				api.galleries.createGallery(form).then(res => {
 					if (res.error) return errorMessage();
-					return galleriesDispatch({ type: 'ADD', payload: res });
+					galleriesDispatch({ type: 'ADD', payload: res });
+					successMessage('Gallery created!');
 				});
 			}
 		} else if (venueType === 'Shelter') {
@@ -79,11 +94,13 @@ export default function VenueForm({ headerText, venueType, venue }) {
 				api.shelters.updateShelter(form).then(res => {
 					if (res.error) return errorMessage();
 					sheltersDispatch({ type: 'UPDATE', payload: res });
+					successMessage('Shelter updated!');
 				});
 			} else {
 				api.shelters.createShelter(form).then(res => {
 					if (res.error) return errorMessage();
 					sheltersDispatch({ type: 'ADD', payload: res });
+					successMessage('Shelter created!');
 				});
 			}
 		} else if (venueType === 'Paint Location') {
@@ -91,11 +108,13 @@ export default function VenueForm({ headerText, venueType, venue }) {
 				api.paintLocs.updatePaintLoc(form).then(res => {
 					if (res.error) return errorMessage();
 					paintLocsDispatch({ type: 'UPDATE', payload: res });
+					successMessage('Paint location updated!');
 				});
 			} else {
 				api.paintLocs.createPaintLoc(form).then(res => {
 					if (res.error) return errorMessage();
 					paintLocsDispatch({ type: 'ADD', payload: res });
+					successMessage('Paint location created!');
 				});
 			}
 		}

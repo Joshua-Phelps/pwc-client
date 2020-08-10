@@ -82,7 +82,7 @@ export default function AdminPage({ location: { pathname } }) {
 					.getShelterById(venueId)
 					.then(res => {
 						if (res.error) return errorMessage();
-						setVenueType('Gallery');
+						setVenueType('Shelter');
 						setVenue(res);
 						setHeaderText(`Edit ${res.name}`);
 					})
@@ -90,10 +90,9 @@ export default function AdminPage({ location: { pathname } }) {
 			} else if (venue === 'paint-locations') {
 				api.paintLocs
 					.getPaintLocById(venueId)
-
 					.then(res => {
 						if (res.error) return errorMessage();
-						setVenueType('Gallery');
+						setVenueType('Paint Location');
 						setVenue(res);
 						setHeaderText(`Edit ${res.name}`);
 					})
@@ -230,6 +229,7 @@ export default function AdminPage({ location: { pathname } }) {
 								headerText={headerText}
 								venueType={venueType}
 								venue={venue}
+								setOpen={setVenueType}
 							/>
 						)}
 						{openAnimalForm && <AnimalForm />}
